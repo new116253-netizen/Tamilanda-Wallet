@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#09070d">
+<title>Net Worth • Tamilanda Wallet</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="icon" href="../icons/icon-192.png">
+<link rel="apple-touch-icon" href="../icons/icon-192.png">
+<link rel="stylesheet" href="../css/style.css">
+<style>
+:root{
+  --nw-bg:#090812;
+  --nw-card:#12101c;
+  --nw-card2:#171322;
+  --nw-border:rgba(255,255,255,.08);
+  --nw-muted:#aaa5b8;
+  --nw-text:#f7f4ff;
+  --nw-purple:#8d68ff;
+  --nw-purple2:#5d43d8;
+}
+body{background:var(--nw-bg)!important;color:var(--nw-text)!important;overflow-x:hidden}
+.nw-page{max-width:720px;margin:0 auto;padding:18px 16px 110px}
+.nw-head{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.nw-back{width:42px;height:42px;border-radius:14px;border:1px solid var(--nw-border);background:var(--nw-card);color:#fff;font-size:22px;display:grid;place-items:center;cursor:pointer}
+.nw-title h1{margin:0;font-size:25px;letter-spacing:-.4px}
+.nw-title p{margin:4px 0 0;color:var(--nw-muted);font-size:13px}
+.nw-main{
+  position:relative;overflow:hidden;padding:24px 20px;border-radius:24px;
+  background:linear-gradient(145deg,#19132c,#0f0d18);
+  border:1px solid rgba(141,104,255,.25);
+  box-shadow:0 18px 45px rgba(0,0,0,.28);
+  margin-bottom:14px
+}
+.nw-main:after{content:"";position:absolute;width:180px;height:180px;right:-70px;top:-75px;background:rgba(141,104,255,.16);filter:blur(45px);border-radius:50%}
+.nw-label{position:relative;z-index:1;color:#b9b1d0;font-size:13px}
+.nw-value{position:relative;z-index:1;font-size:34px;font-weight:800;margin-top:6px;letter-spacing:-1px}
+.nw-date{position:relative;z-index:1;color:var(--nw-muted);font-size:12px;margin-top:6px}
+.nw-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+.nw-card{background:var(--nw-card);border:1px solid var(--nw-border);border-radius:20px;padding:17px;min-width:0}
+.nw-card .icon{font-size:21px;margin-bottom:10px}
+.nw-card .label{font-size:12px;color:var(--nw-muted)}
+.nw-card .amount{font-size:21px;font-weight:750;margin-top:5px}
+.nw-section{background:var(--nw-card);border:1px solid var(--nw-border);border-radius:20px;padding:18px;margin-bottom:14px}
+.nw-section-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:13px}
+.nw-section h2{font-size:16px;margin:0}
+.nw-section small{color:var(--nw-muted)}
+.nw-row{display:flex;justify-content:space-between;gap:14px;padding:12px 0;border-top:1px solid rgba(255,255,255,.06)}
+.nw-row:first-child{border-top:0;padding-top:0}
+.nw-row:last-child{padding-bottom:0}
+.nw-row-name{font-size:14px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.nw-row-type{font-size:11px;color:var(--nw-muted);margin-top:3px}
+.nw-row-amt{font-size:14px;font-weight:700;white-space:nowrap}
+.nw-empty{text-align:center;color:var(--nw-muted);padding:12px 0;font-size:13px}
+.nw-positive{color:#b8ffda}.nw-negative{color:#ff9eae}
+.nw-bar{height:8px;background:#211c2c;border-radius:99px;overflow:hidden;margin-top:12px}
+.nw-bar-fill{height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,#6546dc,#a17dff);transition:width .35s}
+.nw-note{font-size:12px;line-height:1.5;color:var(--nw-muted);margin:0}
+@media(max-width:430px){
+  .nw-page{padding-left:13px;padding-right:13px}
+  .nw-value{font-size:30px}
+  .nw-card{padding:15px}
+}
+</style>
+</head>
+<body>
+<main class="nw-page">
+  <header class="nw-head">
+    <button class="nw-back" type="button" aria-label="Back" onclick="goBack()">‹</button>
+    <div class="nw-title">
+      <h1>Net Worth</h1>
+      <p>Your current financial position</p>
+    </div>
+  </header>
+
+  <section class="nw-main">
+    <div class="nw-label">Net Worth</div>
+    <div class="nw-value" id="netWorth">₹0</div>
+    <div class="nw-date" id="updatedAt">Updated just now</div>
+  </section>
+
+  <section class="nw-grid">
+    <div class="nw-card">
+      <div class="icon">🏦</div>
+      <div class="label">Total Assets</div>
+      <div class="amount nw-positive" id="assets">₹0</div>
+    </div>
+    <div class="nw-card">
+      <div class="icon">💳</div>
+      <div class="label">Total Liabilities</div>
+      <div class="amount nw-negative" id="liabilities">₹0</div>
+    </div>
+  </section>
+
+  <section class="nw-section">
+    <div class="nw-section-head">
+      <h2>Financial Position</h2>
+      <small id="positionText">Balanced</small>
+    </div>
+    <div class="nw-bar"><div class="nw-bar-fill" id="positionBar"></div></div>
+    <p class="nw-note" id="positionNote" style="margin-top:10px">Assets and liabilities are calculated from your wallet data.</p>
+  </section>
+
+  <section class="nw-section">
+    <div class="nw-section-head">
+      <h2>Assets</h2>
+      <small id="assetCount">0 items</small>
+    </div>
+    <div id="assetList"><div class="nw-empty">No assets found</div></div>
+  </section>
+
+  <section class="nw-section">
+    <div class="nw-section-head">
+      <h2>Liabilities</h2>
+      <small id="liabilityCount">0 items</small>
+    </div>
+    <div id="liabilityList"><div class="nw-empty">No liabilities found</div></div>
+  </section>
+</main>
+
+<script src="../js/app.js"></script>
+<script>
+(function(){
+  'use strict';
+
+  const api = window.TamilandaWallet;
+
+  function money(v){
+    if(api && typeof api.formatMoney === 'function') return api.formatMoney(Number(v)||0);
+    return '₹' + (Number(v)||0).toLocaleString('en-IN',{maximumFractionDigits:2});
+  }
+
+  function getData(){
+    if(api && typeof api.getData === 'function') return api.getData();
+    try{return JSON.parse(localStorage.getItem('tamilanda_wallet_data') || '{}')}catch(e){return {}}
+  }
+
+  function esc(s){
+    if(api && typeof api.escapeHtml === 'function') return api.escapeHtml(String(s));
+    return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+  }
+
+  function number(v){ return Number(v)||0; }
+
+  function renderRows(el, rows, empty){
+    if(!rows.length){
+      el.innerHTML='<div class="nw-empty">'+empty+'</div>';
+      return;
+    }
+    el.innerHTML=rows.map(r=>`
+      <div class="nw-row">
+        <div style="min-width:0">
+          <div class="nw-row-name">${esc(r.name)}</div>
+          <div class="nw-row-type">${esc(r.type || '')}</div>
+        </div>
+        <div class="nw-row-amt">${money(r.amount)}</div>
+      </div>`).join('');
+  }
+
+  function render(){
+    const d=getData();
+
+    let assets=0, liabilities=0;
+    if(api && typeof api.calculateTotalAssets==='function') assets=number(api.calculateTotalAssets());
+    if(api && typeof api.calculateTotalLiabilities==='function') liabilities=number(api.calculateTotalLiabilities());
+
+    // Fallback for data created without the shared helpers.
+    if(!assets){
+      (d.accounts||[]).forEach(a=>{assets += number(a.balance)});
+    }
+
+    if(!liabilities){
+      (d.myEmis||[]).forEach(e=>{
+        const total=number(e.totalPayment ?? e.totalAmount);
+        const paid=number(e.alreadyPaid);
+        const remaining=Math.max(0,total-paid);
+        if(remaining>0) liabilities += remaining;
+      });
+      (d.moneyBorrowed||d.borrowedMoney||[]).forEach(x=>{
+        liabilities += number(x.amount ?? x.totalAmount);
+      });
+    }
+
+    let net;
+    if(api && typeof api.calculateNetWorth==='function') net=number(api.calculateNetWorth());
+    else net=assets-liabilities;
+
+    document.getElementById('assets').textContent=money(assets);
+    document.getElementById('liabilities').textContent=money(liabilities);
+    document.getElementById('netWorth').textContent=money(net);
+
+    const now=new Date();
+    document.getElementById('updatedAt').textContent='Updated '+now.toLocaleDateString('en-IN',{
+      day:'2-digit',month:'short',year:'numeric'
+    });
+
+    const positionText=document.getElementById('positionText');
+    const positionNote=document.getElementById('positionNote');
+    const bar=document.getElementById('positionBar');
+    const ratio=assets>0 ? Math.max(0,Math.min(100,(Math.max(0,net)/assets)*100)) : 0;
+    bar.style.width=ratio+'%';
+
+    if(net>0){
+      positionText.textContent='Positive';
+      positionText.className='nw-positive';
+      positionNote.textContent='Your assets are higher than your current liabilities.';
+    }else if(net<0){
+      positionText.textContent='Negative';
+      positionText.className='nw-negative';
+      positionNote.textContent='Your current liabilities are higher than your assets.';
+    }else{
+      positionText.textContent='Balanced';
+      positionText.className='';
+      positionNote.textContent='Your assets and liabilities are currently equal.';
+    }
+
+    const assetRows=(d.accounts||[])
+      .map(a=>({name:a.name||'Account',type:a.type||'Account',amount:number(a.balance)}))
+      .filter(x=>x.amount!==0)
+      .sort((a,b)=>b.amount-a.amount);
+
+    const liabilityRows=(d.myEmis||[]).map(e=>{
+      const total=number(e.totalPayment ?? e.totalAmount);
+      const paid=number(e.alreadyPaid);
+      return {name:e.name||e.lenderName||'EMI',type:'EMI pending',amount:Math.max(0,total-paid)};
+    }).concat((d.moneyBorrowed||d.borrowedMoney||[]).map(x=>({
+      name:x.name||x.personName||'Borrowed amount',
+      type:'Borrowed',
+      amount:number(x.amount ?? x.totalAmount)
+    }))).filter(x=>x.amount>0).sort((a,b)=>b.amount-a.amount);
+
+    document.getElementById('assetCount').textContent=assetRows.length+' item'+(assetRows.length===1?'':'s');
+    document.getElementById('liabilityCount').textContent=liabilityRows.length+' item'+(liabilityRows.length===1?'':'s');
+
+    renderRows(document.getElementById('assetList'),assetRows,'No assets found');
+    renderRows(document.getElementById('liabilityList'),liabilityRows,'No liabilities found');
+  }
+
+  window.goBack=function(){
+    location.href='../pages/more.html';
+  };
+
+  document.addEventListener('DOMContentLoaded',render);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#09070d">
+<link rel="manifest" href="../manifest.json">
+<link rel="icon" href="../icons/icon-192.png">
+<link rel="apple-touch-icon" href="../icons/icon-192.png">
+<link rel="stylesheet" href="../css/style.css">
+<title>Import / Export — Tamilanda Wallet 👑</title>
+
+<style>
+:root{
+  --bg:#09070d;--surface:#15111d;--edge:rgba(255,255,255,.08);
+  --text:#fff;--muted:#b7b2bf;--dim:#77717f;
+  --purple:#9b6dff;--blue:#55aaff;--green:#55d98b;--red:#ff667a;--gold:#ffc857
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:var(--bg);color:#fff}
+body{
+  overflow-x:hidden;-webkit-font-smoothing:antialiased;
+  background:
+    radial-gradient(circle at 95% 8%,rgba(92,82,255,.16),transparent 30%),
+    radial-gradient(circle at 5% 20%,rgba(0,117,255,.07),transparent 26%),
+    linear-gradient(180deg,#0a0d1e 0%,#061625 50%,#04090e 100%)
+}
+.export-page{
+  width:min(100%,720px);
+  margin:0 auto;
+  padding:18px 16px calc(105px + env(safe-area-inset-bottom))
+}
+.export-header{
+  display:flex;align-items:center;gap:10px;padding:15px 14px;margin-bottom:12px;
+  border-radius:19px;background:rgba(21,17,29,.90);border:1px solid var(--edge)
+}
+.export-back,.export-refresh{
+  width:42px;height:42px;flex:0 0 42px;display:grid;place-items:center;
+  border-radius:13px;border:1px solid rgba(255,255,255,.09);color:#fff;background:rgba(255,255,255,.04)
+}
+.export-back{font-size:22px}.export-refresh{margin-left:auto;font-size:18px}
+.export-head-copy{min-width:0}.export-head-copy h1{margin:0;font-size:23px;line-height:1.05;font-weight:900;letter-spacing:-.5px}
+.export-head-copy p{margin:5px 0 0;color:var(--muted);font-size:10px}
+
+.export-hero{
+  position:relative;overflow:hidden;padding:19px;border-radius:22px;
+  border:1px solid rgba(155,109,255,.34);
+  background:
+    radial-gradient(circle at 90% 15%,rgba(42,112,255,.34),transparent 34%),
+    radial-gradient(circle at 14% 117%,rgba(123,51,255,.42),transparent 39%),
+    linear-gradient(145deg,#18112c,#0d0b16 76%);
+  box-shadow:0 15px 44px rgba(0,0,0,.27),inset 0 1px 0 rgba(255,255,255,.035)
+}
+.export-hero-label{color:rgba(255,255,255,.60);font-size:9px;font-weight:800;letter-spacing:1px;text-transform:uppercase}
+.export-hero-title{margin-top:7px;font-size:27px;font-weight:950;letter-spacing:-.7px}
+.export-hero-note{margin-top:6px;color:rgba(255,255,255,.50);font-size:10px;line-height:1.45}
+.export-state{display:inline-flex;align-items:center;gap:6px;margin-top:10px;padding:6px 9px;border-radius:999px;color:var(--green);background:rgba(85,217,139,.09);border:1px solid rgba(85,217,139,.17);font-size:8px;font-weight:900}
+
+.export-section{margin-top:15px}
+.export-section h2{margin:0 2px 8px;font-size:15px;font-weight:900}
+.export-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.export-card{
+  min-height:112px;padding:13px;border-radius:17px;background:rgba(21,17,29,.9);
+  border:1px solid var(--edge);text-align:left;color:#fff
+}
+.export-card.primary{background:linear-gradient(145deg,rgba(38,26,67,.98),rgba(17,13,26,.98));border-color:rgba(155,109,255,.28)}
+.export-card-icon{
+  width:38px;height:38px;display:grid;place-items:center;border-radius:12px;
+  background:rgba(155,109,255,.08);border:1px solid rgba(155,109,255,.14);font-size:19px
+}
+.export-card-title{display:block;margin-top:7px;font-size:11px;font-weight:900}
+.export-card-sub{display:block;margin-top:3px;color:#77717f;font-size:8px;line-height:1.35}
+
+.export-records{
+  padding:13px;border-radius:17px;background:rgba(21,17,29,.88);border:1px solid var(--edge)
+}
+.export-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+.export-count{padding:10px 7px;text-align:center;border-radius:11px;background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.05)}
+.export-count strong{display:block;font-size:14px}.export-count span{display:block;margin-top:3px;color:#77717f;font-size:7px}
+
+.export-note{
+  margin-top:12px;padding:11px 12px;border-radius:13px;
+  background:rgba(85,170,255,.045);border:1px solid rgba(85,170,255,.10);
+  color:#8f8997;font-size:8px;line-height:1.5
+}
+.export-note strong{color:#c5c1ca}
+
+.export-modal{
+  position:fixed;inset:0;z-index:99999;display:none;align-items:flex-end;justify-content:center;
+  padding:10px;background:rgba(0,0,0,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)
+}
+.export-modal.show{display:flex}
+.export-sheet{
+  width:min(100%,610px);max-height:88vh;overflow:auto;padding:17px;border-radius:21px 21px 13px 13px;
+  background:linear-gradient(180deg,#191420,#0e0b13);border:1px solid rgba(155,109,255,.22);box-shadow:0 -20px 65px rgba(0,0,0,.55)
+}
+.export-sheet-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:13px}
+.export-sheet-head h2{margin:0;font-size:18px}.export-close{
+  width:34px;height:34px;border-radius:10px;border:1px solid var(--edge);background:rgba(255,255,255,.04);color:#fff
+}
+.export-option-list{display:grid;gap:8px}
+.export-option{
+  min-height:58px;width:100%;display:flex;align-items:center;gap:10px;padding:10px 11px;
+  border-radius:13px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.03);color:#fff;text-align:left
+}
+.export-option-icon{width:34px;height:34px;display:grid;place-items:center;border-radius:10px;background:rgba(155,109,255,.08);font-size:17px}
+.export-option-title{font-size:10px;font-weight:850}.export-option-sub{margin-top:2px;color:#77717f;font-size:7px}
+.export-danger{
+  margin-top:11px;padding:11px;border-radius:13px;background:rgba(255,102,122,.06);border:1px solid rgba(255,102,122,.13);color:#a69aa6;font-size:8px;line-height:1.45
+}
+.export-danger strong{color:#ff8a99}
+
+@media(max-width:520px){.export-page{padding-left:13px;padding-right:13px}}
+@media(max-width:390px){
+  .export-head-copy h1{font-size:21px}.export-head-copy p{font-size:9px}
+  .export-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+
+<body>
+<main class="export-page">
+
+<header class="export-header">
+  <button class="export-back" type="button" onclick="goMore()" aria-label="Back">‹</button>
+  <div class="export-head-copy">
+    <h1>Import / Export ⇅</h1>
+    <p>Move your Tamilanda Wallet data safely</p>
+  </div>
+  <button class="export-refresh" type="button" onclick="refreshExport()" aria-label="Refresh">↻</button>
+</header>
+
+<section class="export-hero">
+  <div class="export-hero-label">Your Data</div>
+  <div class="export-hero-title">Simple. Portable. Local.</div>
+  <div class="export-hero-note">Export your records for safekeeping, or import a compatible JSON wallet file when you move to another browser or device.</div>
+  <div class="export-state">● Local storage available</div>
+</section>
+
+<section class="export-section">
+  <h2>Export Data</h2>
+  <div class="export-grid">
+    <button class="export-card primary" type="button" onclick="openExportMenu()">
+      <span class="export-card-icon">⬇️</span>
+      <span class="export-card-title">Export Wallet</span>
+      <span class="export-card-sub">JSON backup or CSV transaction export</span>
+    </button>
+    <button class="export-card" type="button" onclick="exportTransactionsCsv()">
+      <span class="export-card-icon">📄</span>
+      <span class="export-card-title">Transactions CSV</span>
+      <span class="export-card-sub">Open your transaction ledger in Excel / Sheets</span>
+    </button>
+  </div>
+</section>
+
+<section class="export-section">
+  <h2>Import Data</h2>
+  <div class="export-grid">
+    <button class="export-card primary" type="button" onclick="openImport()">
+      <span class="export-card-icon">⬆️</span>
+      <span class="export-card-title">Import Wallet JSON</span>
+      <span class="export-card-sub">Restore a compatible Tamilanda Wallet data file</span>
+    </button>
+    <button class="export-card" type="button" onclick="downloadTemplate()">
+      <span class="export-card-icon">🧩</span>
+      <span class="export-card-title">JSON Template</span>
+      <span class="export-card-sub">Download an empty structure for reference</span>
+    </button>
+  </div>
+</section>
+
+<section class="export-section">
+  <h2>Current Records</h2>
+  <div class="export-records">
+    <div class="export-summary">
+      <div class="export-count"><strong id="countAccounts">0</strong><span>Accounts</span></div>
+      <div class="export-count"><strong id="countTransactions">0</strong><span>Transactions</span></div>
+      <div class="export-count"><strong id="countBuyers">0</strong><span>EMI Buyers</span></div>
+      <div class="export-count"><strong id="countIds">0</strong><span>My IDs</span></div>
+      <div class="export-count"><strong id="countEmi">0</strong><span>My EMI</span></div>
+      <div class="export-count"><strong id="countGive">0</strong><span>Loans To Give</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="export-note">
+  <strong>Tip:</strong> Use <b>Backup & Restore</b> for a complete safety copy. This Import / Export page is mainly for portability and spreadsheet-friendly transaction export.
+</div>
+
+</main>
+
+<input id="importFile" type="file" accept=".json,application/json" hidden onchange="previewImport(event)">
+
+<div id="exportModal" class="export-modal" aria-hidden="true" onclick="if(event.target===this)closeExportMenu()">
+  <div class="export-sheet" role="dialog" aria-modal="true">
+    <div class="export-sheet-head">
+      <h2>Export Wallet</h2>
+      <button class="export-close" type="button" onclick="closeExportMenu()">✕</button>
+    </div>
+    <div class="export-option-list">
+      <button class="export-option" type="button" onclick="exportWalletJson()">
+        <span class="export-option-icon">🗂️</span>
+        <span><span class="export-option-title">Full Wallet JSON</span><span class="export-option-sub">All local wallet records in one file</span></span>
+      </button>
+      <button class="export-option" type="button" onclick="exportTransactionsCsv()">
+        <span class="export-option-icon">📊</span>
+        <span><span class="export-option-title">Transactions CSV</span><span class="export-option-sub">Spreadsheet-ready transaction ledger</span></span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div id="importModal" class="export-modal" aria-hidden="true" onclick="if(event.target===this)closeImport()">
+  <div class="export-sheet" role="dialog" aria-modal="true">
+    <div class="export-sheet-head">
+      <h2>Import Wallet JSON</h2>
+      <button class="export-close" type="button" onclick="closeImport()">✕</button>
+    </div>
+
+    <button class="export-option" type="button" onclick="document.getElementById('importFile').click()">
+      <span class="export-option-icon">📁</span>
+      <span><span class="export-option-title">Choose JSON File</span><span class="export-option-sub">Select a Tamilanda Wallet JSON export</span></span>
+    </button>
+
+    <div id="importPreview" style="display:none;margin-top:10px;padding:11px;border-radius:12px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.06);color:#9f98a5;font-size:8px;line-height:1.5"></div>
+
+    <div class="export-danger"><strong>Warning:</strong> importing replaces the current wallet data in local storage. Make a backup before importing.</div>
+
+    <button id="importConfirm" class="export-card primary" type="button" style="width:100%;min-height:46px;margin-top:10px;text-align:center" onclick="importSelected()" disabled>Import Selected File</button>
+  </div>
+</div>
+
+<nav class="bottom-nav" aria-label="Primary navigation">
+  <a class="nav-item" data-page="home" href="../index.html"><span class="nav-icon">🏠</span><span class="nav-label">Home</span></a>
+  <a class="nav-item" data-page="myIds" href="./my-ids.html"><span class="nav-icon">🆔</span><span class="nav-label">My IDs</span></a>
+  <a class="nav-item" data-page="buyers" href="./buyers.html"><span class="nav-icon">💳</span><span class="nav-label">EMI Buyers</span></a>
+  <a class="nav-item" data-page="accounts" href="./accounts.html"><span class="nav-icon">🏦</span><span class="nav-label">Accounts</span></a>
+  <a class="nav-item active" data-page="more" href="./more.html"><span class="nav-icon">☰</span><span class="nav-label">More</span></a>
+</nav>
+
+<script>
+(() => {
+  "use strict";
+  let selectedImport=null;
+
+  const KEY="tamilanda_wallet_data";
+
+  function getData(){
+    try{return JSON.parse(localStorage.getItem(KEY)||"{}")||{}}
+    catch{return {}}
+  }
+
+  function arr(data,key){return Array.isArray(data[key])?data[key]:[]}
+
+  function updateCounts(){
+    const d=getData();
+    document.getElementById("countAccounts").textContent=arr(d,"accounts").length;
+    document.getElementById("countTransactions").textContent=arr(d,"transactions").length;
+    document.getElementById("countBuyers").textContent=arr(d,"buyers").length;
+    document.getElementById("countIds").textContent=Array.isArray(d.myIds)?d.myIds.length:Array.isArray(d.ids)?d.ids.length:0;
+    document.getElementById("countEmi").textContent=Array.isArray(d.myEmis)?d.myEmis.length:Array.isArray(d.emi)?d.emi.length:0;
+    document.getElementById("countGive").textContent=arr(d,"moneyToGive").length;
+  }
+
+  function escapeHtml(value){
+    return String(value??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  }
+
+  function csvCell(value){
+    const str=String(value??"");
+    return `"${str.replace(/"/g,'""')}"`;
+  }
+
+  window.goMore=()=>window.location.assign("./more.html");
+  window.refreshExport=()=>updateCounts();
+
+  window.openExportMenu=()=>{
+    document.getElementById("exportModal").classList.add("show");
+    document.getElementById("exportModal").setAttribute("aria-hidden","false");
+  };
+
+  window.closeExportMenu=()=>{
+    document.getElementById("exportModal").classList.remove("show");
+    document.getElementById("exportModal").setAttribute("aria-hidden","true");
+  };
+
+  window.exportWalletJson=()=>{
+    const data=getData();
+    const payload={app:"Tamilanda Wallet",version:1,exportedAt:new Date().toISOString(),data};
+    const blob=new Blob([JSON.stringify(payload,null,2)],{type:"application/json"});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement("a");
+    a.href=url;
+    a.download=`tamilanda-wallet-export-${new Date().toISOString().slice(0,10)}.json`;
+    document.body.appendChild(a);a.click();a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),1000);
+    closeExportMenu();
+  };
+
+  window.exportTransactionsCsv=()=>{
+    const tx=arr(getData(),"transactions");
+    const rows=[["Date","Type","Amount","Account","Category","Description","Note","Transaction ID"]];
+
+    tx.forEach(t=>{
+      rows.push([
+        t.date || "",
+        t.type || "",
+        t.amount ?? "",
+        t.accountId || "",
+        t.category || "",
+        t.description || "",
+        t.note || t.notes || "",
+        t.id || ""
+      ]);
+    });
+
+    const csv=rows.map(row=>row.map(csvCell).join(",")).join("\r\n");
+    const blob=new Blob([csv],{type:"text/csv;charset=utf-8"});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement("a");
+    a.href=url;
+    a.download=`tamilanda-wallet-transactions-${new Date().toISOString().slice(0,10)}.csv`;
+    document.body.appendChild(a);a.click();a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),1000);
+    closeExportMenu();
+  };
+
+  window.downloadTemplate=()=>{
+    const template={
+      app:"Tamilanda Wallet",
+      version:1,
+      exportedAt:new Date().toISOString(),
+      data:{
+        accounts:[],
+        transactions:[],
+        buyers:[],
+        myIds:[],
+        myEmis:[],
+        moneyToGive:[]
+      }
+    };
+    const blob=new Blob([JSON.stringify(template,null,2)],{type:"application/json"});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement("a");
+    a.href=url;
+    a.download="tamilanda-wallet-json-template.json";
+    document.body.appendChild(a);a.click();a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),1000);
+  };
+
+  window.openImport=()=>{
+    selectedImport=null;
+    document.getElementById("importFile").value="";
+    document.getElementById("importPreview").style.display="none";
+    document.getElementById("importConfirm").disabled=true;
+    document.getElementById("importModal").classList.add("show");
+    document.getElementById("importModal").setAttribute("aria-hidden","false");
+  };
+
+  window.closeImport=()=>{
+    document.getElementById("importModal").classList.remove("show");
+    document.getElementById("importModal").setAttribute("aria-hidden","true");
+    selectedImport=null;
+  };
+
+  window.previewImport=(event)=>{
+    const file=event.target.files?.[0];
+    if(!file)return;
+
+    const reader=new FileReader();
+    reader.onload=()=>{
+      try{
+        const parsed=JSON.parse(String(reader.result||""));
+        const data=parsed?.data && typeof parsed.data==="object" && !Array.isArray(parsed.data) ? parsed.data : parsed;
+        if(!data || typeof data!=="object" || Array.isArray(data)) throw new Error();
+
+        selectedImport=data;
+
+        document.getElementById("importPreview").innerHTML =
+          `<strong style="color:#d9d2e0">${escapeHtml(parsed.app||"JSON Wallet File")}</strong><br>`+
+          `Accounts: ${arr(data,"accounts").length} • `+
+          `Transactions: ${arr(data,"transactions").length} • `+
+          `Buyers: ${arr(data,"buyers").length} • `+
+          `My IDs: ${Array.isArray(data.myIds)?data.myIds.length:0}<br>`+
+          `File: ${escapeHtml(file.name)}`;
+
+        document.getElementById("importPreview").style.display="block";
+        document.getElementById("importConfirm").disabled=false;
+      }catch{
+        selectedImport=null;
+        document.getElementById("importPreview").textContent="This file is not a valid wallet JSON file.";
+        document.getElementById("importPreview").style.display="block";
+        document.getElementById("importConfirm").disabled=true;
+      }
+    };
+    reader.readAsText(file);
+  };
+
+  window.importSelected=()=>{
+    if(!selectedImport)return;
+
+    if(!confirm("Import this file? Your current wallet data will be replaced."))return;
+
+    try{
+      localStorage.setItem(KEY,JSON.stringify(selectedImport));
+      closeImport();
+      updateCounts();
+      alert("Wallet data imported successfully. The page will refresh.");
+      window.location.reload();
+    }catch{
+      alert("Unable to import this file.");
+    }
+  };
+
+  document.addEventListener("DOMContentLoaded",()=>{
+    updateCounts();
+    setTimeout(updateCounts,100);
+  });
+  window.addEventListener("storage",updateCounts);
+})();
+</script>
+</body>
+</html>

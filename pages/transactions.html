@@ -1,0 +1,2325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#09070d">
+<link rel="manifest" href="../manifest.json">
+<link rel="icon" href="../icons/icon-192.png">
+<link rel="apple-touch-icon" href="../icons/icon-192.png">
+<link rel="stylesheet" href="../css/style.css">
+<title>Transactions — Tamilanda Wallet 👑</title>
+
+<style>
+:root{
+  --bg:#09070d;--surface:#15111d;--surface2:#1c1725;--edge:rgba(255,255,255,.08);
+  --text:#fff;--muted:#b7b2bf;--dim:#77717f;--purple:#9b6dff;
+  --green:#55d98b;--red:#ff667a;--blue:#55aaff;--gold:#ffc857;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:var(--bg);color:#fff}
+body{
+  overflow-x:hidden;-webkit-font-smoothing:antialiased;
+  background:
+    radial-gradient(circle at 95% 8%,rgba(92,82,255,.16),transparent 30%),
+    radial-gradient(circle at 5% 20%,rgba(0,117,255,.07),transparent 26%),
+    linear-gradient(180deg,#0a0d1e 0%,#061625 50%,#04090e 100%)
+}
+.transactions-page{
+  width:min(100%,720px);
+  margin:0 auto;
+  padding:18px 16px calc(105px + env(safe-area-inset-bottom));
+}
+
+/* Header */
+.tx-header{
+  display:flex;align-items:center;gap:10px;
+  margin-bottom:12px;padding:15px 14px;border-radius:19px;
+  background:rgba(21,17,29,.90);border:1px solid var(--edge)
+}
+.tx-back,.tx-add{
+  width:42px;height:42px;flex:0 0 42px;display:grid;place-items:center;
+  border-radius:13px;border:1px solid rgba(255,255,255,.09);color:#fff
+}
+.tx-back{background:rgba(255,255,255,.04);font-size:22px}
+.tx-add{margin-left:auto;background:linear-gradient(135deg,#9b6dff,#713fff);font-size:22px;box-shadow:0 9px 22px rgba(113,63,255,.17)}
+.tx-heading{min-width:0}
+.tx-heading h1{margin:0;font-size:23px;line-height:1.05;font-weight:900;letter-spacing:-.5px}
+.tx-heading p{margin:5px 0 0;color:var(--muted);font-size:10px}
+
+/* Compact summary */
+.tx-summary{
+  display:grid;grid-template-columns:1fr 1fr;gap:9px;
+}
+.tx-summary-card{
+  padding:13px 14px;border-radius:16px;background:rgba(21,17,29,.9);border:1px solid var(--edge)
+}
+.tx-summary-label{display:block;color:#77717f;font-size:8px;font-weight:800;text-transform:uppercase;letter-spacing:.8px}
+.tx-summary-value{display:block;margin-top:6px;font-size:18px;font-weight:900}
+.tx-summary-value.received{color:var(--green)}.tx-summary-value.paid{color:var(--red)}
+
+/* GPay-like direction tabs */
+.tx-tabs{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:11px;padding:5px;
+  border-radius:15px;background:rgba(21,17,29,.9);border:1px solid var(--edge)
+}
+.tx-tab{
+  min-height:39px;border:1px solid transparent;border-radius:11px;background:transparent;
+  color:#85808e;font-size:10px;font-weight:850
+}
+.tx-tab.active{color:#fff;background:linear-gradient(135deg,rgba(155,109,255,.23),rgba(113,63,255,.11));border-color:rgba(155,109,255,.30)}
+.tx-tab.received.active{background:rgba(85,217,139,.09);border-color:rgba(85,217,139,.20);color:var(--green)}
+.tx-tab.paid.active{background:rgba(255,102,122,.08);border-color:rgba(255,102,122,.17);color:var(--red)}
+
+/* Search/filter */
+.transaction-filters{
+  display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;padding:12px;
+}
+.transaction-filters:first-of-type{grid-template-columns:1fr}
+.transaction-filters input,.transaction-filters select{
+  width:100%!important;min-width:0!important;margin:0!important;
+  min-height:44px!important;border-radius:11px!important
+}
+#transactionTypeFilter{display:none}
+
+/* List */
+.tx-list-head{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;margin:17px 2px 8px
+}
+.tx-list-head h2{margin:0;font-size:16px;font-weight:900}.tx-count{color:#77717f;font-size:9px}
+.transactions-list{display:flex;flex-direction:column;gap:7px}
+
+.gpay-row{
+  display:flex;align-items:center;gap:11px;min-width:0;padding:12px 11px;
+  border-radius:15px;background:linear-gradient(145deg,rgba(24,20,32,.97),rgba(14,12,20,.97));
+  border:1px solid rgba(255,255,255,.065);box-shadow:0 5px 18px rgba(0,0,0,.10)
+}
+.gpay-icon-wrap{flex:0 0 42px}
+.gpay-icon{
+  width:42px;height:42px;border-radius:14px;display:grid;place-items:center;font-size:18px;
+  background:rgba(155,109,255,.09);border:1px solid rgba(155,109,255,.14)
+}
+.gpay-row.is-received .gpay-icon{background:rgba(85,217,139,.08);border-color:rgba(85,217,139,.15)}
+.gpay-row.is-paid .gpay-icon{background:rgba(255,102,122,.08);border-color:rgba(255,102,122,.15)}
+.gpay-row.is-transfer .gpay-icon{background:rgba(85,170,255,.08);border-color:rgba(85,170,255,.15)}
+.gpay-main{min-width:0;flex:1}
+.gpay-title{
+  color:#fff;font-size:12px;font-weight:850;white-space:nowrap;overflow:hidden;text-overflow:ellipsis
+}
+.gpay-meta{
+  display:flex;gap:5px;margin-top:4px;color:#898290;font-size:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis
+}
+.gpay-date{margin-top:3px;color:#65606d;font-size:7px}
+.gpay-right{display:flex;align-items:center;gap:5px;flex:0 0 auto}
+.gpay-amount{font-size:12px;font-weight:900;white-space:nowrap}
+.gpay-row.is-received .gpay-amount{color:var(--green)}
+.gpay-row.is-paid .gpay-amount{color:var(--red)}
+.gpay-row.is-transfer .gpay-amount{color:var(--purple)}
+.gpay-delete{
+  width:27px;height:27px;border:1px solid rgba(255,255,255,.06);border-radius:9px;
+  background:rgba(255,255,255,.028);color:#6f6977;font-size:16px;line-height:1
+}
+.gpay-delete:active{color:#fff;background:rgba(255,255,255,.07)}
+
+.transactions-empty{
+  padding:40px 18px;text-align:center;border-radius:17px;
+  background:rgba(21,17,29,.80);border:1px dashed rgba(255,255,255,.09)
+}
+.transactions-empty-icon{font-size:31px}.transactions-empty-title{margin-top:8px;font-size:14px;font-weight:850}
+.transactions-empty-text{margin-top:5px;color:#77717f;font-size:9px}
+
+/* Totals appear below the transaction list */
+.tx-total-bar{
+  width:100%;
+  margin-top:14px;
+  display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;padding:8px;
+  border:1px solid rgba(155,109,255,.22);border-radius:17px;
+  background:rgba(15,12,23,.94);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  box-shadow:0 10px 35px rgba(0,0,0,.24)
+}
+.tx-total-item{text-align:center;padding:5px 3px}.tx-total-item+ .tx-total-item{border-left:1px solid rgba(255,255,255,.06)}
+.tx-total-item span{display:block;color:#716b79;font-size:7px;font-weight:800;text-transform:uppercase;letter-spacing:.7px}
+.tx-total-item strong{display:block;margin-top:4px;color:#fff;font-size:11px;font-weight:900}
+.tx-total-item.received strong{color:var(--green)}
+.tx-total-item.paid strong{color:var(--red)}
+.tx-total-item.net strong{color:var(--purple)}
+
+/* Modal */
+.transaction-modal{
+  position:fixed;inset:0;z-index:99999;display:none;align-items:flex-end;justify-content:center;
+  padding:10px;background:rgba(0,0,0,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)
+}
+.transaction-modal.show{display:flex}
+.transaction-modal-card{
+  width:min(100%,600px);max-height:88vh;overflow:auto;padding:17px;
+  border-radius:21px 21px 13px 13px;background:linear-gradient(180deg,#191420,#0e0b13);
+  border:1px solid rgba(155,109,255,.22);box-shadow:0 -20px 65px rgba(0,0,0,.55)
+}
+.transaction-modal-header{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:13px}
+.transaction-modal-header h2{margin:0;font-size:18px;font-weight:900}.transaction-close{width:34px;height:34px;border-radius:10px;border:1px solid var(--edge);background:rgba(255,255,255,.04);color:#fff}
+.transaction-form-group{margin-bottom:10px}.transaction-form-group label{display:block;margin-bottom:6px;color:#aaa2b1;font-size:9px;font-weight:800}
+.transaction-form-group input,.transaction-form-group select,.transaction-form-group textarea{
+  width:100%;min-height:46px;padding:11px 13px;border-radius:11px;background:#110e17;color:#fff;
+  border:1px solid rgba(255,255,255,.08);font-size:13px;outline:none
+}
+.transaction-form-group textarea{min-height:88px;resize:vertical}
+.transaction-transfer-fields.show{display:block}
+.transaction-form-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:13px}
+.transaction-save-button,.transaction-cancel-button{min-height:45px;border-radius:11px;font-size:12px;font-weight:850}
+.transaction-save-button{border:0;background:linear-gradient(135deg,#9b6dff,#713fff);color:#fff}
+.transaction-cancel-button{border:1px solid var(--edge);background:rgba(255,255,255,.04);color:#fff}
+
+@media(max-width:520px){
+  .transactions-page{padding-left:13px;padding-right:13px}
+}
+@media(max-width:390px){
+  .tx-heading h1{font-size:21px}.tx-heading p{font-size:9px}
+  .tx-summary-value{font-size:16px}
+  .gpay-row{gap:8px;padding:11px 9px}
+  .gpay-icon-wrap,.gpay-icon{width:39px;height:39px;flex-basis:39px}
+  .gpay-icon{font-size:17px}
+  .gpay-title{font-size:11px}.gpay-amount{font-size:11px}
+}
+
+/* Native controls: keep the transaction page dark on Chrome/Android/WebView */
+.transaction-filters input,
+.transaction-filters select,
+.transaction-filters .input,
+#transactionTypeFilter,
+.transaction-form-group input,
+.transaction-form-group select,
+.transaction-form-group textarea{
+  color-scheme:dark!important;
+  appearance:none!important;
+  -webkit-appearance:none!important;
+  background:#100d17!important;
+  color:#fff!important;
+  border:1px solid rgba(255,255,255,.08)!important;
+  box-shadow:none!important;
+}
+.transaction-filters input::placeholder,
+.transaction-filters .input::placeholder,
+.transaction-form-group input::placeholder,
+.transaction-form-group textarea::placeholder{
+  color:#756f7f!important;
+}
+.transaction-filters input:focus,
+.transaction-filters select:focus,
+.transaction-filters .input:focus,
+.transaction-form-group input:focus,
+.transaction-form-group select:focus,
+.transaction-form-group textarea:focus{
+  background:#100d17!important;
+  color:#fff!important;
+  border-color:rgba(155,109,255,.48)!important;
+  box-shadow:0 0 0 2px rgba(155,109,255,.07)!important;
+}
+
+</style>
+</head>
+
+<body>
+<main class="transactions-page">
+
+<header class="tx-header">
+  <button class="tx-back" type="button" onclick="goBack()" aria-label="Back">‹</button>
+  <div class="tx-heading">
+    <h1>Transactions 📒</h1>
+    <p>See exactly what you paid and what you received</p>
+  </div>
+  <button class="tx-add" type="button" onclick="openTransactionModal()" aria-label="Add transaction">＋</button>
+</header>
+
+<section class="tx-summary">
+  <article class="tx-summary-card">
+    <span class="tx-summary-label">Total Received</span>
+    <strong id="totalIncome" class="tx-summary-value received">₹0.00</strong>
+  </article>
+  <article class="tx-summary-card">
+    <span class="tx-summary-label">Total Paid</span>
+    <strong id="totalExpense" class="tx-summary-value paid">₹0.00</strong>
+  </article>
+</section>
+
+<!-- The legacy select remains for the existing JS, but is visually replaced by these tabs. -->
+<select id="transactionTypeFilter" aria-hidden="true">
+  <option value="all">All</option>
+  <option value="received">Received</option>
+  <option value="paid">Paid</option>
+  <option value="transfer">Transfer</option>
+</select>
+
+<section class="tx-tabs" aria-label="Transaction direction">
+  <button class="tx-tab active" data-filter="all" type="button">All</button>
+  <button class="tx-tab received" data-filter="received" type="button">Received</button>
+  <button class="tx-tab paid" data-filter="paid" type="button">Paid</button>
+</section>
+
+<section class="card transaction-filters">
+  <input type="search" id="transactionSearch" class="input" placeholder="🔎 Search transactions...">
+</section>
+
+<section class="card transaction-filters">
+  <select id="transactionDateFilter" class="input">
+    <option value="all">All Dates</option>
+    <option value="today">Today</option>
+    <option value="7days">Last 7 Days</option>
+    <option value="30days">Last 30 Days</option>
+  </select>
+  <select id="transactionAccountFilter" class="input">
+    <option value="all">All Accounts</option>
+  </select>
+  <select id="transactionCategoryFilter" class="input">
+    <option value="all">All Categories</option>
+  </select>
+</section>
+
+<div class="tx-list-head">
+  <h2>Money Activity</h2>
+  <span class="tx-count" id="transactionCount">0 transactions</span>
+</div>
+
+<section id="transactionsList" class="transactions-list"></section>
+
+<div class="tx-total-bar" aria-label="Transaction totals">
+  <div class="tx-total-item received"><span>Received</span><strong id="bottomReceived">₹0.00</strong></div>
+  <div class="tx-total-item paid"><span>Paid</span><strong id="bottomPaid">₹0.00</strong></div>
+  <div class="tx-total-item net"><span>Net</span><strong id="bottomNet">₹0.00</strong></div>
+</div>
+
+</main>
+
+<!-- Fixed total at bottom -->
+<!-- Add Transaction -->
+<div id="transactionModal" class="transaction-modal" onclick="handleModalBackdrop(event)">
+  <div class="transaction-modal-card">
+    <div class="transaction-modal-header">
+      <h2>Add Transaction</h2>
+      <button type="button" class="transaction-close" onclick="closeTransactionModal()">✕</button>
+    </div>
+
+    <form id="transactionForm" onsubmit="saveTransaction(event)">
+      <div class="transaction-form-group">
+        <label for="transactionType">Transaction Type</label>
+        <select id="transactionType" class="input" required>
+          <option value="income">Received</option>
+          <option value="expense">Paid</option>
+          <option value="transfer">Transfer</option>
+        </select>
+      </div>
+
+      <div class="transaction-form-group">
+        <label for="transactionAmount">Amount</label>
+        <input type="number" id="transactionAmount" class="input" min="0.01" step="0.01" inputmode="decimal" placeholder="₹ Amount" required>
+      </div>
+
+      <div class="transaction-form-group" id="singleAccountGroup">
+        <label for="transactionAccount">Account</label>
+        <select id="transactionAccount" class="input" required></select>
+      </div>
+
+      <div id="transferFields" class="transaction-transfer-fields">
+        <div class="transaction-form-group">
+          <label for="transferFromAccount">From Account</label>
+          <select id="transferFromAccount" class="input"></select>
+        </div>
+        <div class="transaction-form-group">
+          <label for="transferToAccount">To Account</label>
+          <select id="transferToAccount" class="input"></select>
+        </div>
+      </div>
+
+      <div class="transaction-form-group" id="categoryGroup">
+        <label for="transactionCategory">Category</label>
+        <select id="transactionCategory" class="input"></select>
+      </div>
+
+      <div class="transaction-form-group">
+        <label for="transactionDescription">Description</label>
+        <input type="text" id="transactionDescription" class="input" maxlength="150" placeholder="Example: Salary, Grocery...">
+      </div>
+
+      <div class="transaction-form-group">
+        <label for="transactionDate">Date</label>
+        <input type="date" id="transactionDate" class="input" required>
+      </div>
+
+      <div class="transaction-form-group">
+        <label for="transactionNote">Note</label>
+        <textarea id="transactionNote" class="input" maxlength="300" placeholder="Optional note"></textarea>
+      </div>
+
+      <div class="transaction-form-actions">
+        <button type="button" class="transaction-cancel-button" onclick="closeTransactionModal()">Cancel</button>
+        <button type="submit" class="transaction-save-button">Save Transaction</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<nav class="bottom-nav" aria-label="Primary navigation">
+  <a class="nav-item" data-page="home" href="../index.html"><span class="nav-icon">🏠</span><span class="nav-label">Home</span></a>
+  <a class="nav-item" data-page="myIds" href="./my-ids.html"><span class="nav-icon">🆔</span><span class="nav-label">My IDs</span></a>
+  <a class="nav-item" data-page="buyers" href="./buyers.html"><span class="nav-icon">💳</span><span class="nav-label">EMI Buyers</span></a>
+  <a class="nav-item" data-page="accounts" href="./accounts.html"><span class="nav-icon">🏦</span><span class="nav-label">Accounts</span></a>
+  <a class="nav-item" data-page="more" href="./more.html"><span class="nav-icon">☰</span><span class="nav-label">More</span></a>
+</nav>
+
+<script src="../js/app.js"></script>
+
+
+  <script>
+    "use strict";
+
+
+    /* =======================================================
+       GLOBAL DATA
+       ======================================================= */
+
+    let walletData = null;
+
+
+    /* =======================================================
+       HELPERS
+       ======================================================= */
+
+    function getData() {
+
+      if (
+        window.TamilandaWallet &&
+        typeof window.TamilandaWallet.getData ===
+          "function"
+      ) {
+
+        return window.TamilandaWallet.getData();
+
+      }
+
+      try {
+
+        return JSON.parse(
+          localStorage.getItem(
+            "tamilanda_wallet_data"
+          )
+        ) || {};
+
+      } catch (error) {
+
+        return {};
+
+      }
+
+    }
+
+
+    function saveData() {
+
+      if (
+        window.TamilandaWallet &&
+        typeof window.TamilandaWallet.save ===
+          "function"
+      ) {
+
+        return window.TamilandaWallet.save();
+
+      }
+
+      localStorage.setItem(
+        "tamilanda_wallet_data",
+        JSON.stringify(walletData)
+      );
+
+      return true;
+
+    }
+
+
+    function money(value) {
+
+      if (
+        window.TamilandaWallet &&
+        typeof window.TamilandaWallet.formatMoney ===
+          "function"
+      ) {
+
+        return window.TamilandaWallet.formatMoney(
+          Number(value || 0)
+        );
+
+      }
+
+      return (
+        "₹" +
+        Number(value || 0).toLocaleString(
+          "en-IN",
+          {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+          }
+        )
+      );
+
+    }
+
+
+    function today() {
+
+      if (
+        window.TamilandaWallet &&
+        typeof window.TamilandaWallet.todayString ===
+          "function"
+      ) {
+
+        return window.TamilandaWallet.todayString();
+
+      }
+
+      const date = new Date();
+
+      return (
+        date.getFullYear() +
+        "-" +
+        String(
+          date.getMonth() + 1
+        ).padStart(2, "0") +
+        "-" +
+        String(
+          date.getDate()
+        ).padStart(2, "0")
+      );
+
+    }
+
+
+    function formatDate(dateString) {
+
+      if (!dateString) {
+        return "—";
+      }
+
+      const date =
+        new Date(
+          dateString + "T00:00:00"
+        );
+
+      if (
+        Number.isNaN(
+          date.getTime()
+        )
+      ) {
+
+        return dateString;
+
+      }
+
+      return date.toLocaleDateString(
+        "en-IN",
+        {
+          day: "2-digit",
+          month: "short",
+          year: "numeric"
+        }
+      );
+
+    }
+
+
+    function escapeHtml(value) {
+
+      if (
+        window.TamilandaWallet &&
+        typeof window.TamilandaWallet.escapeHtml ===
+          "function"
+      ) {
+
+        return window.TamilandaWallet.escapeHtml(
+          String(value ?? "")
+        );
+
+      }
+
+      return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+    }
+
+
+    function getAccount(accountId) {
+
+      return (
+        walletData.accounts || []
+      ).find(
+        account =>
+          String(account.id) ===
+          String(accountId)
+      );
+
+    }
+
+
+    function getAccountName(accountId) {
+
+      const account =
+        getAccount(accountId);
+
+      return account
+        ? (
+            account.name ||
+            account.accountName ||
+            "Account"
+          )
+        : "Unknown Account";
+
+    }
+
+
+    function transactionTypeName(type) {
+
+      const names = {
+
+        income: "Income",
+
+        expense: "Expense",
+
+        transfer: "Transfer",
+
+        buyer_initial_payment:
+          "Buyer Initial Payment",
+
+        buyer_payment:
+          "Buyer Payment",
+
+        emi_payment:
+          "EMI Payment",
+
+        recurring_payment:
+          "Recurring Payment",
+
+        money_to_give_payment:
+          "Money To Give Payment"
+
+      };
+
+      return names[type] || "Transaction";
+
+    }
+
+
+    function isIncome(transaction) {
+
+      if (
+        window.TamilandaWallet &&
+        typeof window.TamilandaWallet.isIncomeTransaction ===
+          "function"
+      ) {
+
+        return window.TamilandaWallet.isIncomeTransaction(
+          transaction
+        );
+
+      }
+
+      return (
+        transaction.type === "income" ||
+        transaction.type === "buyer_payment"
+      );
+
+    }
+
+
+    function isExpense(transaction) {
+
+      if (
+        window.TamilandaWallet &&
+        typeof window.TamilandaWallet.isExpenseTransaction ===
+          "function"
+      ) {
+
+        return window.TamilandaWallet.isExpenseTransaction(
+          transaction
+        );
+
+      }
+
+      return (
+        transaction.type === "expense" ||
+        transaction.type === "emi_payment" ||
+        transaction.type === "recurring_payment" ||
+        transaction.type === "money_to_give_payment"
+      );
+
+    }
+
+
+    function isTransfer(transaction) {
+
+      if (
+        window.TamilandaWallet &&
+        typeof window.TamilandaWallet.isTransferTransaction ===
+          "function"
+      ) {
+
+        return window.TamilandaWallet.isTransferTransaction(
+          transaction
+        );
+
+      }
+
+      return (
+        transaction.type === "transfer"
+      );
+
+    }
+
+
+    function iconForTransaction(transaction) {
+
+      if (
+        isIncome(transaction)
+      ) {
+
+        return "💰";
+
+      }
+
+      if (
+        isExpense(transaction)
+      ) {
+
+        return "💸";
+
+      }
+
+      if (
+        isTransfer(transaction)
+      ) {
+
+        return "🔄";
+
+      }
+
+      return "📒";
+
+    }
+
+
+    function amountClass(transaction) {
+
+      if (
+        isIncome(transaction)
+      ) {
+
+        return "transaction-income";
+
+      }
+
+      if (
+        isExpense(transaction)
+      ) {
+
+        return "transaction-expense";
+
+      }
+
+      return "transaction-transfer";
+
+    }
+
+
+    function amountSign(transaction) {
+
+      if (
+        isIncome(transaction)
+      ) {
+
+        return "+";
+
+      }
+
+      if (
+        isExpense(transaction)
+      ) {
+
+        return "-";
+
+      }
+
+      return "";
+
+    }
+
+
+    /* =======================================================
+       FILTER OPTIONS
+       ======================================================= */
+
+    function populateFilters() {
+
+      const accountFilter =
+        document.getElementById(
+          "transactionAccountFilter"
+        );
+
+      const categoryFilter =
+        document.getElementById(
+          "transactionCategoryFilter"
+        );
+
+
+      accountFilter.innerHTML =
+        `
+          <option value="all">
+            All Accounts
+          </option>
+        `;
+
+
+      (
+        walletData.accounts || []
+      ).forEach(
+        account => {
+
+          const option =
+            document.createElement(
+              "option"
+            );
+
+          option.value =
+            account.id;
+
+          option.textContent =
+            (
+              account.name ||
+              account.accountName ||
+              "Account"
+            );
+
+          accountFilter.appendChild(
+            option
+          );
+
+        }
+      );
+
+
+      const categorySet =
+        new Set();
+
+
+      (
+        walletData.transactions || []
+      ).forEach(
+        transaction => {
+
+          if (
+            transaction.category
+          ) {
+
+            categorySet.add(
+              String(
+                transaction.category
+              )
+            );
+
+          }
+
+        }
+      );
+
+
+      categoryFilter.innerHTML =
+        `
+          <option value="all">
+            All Categories
+          </option>
+        `;
+
+
+      Array.from(
+        categorySet
+      )
+        .sort(
+          (a, b) =>
+            a.localeCompare(b)
+        )
+        .forEach(
+          category => {
+
+            const option =
+              document.createElement(
+                "option"
+              );
+
+            option.value =
+              category;
+
+            option.textContent =
+              category;
+
+            categoryFilter.appendChild(
+              option
+            );
+
+          }
+        );
+
+    }
+
+
+    function populateFormAccounts() {
+
+      const singleAccount =
+        document.getElementById(
+          "transactionAccount"
+        );
+
+      const fromAccount =
+        document.getElementById(
+          "transferFromAccount"
+        );
+
+      const toAccount =
+        document.getElementById(
+          "transferToAccount"
+        );
+
+
+      const accounts =
+        walletData.accounts || [];
+
+
+      const defaultOption =
+        `
+          <option value="">
+            Select account
+          </option>
+        `;
+
+
+      singleAccount.innerHTML =
+        defaultOption;
+
+      fromAccount.innerHTML =
+        defaultOption;
+
+      toAccount.innerHTML =
+        defaultOption;
+
+
+      accounts.forEach(
+        account => {
+
+          const label =
+            (
+              account.name ||
+              account.accountName ||
+              "Account"
+            ) +
+            " — " +
+            money(
+              account.balance || 0
+            );
+
+
+          const option1 =
+            document.createElement(
+              "option"
+            );
+
+          option1.value =
+            account.id;
+
+          option1.textContent =
+            label;
+
+          singleAccount.appendChild(
+            option1
+          );
+
+
+          const option2 =
+            document.createElement(
+              "option"
+            );
+
+          option2.value =
+            account.id;
+
+          option2.textContent =
+            label;
+
+          fromAccount.appendChild(
+            option2
+          );
+
+
+          const option3 =
+            document.createElement(
+              "option"
+            );
+
+          option3.value =
+            account.id;
+
+          option3.textContent =
+            label;
+
+          toAccount.appendChild(
+            option3
+          );
+
+        }
+      );
+
+    }
+
+
+    function populateCategories() {
+
+      const categorySelect =
+        document.getElementById(
+          "transactionCategory"
+        );
+
+
+      const categories = [];
+
+
+      const incomeCategories =
+        walletData.categories &&
+        Array.isArray(
+          walletData.categories.income
+        )
+          ? walletData.categories.income
+          : [];
+
+
+      const expenseCategories =
+        walletData.categories &&
+        Array.isArray(
+          walletData.categories.expense
+        )
+          ? walletData.categories.expense
+          : [];
+
+
+      [
+        ...incomeCategories,
+        ...expenseCategories
+      ].forEach(
+        category => {
+
+          const value =
+            String(category || "")
+              .trim();
+
+          if (
+            value &&
+            !categories.includes(value)
+          ) {
+
+            categories.push(
+              value
+            );
+
+          }
+
+        }
+      );
+
+
+      categorySelect.innerHTML =
+        `
+          <option value="">
+            Select category
+          </option>
+        `;
+
+
+      categories
+        .sort(
+          (a, b) =>
+            a.localeCompare(b)
+        )
+        .forEach(
+          category => {
+
+            const option =
+              document.createElement(
+                "option"
+              );
+
+            option.value =
+              category;
+
+            option.textContent =
+              category;
+
+            categorySelect.appendChild(
+              option
+            );
+
+          }
+        );
+
+    }
+
+
+    /* =======================================================
+       FILTERING
+       ======================================================= */
+
+    function getDateLimit(filter) {
+
+      const now =
+        new Date();
+
+      const current =
+        new Date(
+          now.getFullYear(),
+          now.getMonth(),
+          now.getDate()
+        );
+
+
+      if (
+        filter === "today"
+      ) {
+
+        return current;
+
+      }
+
+
+      if (
+        filter === "7days"
+      ) {
+
+        const date =
+          new Date(current);
+
+        date.setDate(
+          date.getDate() - 6
+        );
+
+        return date;
+
+      }
+
+
+      if (
+        filter === "30days"
+      ) {
+
+        const date =
+          new Date(current);
+
+        date.setDate(
+          date.getDate() - 29
+        );
+
+        return date;
+
+      }
+
+
+      return null;
+
+    }
+
+
+    function getFilteredTransactions() {
+
+      const transactions =
+        [
+          ...(walletData.transactions || [])
+        ];
+
+
+      const search =
+        document
+          .getElementById(
+            "transactionSearch"
+          )
+          .value
+          .trim()
+          .toLowerCase();
+
+
+      const type =
+        document
+          .getElementById(
+            "transactionTypeFilter"
+          )
+          .value;
+
+
+      const dateFilter =
+        document
+          .getElementById(
+            "transactionDateFilter"
+          )
+          .value;
+
+
+      const accountId =
+        document
+          .getElementById(
+            "transactionAccountFilter"
+          )
+          .value;
+
+
+      const category =
+        document
+          .getElementById(
+            "transactionCategoryFilter"
+          )
+          .value;
+
+
+      const dateLimit =
+        getDateLimit(
+          dateFilter
+        );
+
+
+      return transactions.filter(
+        transaction => {
+
+          if (type === "received" && !isIncome(transaction)) {
+            return false;
+          }
+
+          if (type === "paid" && !isExpense(transaction)) {
+            return false;
+          }
+
+          if (type === "transfer" && !isTransfer(transaction)) {
+            return false;
+          }
+
+
+          if (
+            accountId !== "all"
+          ) {
+
+            if (
+              String(
+                transaction.accountId
+              ) !==
+              String(accountId)
+            ) {
+
+              return false;
+
+            }
+
+          }
+
+
+          if (
+            category !== "all"
+          ) {
+
+            if (
+              String(
+                transaction.category || ""
+              ) !==
+              String(category)
+            ) {
+
+              return false;
+
+            }
+
+          }
+
+
+          if (
+            dateLimit &&
+            transaction.date
+          ) {
+
+            const transactionDate =
+              new Date(
+                transaction.date +
+                "T00:00:00"
+              );
+
+            if (
+              transactionDate <
+              dateLimit
+            ) {
+
+              return false;
+
+            }
+
+          }
+
+
+          if (
+            search
+          ) {
+
+            const searchable =
+              [
+                transaction.description,
+                transaction.category,
+                transaction.note,
+                transactionTypeName(
+                  transaction.type
+                ),
+                getAccountName(
+                  transaction.accountId
+                )
+              ]
+                .join(" ")
+                .toLowerCase();
+
+
+            if (
+              !searchable.includes(
+                search
+              )
+            ) {
+
+              return false;
+
+            }
+
+          }
+
+
+          return true;
+
+        }
+      )
+      .sort(
+        (a, b) => {
+
+          const dateDifference =
+            new Date(
+              b.date ||
+              b.createdAt ||
+              0
+            ) -
+            new Date(
+              a.date ||
+              a.createdAt ||
+              0
+            );
+
+
+          if (
+            dateDifference !== 0
+          ) {
+
+            return dateDifference;
+
+          }
+
+
+          return (
+            new Date(
+              b.createdAt ||
+              0
+            ) -
+            new Date(
+              a.createdAt ||
+              0
+            )
+          );
+
+        }
+      );
+
+    }
+
+
+    /* =======================================================
+       SUMMARY
+       ======================================================= */
+
+    function renderSummary() {
+
+      const transactions = walletData.transactions || [];
+
+      let income = 0;
+      let expense = 0;
+
+      transactions.forEach(transaction => {
+        if (isIncome(transaction)) {
+          income += Number(transaction.amount || 0);
+        }
+        if (isExpense(transaction)) {
+          expense += Number(transaction.amount || 0);
+        }
+      });
+
+      const net = income - expense;
+
+      document.getElementById("totalIncome").textContent = money(income);
+      document.getElementById("totalExpense").textContent = money(expense);
+
+      const bottomReceived = document.getElementById("bottomReceived");
+      const bottomPaid = document.getElementById("bottomPaid");
+      const bottomNet = document.getElementById("bottomNet");
+
+      if (bottomReceived) bottomReceived.textContent = money(income);
+      if (bottomPaid) bottomPaid.textContent = money(expense);
+      if (bottomNet) bottomNet.textContent = money(net);
+    }
+
+    /* =======================================================
+       RENDER LIST
+       ======================================================= */
+
+    function renderTransactions() {
+
+      walletData = getData();
+
+      const list = document.getElementById("transactionsList");
+      const transactions = getFilteredTransactions();
+
+      const countText =
+        `${transactions.length} ${transactions.length === 1 ? "transaction" : "transactions"}`;
+
+      document.getElementById("transactionCount").textContent = countText;
+
+      if (transactions.length === 0) {
+        list.innerHTML = `
+          <div class="transactions-empty">
+            <div class="transactions-empty-icon">📒</div>
+            <div class="transactions-empty-title">No transactions found</div>
+            <div class="transactions-empty-text">Try changing your search or filters.</div>
+          </div>
+        `;
+        return;
+      }
+
+      list.innerHTML = transactions.map(transaction => {
+
+        const title =
+          transaction.description ||
+          transaction.category ||
+          transactionTypeName(transaction.type);
+
+        const accountName =
+          getAccountName(transaction.accountId);
+
+        const dateText =
+          formatDate(transaction.date);
+
+        const timeText =
+          transaction.createdAt
+            ? new Date(transaction.createdAt).toLocaleTimeString("en-IN", {
+                hour: "2-digit",
+                minute: "2-digit"
+              })
+            : "";
+
+        const received = isIncome(transaction);
+        const paid = isExpense(transaction);
+        const transfer = isTransfer(transaction);
+
+        const directionLabel =
+          received ? "Received" : paid ? "Paid" : transfer ? "Transfer" : "Transaction";
+
+        const sign =
+          amountSign(transaction);
+
+        return `
+          <article class="gpay-row ${received ? "is-received" : paid ? "is-paid" : "is-transfer"}">
+
+            <div class="gpay-icon-wrap">
+              <div class="gpay-icon">
+                ${iconForTransaction(transaction)}
+              </div>
+            </div>
+
+            <div class="gpay-main">
+              <div class="gpay-title" title="${escapeHtml(title)}">
+                ${escapeHtml(title)}
+              </div>
+
+              <div class="gpay-meta">
+                <span>${escapeHtml(directionLabel)}</span>
+                <span>•</span>
+                <span>${escapeHtml(accountName)}</span>
+              </div>
+
+              <div class="gpay-date">
+                ${escapeHtml(dateText)}${timeText ? " • " + escapeHtml(timeText) : ""}
+              </div>
+            </div>
+
+            <div class="gpay-right">
+              <div class="gpay-amount">
+                ${sign}${escapeHtml(money(transaction.amount))}
+              </div>
+              <button
+                type="button"
+                class="gpay-delete"
+                title="Move to Trash"
+                aria-label="Delete transaction"
+                onclick="deleteTransaction('${escapeHtml(transaction.id)}')"
+              >⋮</button>
+            </div>
+
+          </article>
+        `;
+      }).join("");
+    }
+
+    /* =======================================================
+       DELETE
+       ======================================================= */
+
+    function deleteTransaction(id) {
+
+      walletData =
+        getData();
+
+
+      const transaction =
+        (
+          walletData.transactions ||
+          []
+        ).find(
+          item =>
+            String(item.id) ===
+            String(id)
+        );
+
+
+      if (!transaction) {
+
+        alert(
+          "Transaction not found."
+        );
+
+        return;
+
+      }
+
+
+      const title =
+        transaction.description ||
+        transaction.category ||
+        "this transaction";
+
+
+      if (
+        !confirm(
+          `Move "${title}" to Trash?`
+        )
+      ) {
+
+        return;
+
+      }
+
+
+      /*
+        Special linked payments should stay
+        protected and be managed from their
+        source page.
+      */
+
+      const protectedTypes = [
+        "buyer_initial_payment",
+        "buyer_payment",
+        "emi_payment",
+        "recurring_payment",
+        "money_to_give_payment"
+      ];
+
+
+      if (
+        protectedTypes.includes(
+          transaction.type
+        )
+      ) {
+
+        alert(
+          "This linked payment should be managed from its original section."
+        );
+
+        return;
+
+      }
+
+
+      if (
+        window.TamilandaWallet &&
+        typeof window.TamilandaWallet.deleteRecord ===
+          "function"
+      ) {
+
+        window.TamilandaWallet.deleteRecord(
+          "transactions",
+          id
+        );
+
+      } else {
+
+        walletData.transactions =
+          (
+            walletData.transactions ||
+            []
+          ).filter(
+            item =>
+              String(item.id) !==
+              String(id)
+          );
+
+        saveData();
+
+      }
+
+
+      walletData =
+        getData();
+
+
+      renderSummary();
+
+      populateFilters();
+
+      renderTransactions();
+
+    }
+
+
+    /* =======================================================
+       MODAL
+       ======================================================= */
+
+    function openTransactionModal() {
+
+      walletData =
+        getData();
+
+
+      document.getElementById(
+        "transactionModal"
+      ).classList.add("show");
+
+
+      document.getElementById(
+        "transactionForm"
+      ).reset();
+
+
+      document.getElementById(
+        "transactionDate"
+      ).value =
+        today();
+
+
+      populateFormAccounts();
+
+      populateCategories();
+
+      updateTransactionTypeUI();
+
+
+      setTimeout(
+        () => {
+
+          document.getElementById(
+            "transactionAmount"
+          ).focus();
+
+        },
+        50
+      );
+
+    }
+
+
+    function closeTransactionModal() {
+
+      document.getElementById(
+        "transactionModal"
+      ).classList.remove("show");
+
+    }
+
+
+    function handleModalBackdrop(
+      event
+    ) {
+
+      if (
+        event.target.id ===
+        "transactionModal"
+      ) {
+
+        closeTransactionModal();
+
+      }
+
+    }
+
+
+    /* =======================================================
+       TYPE SWITCH
+       ======================================================= */
+
+    function updateTransactionTypeUI() {
+
+      const type =
+        document.getElementById(
+          "transactionType"
+        ).value;
+
+
+      const singleAccountGroup =
+        document.getElementById(
+          "singleAccountGroup"
+        );
+
+
+      const transferFields =
+        document.getElementById(
+          "transferFields"
+        );
+
+
+      const categoryGroup =
+        document.getElementById(
+          "categoryGroup"
+        );
+
+
+      const singleAccount =
+        document.getElementById(
+          "transactionAccount"
+        );
+
+
+      const fromAccount =
+        document.getElementById(
+          "transferFromAccount"
+        );
+
+
+      const toAccount =
+        document.getElementById(
+          "transferToAccount"
+        );
+
+
+      if (
+        type === "transfer"
+      ) {
+
+        singleAccountGroup.style.display =
+          "none";
+
+        transferFields.classList.add(
+          "show"
+        );
+
+        categoryGroup.style.display =
+          "none";
+
+        singleAccount.required =
+          false;
+
+        fromAccount.required =
+          true;
+
+        toAccount.required =
+          true;
+
+      } else {
+
+        singleAccountGroup.style.display =
+          "block";
+
+        transferFields.classList.remove(
+          "show"
+        );
+
+        categoryGroup.style.display =
+          "block";
+
+        singleAccount.required =
+          true;
+
+        fromAccount.required =
+          false;
+
+        toAccount.required =
+          false;
+
+      }
+
+    }
+
+
+    /* =======================================================
+       SAVE TRANSACTION
+       ======================================================= */
+
+    function saveTransaction(
+      event
+    ) {
+
+      event.preventDefault();
+
+
+      walletData =
+        getData();
+
+
+      const type =
+        document.getElementById(
+          "transactionType"
+        ).value;
+
+
+      const amount =
+        Number(
+          document.getElementById(
+            "transactionAmount"
+          ).value
+        );
+
+
+      const description =
+        document.getElementById(
+          "transactionDescription"
+        ).value.trim();
+
+
+      const date =
+        document.getElementById(
+          "transactionDate"
+        ).value ||
+        today();
+
+
+      const note =
+        document.getElementById(
+          "transactionNote"
+        ).value.trim();
+
+
+      if (
+        !Number.isFinite(amount) ||
+        amount <= 0
+      ) {
+
+        alert(
+          "Please enter a valid amount."
+        );
+
+        return;
+
+      }
+
+
+      /* =====================================================
+         TRANSFER
+         ===================================================== */
+
+      if (
+        type === "transfer"
+      ) {
+
+        const fromAccountId =
+          document.getElementById(
+            "transferFromAccount"
+          ).value;
+
+
+        const toAccountId =
+          document.getElementById(
+            "transferToAccount"
+          ).value;
+
+
+        if (
+          !fromAccountId ||
+          !toAccountId
+        ) {
+
+          alert(
+            "Please select both accounts."
+          );
+
+          return;
+
+        }
+
+
+        if (
+          String(fromAccountId) ===
+          String(toAccountId)
+        ) {
+
+          alert(
+            "From Account and To Account cannot be the same."
+          );
+
+          return;
+
+        }
+
+
+        const fromAccount =
+          getAccount(
+            fromAccountId
+          );
+
+
+        if (!fromAccount) {
+
+          alert(
+            "From account not found."
+          );
+
+          return;
+
+        }
+
+
+        const currentBalance =
+          Number(
+            fromAccount.balance || 0
+          );
+
+
+        if (
+          amount >
+          currentBalance
+        ) {
+
+          alert(
+            "Insufficient balance in the selected account."
+          );
+
+          return;
+
+        }
+
+
+        if (
+          window.TamilandaWallet &&
+          typeof window.TamilandaWallet.transferBetweenAccounts ===
+            "function"
+        ) {
+
+          const result =
+            window.TamilandaWallet.transferBetweenAccounts(
+              fromAccountId,
+              toAccountId,
+              amount,
+              note || description,
+              date
+            );
+
+
+          if (!result) {
+
+            alert(
+              "Transfer could not be completed."
+            );
+
+            return;
+
+          }
+
+        } else {
+
+          alert(
+            "Transfer function is unavailable."
+          );
+
+          return;
+
+        }
+
+
+        closeTransactionModal();
+
+
+        walletData =
+          getData();
+
+
+        renderSummary();
+
+        populateFilters();
+
+        renderTransactions();
+
+
+        alert(
+          "Transfer completed successfully. ✅"
+        );
+
+
+        return;
+
+      }
+
+
+      /* =====================================================
+         NORMAL INCOME / EXPENSE
+         ===================================================== */
+
+      const accountId =
+        document.getElementById(
+          "transactionAccount"
+        ).value;
+
+
+      const category =
+        document.getElementById(
+          "transactionCategory"
+        ).value;
+
+
+      if (!accountId) {
+
+        alert(
+          "Please select an account."
+        );
+
+        return;
+
+      }
+
+
+      const transaction = {
+
+        type,
+
+        amount,
+
+        accountId,
+
+        category,
+
+        description:
+          description ||
+          category ||
+          (
+            type === "income"
+              ? "Income"
+              : "Expense"
+          ),
+
+        note,
+
+        date
+
+      };
+
+
+      if (
+        window.TamilandaWallet &&
+        typeof window.TamilandaWallet.addTransaction ===
+          "function"
+      ) {
+
+        const result =
+          window.TamilandaWallet.addTransaction(
+            transaction
+          );
+
+
+        if (!result) {
+
+          alert(
+            type === "expense"
+              ? "Expense could not be added. Please check the selected account balance."
+              : "Income could not be added."
+          );
+
+          return;
+
+        }
+
+      } else {
+
+        alert(
+          "Transaction function is unavailable."
+        );
+
+        return;
+
+      }
+
+
+      closeTransactionModal();
+
+
+      walletData =
+        getData();
+
+
+      renderSummary();
+
+      populateFilters();
+
+      renderTransactions();
+
+
+      alert(
+        type === "income"
+          ? "Income added successfully. ✅"
+          : "Expense added successfully. ✅"
+      );
+
+    }
+
+
+    /* =======================================================
+       FILTER EVENTS
+       ======================================================= */
+
+    [
+      "transactionSearch",
+      "transactionTypeFilter",
+      "transactionDateFilter",
+      "transactionAccountFilter",
+      "transactionCategoryFilter"
+    ]
+      .forEach(
+        id => {
+
+          const element =
+            document.getElementById(
+              id
+            );
+
+
+          if (!element) {
+            return;
+          }
+
+
+          element.addEventListener(
+            "input",
+            renderTransactions
+          );
+
+
+          element.addEventListener(
+            "change",
+            renderTransactions
+          );
+
+        }
+      );
+
+
+    document.getElementById(
+      "transactionType"
+    ).addEventListener(
+      "change",
+      updateTransactionTypeUI
+    );
+
+
+    /* =======================================================
+       ESCAPE TO CLOSE MODAL
+       ======================================================= */
+
+    document.addEventListener(
+      "keydown",
+      event => {
+
+        if (
+          event.key === "Escape"
+        ) {
+
+          closeTransactionModal();
+
+        }
+
+      }
+    );
+
+
+    /* =======================================================
+       BOTTOM NAV
+       ======================================================= */
+
+    document
+      .querySelectorAll(
+        ".bottom-nav .nav-item"
+      )
+      .forEach(
+        item => {
+
+          item.addEventListener(
+            "click",
+            () => {
+
+              const page =
+                item.dataset.page;
+
+
+              if (
+                window.TamilandaWallet &&
+                typeof window.TamilandaWallet.goToPage ===
+                  "function"
+              ) {
+
+                window.TamilandaWallet.goToPage(
+                  page
+                );
+
+                return;
+
+              }
+
+
+              if (
+                page === "home"
+              ) {
+
+                window.location.href =
+                  "../index.html";
+
+                return;
+
+              }
+
+
+              if (
+                page === "transactions"
+              ) {
+
+                window.location.href =
+                  "./transactions.html";
+
+                return;
+
+              }
+
+
+              if (
+                page === "buyers"
+              ) {
+
+                window.location.href =
+                  "./buyers.html";
+
+                return;
+
+              }
+
+
+              if (
+                page === "accounts"
+              ) {
+
+                window.location.href =
+                  "./accounts.html";
+
+                return;
+
+              }
+
+
+              if (
+                page === "more"
+              ) {
+
+                window.location.href =
+                  "./more.html";
+
+              }
+
+            }
+          );
+
+        }
+      );
+
+
+    /* =======================================================
+       STORAGE UPDATE
+       ======================================================= */
+
+    window.addEventListener(
+      "storage",
+      event => {
+
+        if (
+          event.key ===
+          "tamilanda_wallet_data"
+        ) {
+
+          walletData =
+            getData();
+
+          renderSummary();
+
+          populateFilters();
+
+          renderTransactions();
+
+        }
+
+      }
+    );
+
+
+    /* =======================================================
+       INITIALIZE
+       ======================================================= */
+
+    document.addEventListener(
+      "DOMContentLoaded",
+      () => {
+
+        walletData =
+          getData();
+
+
+        populateFilters();
+
+        populateFormAccounts();
+
+        populateCategories();
+
+        renderSummary();
+
+        renderTransactions();
+
+        updateTransactionTypeUI();
+
+      }
+    );
+
+  </script>
+<script>
+document.addEventListener("DOMContentLoaded",()=>{
+  const tabs=document.querySelectorAll(".tx-tab");
+  const select=document.getElementById("transactionTypeFilter");
+  tabs.forEach(tab=>{
+    tab.addEventListener("click",()=>{
+      tabs.forEach(x=>x.classList.remove("active"));
+      tab.classList.add("active");
+      select.value=tab.dataset.filter;
+      renderTransactions();
+    });
+  });
+});
+</script>
+</body>
+</html>

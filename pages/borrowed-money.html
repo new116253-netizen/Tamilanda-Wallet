@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#09070d">
+<title>Borrowed Money • Tamilanda Wallet</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="icon" href="../icons/icon-192.png">
+<link rel="apple-touch-icon" href="../icons/icon-192.png">
+<link rel="stylesheet" href="../css/style.css">
+<style>
+:root{
+  --bm-bg:#090812;--bm-card:#12101c;--bm-card2:#171322;--bm-border:rgba(255,255,255,.08);
+  --bm-muted:#aaa5b8;--bm-text:#f7f4ff;--bm-purple:#8d68ff;--bm-purple2:#5d43d8;
+}
+body{background:var(--bm-bg)!important;color:var(--bm-text)!important;overflow-x:hidden}
+.bm-page{max-width:720px;margin:0 auto;padding:18px 16px 110px}
+.bm-head{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.bm-back{width:42px;height:42px;border-radius:14px;border:1px solid var(--bm-border);background:var(--bm-card);color:#fff;font-size:22px;display:grid;place-items:center;cursor:pointer}
+.bm-title h1{margin:0;font-size:25px;letter-spacing:-.4px}.bm-title p{margin:4px 0 0;color:var(--bm-muted);font-size:13px}
+.bm-total{position:relative;overflow:hidden;padding:22px 20px;border-radius:24px;background:linear-gradient(145deg,#19132c,#0f0d18);border:1px solid rgba(141,104,255,.25);box-shadow:0 18px 45px rgba(0,0,0,.28);margin-bottom:14px}
+.bm-total:after{content:"";position:absolute;width:180px;height:180px;right:-65px;top:-80px;background:rgba(141,104,255,.16);filter:blur(45px);border-radius:50%}
+.bm-total-label,.bm-total-value,.bm-total-sub{position:relative;z-index:1}.bm-total-label{color:#b9b1d0;font-size:13px}.bm-total-value{font-size:32px;font-weight:800;margin-top:5px}.bm-total-sub{font-size:12px;color:var(--bm-muted);margin-top:5px}
+.bm-card{background:var(--bm-card);border:1px solid var(--bm-border);border-radius:20px;padding:18px;margin-bottom:14px}
+.bm-card h2{font-size:16px;margin:0 0 13px}
+.bm-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.bm-field{margin-bottom:12px;min-width:0}.bm-label{display:block;font-size:12px;color:var(--bm-muted);margin-bottom:7px}
+.bm-input,.bm-textarea{display:block;width:100%;box-sizing:border-box;border:1px solid var(--bm-border)!important;border-radius:13px!important;background:#15111d!important;color:#fff!important;padding:13px 14px!important;outline:none!important;font-size:14px!important;color-scheme:dark!important}
+.bm-textarea{min-height:80px;resize:vertical}.bm-input:focus,.bm-textarea:focus{border-color:rgba(141,104,255,.65)!important}
+.bm-btn{width:100%;border:0;border-radius:13px;padding:13px;color:#fff;font-weight:800;cursor:pointer;background:linear-gradient(135deg,var(--bm-purple2),var(--bm-purple))}
+.bm-status{display:none;margin-top:10px;padding:11px 12px;border-radius:12px;font-size:12px}.bm-status.show{display:block}.bm-status.ok{color:#b8ffda;background:rgba(50,220,140,.07);border:1px solid rgba(50,220,140,.16)}.bm-status.err{color:#ffabb7;background:rgba(255,80,100,.07);border:1px solid rgba(255,80,100,.16)}
+.bm-tools{display:flex;gap:9px;margin-bottom:13px}.bm-search{flex:1;min-width:0}.bm-count{font-size:12px;color:var(--bm-muted);align-self:center;white-space:nowrap}
+.bm-item{background:var(--bm-card2);border:1px solid var(--bm-border);border-radius:17px;padding:15px;margin-bottom:10px}
+.bm-item:last-child{margin-bottom:0}.bm-item-top{display:flex;justify-content:space-between;gap:12px}.bm-name{font-size:15px;font-weight:750;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.bm-amount{font-size:15px;font-weight:800;white-space:nowrap}
+.bm-note{font-size:12px;color:var(--bm-muted);margin-top:5px;line-height:1.45;white-space:pre-wrap;word-break:break-word}
+.bm-meta{font-size:11px;color:var(--bm-muted);margin-top:8px}.bm-actions{display:flex;gap:8px;margin-top:12px}.bm-small{border:1px solid var(--bm-border);background:#211c2c;color:#fff;border-radius:10px;padding:9px 12px;font-size:12px;font-weight:700;cursor:pointer}.bm-small.delete{color:#ffabb7}
+.bm-empty{text-align:center;color:var(--bm-muted);font-size:13px;padding:18px 0}
+.bm-dialog{position:fixed;inset:0;background:rgba(0,0,0,.68);display:none;align-items:flex-end;justify-content:center;z-index:999;padding:14px}.bm-dialog.show{display:flex}.bm-sheet{width:min(100%,600px);box-sizing:border-box;background:#110f19;border:1px solid var(--bm-border);border-radius:24px 24px 16px 16px;padding:18px;box-shadow:0 -20px 60px rgba(0,0,0,.45)}.bm-sheet-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}.bm-sheet h3{margin:0;font-size:17px}.bm-close{background:#211c2c;border:1px solid var(--bm-border);color:#fff;width:34px;height:34px;border-radius:11px;cursor:pointer;font-size:18px}
+@media(max-width:430px){.bm-page{padding-left:13px;padding-right:13px}.bm-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<main class="bm-page">
+  <header class="bm-head">
+    <button class="bm-back" type="button" onclick="goBack()" aria-label="Back">‹</button>
+    <div class="bm-title"><h1>Borrowed Money</h1><p>Money you borrowed from others</p></div>
+  </header>
+
+  <section class="bm-total">
+    <div class="bm-total-label">Total Borrowed</div>
+    <div class="bm-total-value" id="totalAmount">₹0</div>
+    <div class="bm-total-sub" id="totalCount">0 people</div>
+  </section>
+
+  <section class="bm-card">
+    <h2>Add Borrowed Amount</h2>
+    <form id="borrowForm" onsubmit="saveBorrowed(event)">
+      <div class="bm-grid">
+        <div class="bm-field">
+          <label class="bm-label" for="personName">Person Name</label>
+          <input class="bm-input" id="personName" type="text" maxlength="100" required placeholder="Name">
+        </div>
+        <div class="bm-field">
+          <label class="bm-label" for="amount">Borrowed Amount</label>
+          <input class="bm-input" id="amount" type="number" min="0.01" step="0.01" inputmode="decimal" required placeholder="₹ 0">
+        </div>
+      </div>
+      <div class="bm-field">
+        <label class="bm-label" for="note">Notes</label>
+        <textarea class="bm-textarea" id="note" maxlength="300" placeholder="Optional note"></textarea>
+      </div>
+      <button class="bm-btn" id="saveBtn" type="submit">Add Borrowed Amount</button>
+      <div id="status" class="bm-status"></div>
+    </form>
+  </section>
+
+  <section class="bm-card">
+    <div class="bm-tools">
+      <input class="bm-input bm-search" id="search" type="search" placeholder="Search person..." oninput="renderList()">
+      <span class="bm-count" id="visibleCount">0</span>
+    </div>
+    <div id="list"></div>
+  </section>
+</main>
+
+<div class="bm-dialog" id="editDialog" onclick="if(event.target===this)closeEdit()">
+  <div class="bm-sheet">
+    <div class="bm-sheet-head">
+      <h3>Edit Borrowed Amount</h3>
+      <button class="bm-close" type="button" onclick="closeEdit()">×</button>
+    </div>
+    <form onsubmit="updateBorrowed(event)">
+      <input type="hidden" id="editId">
+      <div class="bm-field"><label class="bm-label" for="editName">Person Name</label><input class="bm-input" id="editName" required maxlength="100"></div>
+      <div class="bm-field"><label class="bm-label" for="editAmount">Borrowed Amount</label><input class="bm-input" id="editAmount" type="number" min="0.01" step="0.01" required></div>
+      <div class="bm-field"><label class="bm-label" for="editNote">Notes</label><textarea class="bm-textarea" id="editNote" maxlength="300"></textarea></div>
+      <button class="bm-btn" type="submit">Save Changes</button>
+    </form>
+  </div>
+</div>
+
+<script src="../js/app.js"></script>
+<script>
+(function(){
+  'use strict';
+  const api=window.TamilandaWallet;
+
+  function getData(){
+    if(api&&typeof api.getData==='function')return api.getData();
+    try{return JSON.parse(localStorage.getItem('tamilanda_wallet_data')||'{}')}catch(e){return {}}
+  }
+  function saveData(d){
+    if(api&&typeof api.save==='function'){api.save(d);return}
+    localStorage.setItem('tamilanda_wallet_data',JSON.stringify(d));
+  }
+  function money(v){
+    if(api&&typeof api.formatMoney==='function')return api.formatMoney(Number(v)||0);
+    return '₹'+(Number(v)||0).toLocaleString('en-IN',{maximumFractionDigits:2});
+  }
+  function esc(s){
+    if(api&&typeof api.escapeHtml==='function')return api.escapeHtml(String(s));
+    return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+  }
+  function list(){const d=getData();return Array.isArray(d.moneyBorrowed)?d.moneyBorrowed:(Array.isArray(d.borrowedMoney)?d.borrowedMoney:[])}
+  function writeList(items){
+    const d=getData();
+    d.moneyBorrowed=items;
+    if(Array.isArray(d.borrowedMoney))d.borrowedMoney=items;
+    saveData(d);
+  }
+  function id(){return 'borrow_'+Date.now()+'_'+Math.random().toString(36).slice(2,8)}
+
+  window.renderList=function(){
+    const all=list();
+    const q=document.getElementById('search').value.trim().toLowerCase();
+    const filtered=q?all.filter(x=>String(x.name||x.personName||'').toLowerCase().includes(q)):all;
+    const total=all.reduce((s,x)=>s+Number(x.amount??x.totalAmount)||0,0);
+    document.getElementById('totalAmount').textContent=money(total);
+    document.getElementById('totalCount').textContent=all.length+' '+(all.length===1?'person':'people');
+    document.getElementById('visibleCount').textContent=filtered.length+' shown';
+
+    const el=document.getElementById('list');
+    if(!filtered.length){el.innerHTML='<div class="bm-empty">'+(q?'No matching person found.':'No borrowed amounts yet.')+'</div>';return}
+    el.innerHTML=filtered.map(x=>{
+      const name=x.name||x.personName||'Unnamed';
+      const amount=Number(x.amount??x.totalAmount)||0;
+      const note=x.note||x.notes||'';
+      const when=x.date||x.createdAt||'';
+      return `<article class="bm-item">
+        <div class="bm-item-top"><div class="bm-name">${esc(name)}</div><div class="bm-amount">${money(amount)}</div></div>
+        ${note?`<div class="bm-note">${esc(note)}</div>`:''}
+        ${when?`<div class="bm-meta">${esc(String(when))}</div>`:''}
+        <div class="bm-actions">
+          <button class="bm-small" type="button" onclick="openEdit('${esc(x.id)}')">Edit</button>
+          <button class="bm-small delete" type="button" onclick="removeBorrowed('${esc(x.id)}')">Delete</button>
+        </div>
+      </article>`;
+    }).join('');
+  };
+
+  window.saveBorrowed=function(ev){
+    ev.preventDefault();
+    const name=document.getElementById('personName').value.trim();
+    const amount=Number(document.getElementById('amount').value);
+    const note=document.getElementById('note').value.trim();
+    const status=document.getElementById('status');
+    try{
+      if(!name)throw new Error('Enter the person name.');
+      if(!(amount>0))throw new Error('Enter a valid amount.');
+      const items=list();
+      items.push({id:id(),name,personName:name,amount,note,notes:note,date:new Date().toISOString().slice(0,10),createdAt:new Date().toISOString()});
+      writeList(items);
+      document.getElementById('borrowForm').reset();
+      status.textContent='Borrowed amount added successfully.';
+      status.className='bm-status show ok';
+      renderList();
+    }catch(e){
+      status.textContent=e.message||'Could not save.';
+      status.className='bm-status show err';
+    }
+  };
+
+  window.openEdit=function(itemId){
+    const item=list().find(x=>String(x.id)===String(itemId));
+    if(!item)return;
+    document.getElementById('editId').value=item.id;
+    document.getElementById('editName').value=item.name||item.personName||'';
+    document.getElementById('editAmount').value=Number(item.amount??item.totalAmount)||0;
+    document.getElementById('editNote').value=item.note||item.notes||'';
+    document.getElementById('editDialog').classList.add('show');
+  };
+  window.closeEdit=function(){document.getElementById('editDialog').classList.remove('show')};
+
+  window.updateBorrowed=function(ev){
+    ev.preventDefault();
+    const itemId=document.getElementById('editId').value;
+    const items=list();
+    const item=items.find(x=>String(x.id)===String(itemId));
+    if(!item)return;
+    const name=document.getElementById('editName').value.trim();
+    const amount=Number(document.getElementById('editAmount').value);
+    const note=document.getElementById('editNote').value.trim();
+    if(!name||!(amount>0)){alert('Enter a valid name and amount.');return}
+    item.name=name;item.personName=name;item.amount=amount;item.totalAmount=amount;item.note=note;item.notes=note;
+    writeList(items);closeEdit();renderList();
+  };
+
+  window.removeBorrowed=function(itemId){
+    const items=list();
+    const item=items.find(x=>String(x.id)===String(itemId));
+    if(!item)return;
+    if(!confirm('Delete this borrowed amount?'))return;
+    writeList(items.filter(x=>String(x.id)!==String(itemId)));
+    renderList();
+  };
+
+  window.goBack=function(){location.href='../pages/more.html'};
+  document.addEventListener('DOMContentLoaded',renderList);
+})();
+</script>
+</body>
+</html>

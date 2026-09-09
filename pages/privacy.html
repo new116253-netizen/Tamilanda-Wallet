@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#09070d">
+<link rel="manifest" href="../manifest.json">
+<link rel="icon" href="../icons/icon-192.png">
+<link rel="apple-touch-icon" href="../icons/icon-192.png">
+<link rel="stylesheet" href="../css/style.css">
+<title>Privacy & Security — Tamilanda Wallet 👑</title>
+
+<style>
+:root{
+  --bg:#09070d;--surface:#15111d;--edge:rgba(255,255,255,.08);
+  --text:#fff;--muted:#b7b2bf;--dim:#77717f;
+  --purple:#9b6dff;--blue:#55aaff;--green:#55d98b;--red:#ff667a;--gold:#ffc857
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:var(--bg);color:#fff}
+body{
+  overflow-x:hidden;-webkit-font-smoothing:antialiased;
+  background:
+    radial-gradient(circle at 95% 8%,rgba(92,82,255,.16),transparent 30%),
+    radial-gradient(circle at 5% 20%,rgba(0,117,255,.07),transparent 26%),
+    linear-gradient(180deg,#0a0d1e 0%,#061625 50%,#04090e 100%)
+}
+.privacy-page{
+  width:min(100%,720px);
+  margin:0 auto;
+  padding:18px 16px calc(105px + env(safe-area-inset-bottom))
+}
+.privacy-header{
+  display:flex;align-items:center;gap:10px;padding:15px 14px;margin-bottom:12px;
+  border-radius:19px;background:rgba(21,17,29,.90);border:1px solid var(--edge)
+}
+.privacy-back,.privacy-refresh{
+  width:42px;height:42px;flex:0 0 42px;display:grid;place-items:center;
+  border-radius:13px;border:1px solid rgba(255,255,255,.09);color:#fff;background:rgba(255,255,255,.04)
+}
+.privacy-back{font-size:22px}.privacy-refresh{margin-left:auto;font-size:18px}
+.privacy-head-copy{min-width:0}.privacy-head-copy h1{margin:0;font-size:23px;line-height:1.05;font-weight:900;letter-spacing:-.5px}
+.privacy-head-copy p{margin:5px 0 0;color:var(--muted);font-size:10px}
+
+.privacy-hero{
+  position:relative;overflow:hidden;padding:19px;border-radius:22px;border:1px solid rgba(155,109,255,.34);
+  background:
+    radial-gradient(circle at 90% 15%,rgba(42,112,255,.34),transparent 34%),
+    radial-gradient(circle at 14% 117%,rgba(123,51,255,.42),transparent 39%),
+    linear-gradient(145deg,#18112c,#0d0b16 76%);
+  box-shadow:0 15px 44px rgba(0,0,0,.27)
+}
+.privacy-hero-icon{
+  width:45px;height:45px;display:grid;place-items:center;border-radius:14px;
+  background:rgba(155,109,255,.10);border:1px solid rgba(155,109,255,.17);font-size:23px
+}
+.privacy-hero-title{margin-top:10px;font-size:26px;font-weight:950;letter-spacing:-.7px}
+.privacy-hero-note{margin-top:6px;color:rgba(255,255,255,.50);font-size:10px;line-height:1.5}
+.privacy-state{
+  display:inline-flex;align-items:center;gap:6px;margin-top:10px;padding:6px 9px;border-radius:999px;
+  color:var(--green);background:rgba(85,217,139,.09);border:1px solid rgba(85,217,139,.17);font-size:8px;font-weight:900
+}
+
+.privacy-section{margin-top:16px}
+.privacy-section h2{margin:0 2px 8px;font-size:15px;font-weight:900}
+.privacy-list{
+  border-radius:18px;overflow:hidden;background:rgba(21,17,29,.88);border:1px solid var(--edge)
+}
+.privacy-item{
+  display:flex;align-items:flex-start;gap:11px;width:100%;padding:13px 12px;
+  border:0;border-bottom:1px solid rgba(255,255,255,.055);background:transparent;color:#fff;text-align:left
+}
+.privacy-item:last-child{border-bottom:0}
+.privacy-icon{
+  width:38px;height:38px;flex:0 0 38px;display:grid;place-items:center;border-radius:12px;
+  background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.055);font-size:18px
+}
+.privacy-item.good .privacy-icon{background:rgba(85,217,139,.07);border-color:rgba(85,217,139,.13)}
+.privacy-item.blue .privacy-icon{background:rgba(85,170,255,.07);border-color:rgba(85,170,255,.13)}
+.privacy-item.purple .privacy-icon{background:rgba(155,109,255,.08);border-color:rgba(155,109,255,.13)}
+.privacy-copy{min-width:0;flex:1}.privacy-title{font-size:11px;font-weight:850}.privacy-desc{margin-top:4px;color:#77717f;font-size:8px;line-height:1.45}
+
+.privacy-status-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:8px
+}
+.privacy-status-card{
+  padding:12px;border-radius:15px;background:rgba(21,17,29,.88);border:1px solid var(--edge)
+}
+.privacy-status-card span{display:block;color:#77717f;font-size:7px;font-weight:800;text-transform:uppercase;letter-spacing:.7px}
+.privacy-status-card strong{display:block;margin-top:5px;font-size:13px;font-weight:900;color:#fff}
+.privacy-status-card .on{color:var(--green)}.privacy-status-card .off{color:var(--gold)}
+
+.privacy-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.privacy-action{
+  min-height:82px;padding:12px;border-radius:17px;text-align:left;border:1px solid var(--edge);
+  background:rgba(21,17,29,.88);color:#fff
+}
+.privacy-action.primary{background:linear-gradient(145deg,rgba(38,26,67,.98),rgba(17,13,26,.98));border-color:rgba(155,109,255,.28)}
+.privacy-action-icon{width:34px;height:34px;display:grid;place-items:center;border-radius:10px;background:rgba(155,109,255,.08);font-size:17px}
+.privacy-action-title{display:block;margin-top:7px;font-size:10px;font-weight:900}
+.privacy-action-sub{display:block;margin-top:3px;color:#77717f;font-size:7px;line-height:1.35}
+
+.privacy-footer{
+  margin-top:16px;padding:13px;border-radius:16px;text-align:center;
+  background:rgba(21,17,29,.70);border:1px solid rgba(255,255,255,.055)
+}
+.privacy-footer strong{font-size:10px}.privacy-footer p{margin:5px 0 0;color:#77717f;font-size:8px;line-height:1.5}
+
+@media(max-width:520px){.privacy-page{padding-left:13px;padding-right:13px}}
+@media(max-width:390px){
+  .privacy-head-copy h1{font-size:21px}.privacy-head-copy p{font-size:9px}
+  .privacy-status-grid,.privacy-actions{grid-template-columns:1fr}
+}
+</style>
+</head>
+
+<body>
+<main class="privacy-page">
+
+<header class="privacy-header">
+  <button class="privacy-back" type="button" onclick="goMore()" aria-label="Back">‹</button>
+  <div class="privacy-head-copy">
+    <h1>Privacy & Security 🛡️</h1>
+    <p>Understand how Tamilanda Wallet handles your local data</p>
+  </div>
+  <button class="privacy-refresh" type="button" onclick="refreshPrivacy()" aria-label="Refresh">↻</button>
+</header>
+
+<section class="privacy-hero">
+  <div class="privacy-hero-icon">🛡️</div>
+  <div class="privacy-hero-title">Your wallet. Your data.</div>
+  <div class="privacy-hero-note">This app stores its wallet records in browser local storage on this device. Use Backup & Restore to keep an external copy of your data.</div>
+  <div class="privacy-state">● Local storage detected</div>
+</section>
+
+<section class="privacy-section">
+  <h2>Data Status</h2>
+  <div class="privacy-status-grid">
+    <div class="privacy-status-card"><span>Local Storage</span><strong id="storageStatus" class="on">Available</strong></div>
+    <div class="privacy-status-card"><span>Wallet Records</span><strong id="recordCount">0</strong></div>
+    <div class="privacy-status-card"><span>Profile</span><strong id="profileStatus">Not set</strong></div>
+    <div class="privacy-status-card"><span>Security PIN</span><strong id="pinStatus">Not configured</strong></div>
+  </div>
+</section>
+
+<section class="privacy-section">
+  <h2>Privacy Principles</h2>
+  <div class="privacy-list">
+    <div class="privacy-item good">
+      <div class="privacy-icon">📱</div>
+      <div class="privacy-copy"><div class="privacy-title">Stored on this device</div><div class="privacy-desc">Wallet records are stored locally in browser storage rather than being automatically sent to a remote finance service by this page.</div></div>
+    </div>
+    <div class="privacy-item blue">
+      <div class="privacy-icon">☁️</div>
+      <div class="privacy-copy"><div class="privacy-title">Backup is under your control</div><div class="privacy-desc">Create your own JSON backup when needed. Keep that file somewhere safe because it can contain your wallet records.</div></div>
+    </div>
+    <div class="privacy-item purple">
+      <div class="privacy-icon">🗑️</div>
+      <div class="privacy-copy"><div class="privacy-title">Deleted records use Trash</div><div class="privacy-desc">Records moved to Trash remain recoverable until you permanently delete them or empty the Trash.</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="privacy-section">
+  <h2>Security</h2>
+  <div class="privacy-list">
+    <div class="privacy-item purple">
+      <div class="privacy-icon">🔐</div>
+      <div class="privacy-copy"><div class="privacy-title">Security settings</div><div class="privacy-desc">The wallet data model includes security settings for PIN state. Configure security controls here only when the underlying app logic supports them.</div></div>
+    </div>
+    <div class="privacy-item blue">
+      <div class="privacy-icon">📦</div>
+      <div class="privacy-copy"><div class="privacy-title">Before clearing browser data</div><div class="privacy-desc">Create a backup first. Clearing local site storage can remove wallet records stored on this device.</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="privacy-section">
+  <h2>Useful Actions</h2>
+  <div class="privacy-actions">
+    <button class="privacy-action primary" type="button" onclick="goTo('./backup.html')">
+      <span class="privacy-action-icon">☁️</span>
+      <span class="privacy-action-title">Backup & Restore</span>
+      <span class="privacy-action-sub">Create or restore a wallet backup</span>
+    </button>
+    <button class="privacy-action" type="button" onclick="goTo('./profile.html')">
+      <span class="privacy-action-icon">👤</span>
+      <span class="privacy-action-title">Profile</span>
+      <span class="privacy-action-sub">Review your saved profile details</span>
+    </button>
+  </div>
+</section>
+
+<footer class="privacy-footer">
+  <strong>Tamilanda Wallet 👑</strong>
+  <p>Privacy and security information shown here reflects the local wallet architecture and current device storage status.</p>
+</footer>
+
+</main>
+
+<nav class="bottom-nav" aria-label="Primary navigation">
+  <a class="nav-item" data-page="home" href="../index.html"><span class="nav-icon">🏠</span><span class="nav-label">Home</span></a>
+  <a class="nav-item" data-page="myIds" href="./my-ids.html"><span class="nav-icon">🆔</span><span class="nav-label">My IDs</span></a>
+  <a class="nav-item" data-page="buyers" href="./buyers.html"><span class="nav-icon">💳</span><span class="nav-label">EMI Buyers</span></a>
+  <a class="nav-item" data-page="accounts" href="./accounts.html"><span class="nav-icon">🏦</span><span class="nav-label">Accounts</span></a>
+  <a class="nav-item active" data-page="more" href="./more.html"><span class="nav-icon">☰</span><span class="nav-label">More</span></a>
+</nav>
+
+<script>
+(() => {
+  "use strict";
+  const KEY="tamilanda_wallet_data";
+
+  function read(){
+    try{return JSON.parse(localStorage.getItem(KEY)||"{}")||{}}
+    catch{return {}}
+  }
+
+  function refresh(){
+    const d=read();
+    const collections=["accounts","transactions","buyers","buyerPayments","moneyToGive","givePayments","myEmis","emiPayments","trash","recurringBills","recurringPayments"];
+    const total=collections.reduce((sum,key)=>sum+(Array.isArray(d[key])?d[key].length:0),0);
+
+    document.getElementById("storageStatus").textContent =
+      localStorage.getItem(KEY) !== null ? "Available" : "Not initialized";
+    document.getElementById("storageStatus").className =
+      localStorage.getItem(KEY) !== null ? "on" : "off";
+
+    document.getElementById("recordCount").textContent=total;
+    document.getElementById("profileStatus").textContent =
+      String(d.profile?.name||"").trim() ? "Configured" : "Not set";
+    document.getElementById("pinStatus").textContent =
+      d.security?.pinEnabled ? "Enabled" :
+      d.security?.pinConfigured ? "Configured" : "Not configured";
+  }
+
+  window.goMore=()=>window.location.assign("./more.html");
+  window.goTo=(url)=>window.location.assign(url);
+  window.refreshPrivacy=refresh;
+
+  document.addEventListener("DOMContentLoaded",()=>{
+    refresh();
+    setTimeout(refresh,100);
+  });
+  window.addEventListener("storage",refresh);
+  window.addEventListener("pageshow",refresh);
+})();
+</script>
+</body>
+</html>

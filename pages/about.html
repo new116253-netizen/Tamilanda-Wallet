@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#09070d">
+<link rel="manifest" href="../manifest.json">
+<link rel="icon" href="../icons/icon-192.png">
+<link rel="apple-touch-icon" href="../icons/icon-192.png">
+<link rel="stylesheet" href="../css/style.css">
+<title>About — Tamilanda Wallet 👑</title>
+
+<style>
+:root{
+  --bg:#09070d;--surface:#15111d;--edge:rgba(255,255,255,.08);
+  --text:#fff;--muted:#b7b2bf;--dim:#77717f;
+  --purple:#9b6dff;--blue:#55aaff;--green:#55d98b;--red:#ff667a;--gold:#ffc857
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:var(--bg);color:#fff}
+body{
+  overflow-x:hidden;-webkit-font-smoothing:antialiased;
+  background:
+    radial-gradient(circle at 95% 8%,rgba(92,82,255,.16),transparent 30%),
+    radial-gradient(circle at 5% 20%,rgba(0,117,255,.07),transparent 26%),
+    linear-gradient(180deg,#0a0d1e 0%,#061625 50%,#04090e 100%)
+}
+.about-page{
+  width:min(100%,720px);
+  margin:0 auto;
+  padding:18px 16px calc(105px + env(safe-area-inset-bottom))
+}
+.about-header{
+  display:flex;align-items:center;gap:10px;padding:15px 14px;margin-bottom:12px;
+  border-radius:19px;background:rgba(21,17,29,.90);border:1px solid var(--edge)
+}
+.about-back,.about-refresh{
+  width:42px;height:42px;flex:0 0 42px;display:grid;place-items:center;
+  border-radius:13px;border:1px solid rgba(255,255,255,.09);color:#fff;background:rgba(255,255,255,.04)
+}
+.about-back{font-size:22px}.about-refresh{margin-left:auto;font-size:18px}
+.about-head-copy{min-width:0}.about-head-copy h1{margin:0;font-size:23px;line-height:1.05;font-weight:900;letter-spacing:-.5px}
+.about-head-copy p{margin:5px 0 0;color:var(--muted);font-size:10px}
+
+.about-hero{
+  position:relative;overflow:hidden;padding:20px;border-radius:23px;
+  border:1px solid rgba(155,109,255,.34);
+  background:
+    radial-gradient(circle at 91% 16%,rgba(42,112,255,.34),transparent 34%),
+    radial-gradient(circle at 13% 117%,rgba(123,51,255,.42),transparent 39%),
+    linear-gradient(145deg,#18112c,#0d0b16 76%);
+  box-shadow:0 15px 44px rgba(0,0,0,.27)
+}
+.about-brand-row{display:flex;align-items:center;gap:12px}
+.about-logo{
+  width:54px;height:54px;flex:0 0 54px;display:grid;place-items:center;border-radius:16px;
+  background:linear-gradient(145deg,rgba(155,109,255,.22),rgba(85,170,255,.10));
+  border:1px solid rgba(155,109,255,.22);font-size:29px
+}
+.about-brand{font-size:22px;font-weight:950;letter-spacing:-.5px}
+.about-tagline{margin-top:4px;color:rgba(255,255,255,.52);font-size:9px;line-height:1.35}
+.about-hero-title{margin-top:16px;font-size:27px;font-weight:950;letter-spacing:-.8px}
+.about-hero-note{margin-top:6px;color:rgba(255,255,255,.50);font-size:10px;line-height:1.5}
+.about-state{
+  display:inline-flex;align-items:center;gap:6px;margin-top:11px;padding:6px 9px;border-radius:999px;
+  color:var(--green);background:rgba(85,217,139,.09);border:1px solid rgba(85,217,139,.17);font-size:8px;font-weight:900
+}
+
+.about-section{margin-top:16px}
+.about-section h2{margin:0 2px 8px;font-size:15px;font-weight:900}
+.about-list{
+  border-radius:18px;overflow:hidden;background:rgba(21,17,29,.88);border:1px solid var(--edge)
+}
+.about-item{
+  display:flex;align-items:flex-start;gap:11px;padding:13px 12px;
+  border-bottom:1px solid rgba(255,255,255,.055)
+}
+.about-item:last-child{border-bottom:0}
+.about-icon{
+  width:38px;height:38px;flex:0 0 38px;display:grid;place-items:center;border-radius:12px;
+  background:rgba(155,109,255,.08);border:1px solid rgba(155,109,255,.13);font-size:18px
+}
+.about-item.green .about-icon{background:rgba(85,217,139,.07);border-color:rgba(85,217,139,.13)}
+.about-item.blue .about-icon{background:rgba(85,170,255,.07);border-color:rgba(85,170,255,.13)}
+.about-copy{min-width:0}.about-title{font-size:11px;font-weight:850}.about-desc{margin-top:4px;color:#77717f;font-size:8px;line-height:1.5}
+
+.about-features{
+  display:grid;grid-template-columns:1fr 1fr;gap:8px
+}
+.about-feature{
+  padding:12px;border-radius:15px;background:rgba(21,17,29,.88);border:1px solid var(--edge)
+}
+.about-feature-icon{font-size:18px}.about-feature-title{margin-top:6px;font-size:10px;font-weight:850}.about-feature-text{margin-top:3px;color:#77717f;font-size:8px;line-height:1.4}
+
+.about-tech{
+  display:grid;grid-template-columns:1fr 1fr;gap:8px
+}
+.about-tech-card{
+  padding:12px;border-radius:15px;background:rgba(21,17,29,.88);border:1px solid var(--edge)
+}
+.about-tech-card span{display:block;color:#77717f;font-size:7px;font-weight:800;text-transform:uppercase;letter-spacing:.7px}
+.about-tech-card strong{display:block;margin-top:5px;color:#fff;font-size:11px;font-weight:900;word-break:break-word}
+
+.about-actions{
+  display:grid;grid-template-columns:1fr 1fr;gap:9px
+}
+.about-action{
+  min-height:78px;padding:12px;border-radius:17px;text-align:left;border:1px solid var(--edge);
+  background:rgba(21,17,29,.88);color:#fff
+}
+.about-action.primary{background:linear-gradient(145deg,rgba(38,26,67,.98),rgba(17,13,26,.98));border-color:rgba(155,109,255,.28)}
+.about-action-icon{width:34px;height:34px;display:grid;place-items:center;border-radius:10px;background:rgba(155,109,255,.08);font-size:17px}
+.about-action-title{display:block;margin-top:7px;font-size:10px;font-weight:900}
+.about-action-sub{display:block;margin-top:3px;color:#77717f;font-size:7px;line-height:1.35}
+
+.about-footer{
+  margin-top:17px;padding:15px;border-radius:17px;text-align:center;
+  background:rgba(21,17,29,.70);border:1px solid rgba(255,255,255,.055)
+}
+.about-footer-brand{font-size:12px;font-weight:900}.about-footer-note{margin-top:5px;color:#77717f;font-size:8px;line-height:1.5}
+.about-footer-mark{margin-top:9px;color:#5f5967;font-size:7px}
+
+@media(max-width:520px){.about-page{padding-left:13px;padding-right:13px}}
+@media(max-width:390px){
+  .about-head-copy h1{font-size:21px}.about-head-copy p{font-size:9px}
+  .about-features,.about-tech,.about-actions{grid-template-columns:1fr}
+  .about-hero{padding:17px}.about-hero-title{font-size:24px}
+}
+</style>
+</head>
+
+<body>
+<main class="about-page">
+
+<header class="about-header">
+  <button class="about-back" type="button" onclick="goMore()" aria-label="Back">‹</button>
+  <div class="about-head-copy">
+    <h1>About ℹ️</h1>
+    <p>About Tamilanda Wallet and how the app is structured</p>
+  </div>
+  <button class="about-refresh" type="button" onclick="refreshAbout()" aria-label="Refresh">↻</button>
+</header>
+
+<section class="about-hero">
+  <div class="about-brand-row">
+    <div class="about-logo">👑</div>
+    <div>
+      <div class="about-brand">Tamilanda Wallet</div>
+      <div class="about-tagline">Private • Local First • Offline Ready</div>
+    </div>
+  </div>
+
+  <div class="about-hero-title">Everyday money, organized.</div>
+  <div class="about-hero-note">A mobile-first wallet built to keep your accounts, transactions, EMI records, buyers, IDs and personal money tracking in one place.</div>
+  <div class="about-state">● PWA / Android WebView ready</div>
+</section>
+
+<section class="about-section">
+  <h2>What this app does</h2>
+  <div class="about-features">
+    <article class="about-feature"><div class="about-feature-icon">🏦</div><div class="about-feature-title">Accounts</div><div class="about-feature-text">Track bank, cash, UPI and wallet balances.</div></article>
+    <article class="about-feature"><div class="about-feature-icon">📒</div><div class="about-feature-title">Transactions</div><div class="about-feature-text">See money paid, received and transferred.</div></article>
+    <article class="about-feature"><div class="about-feature-icon">💳</div><div class="about-feature-title">EMI Tracking</div><div class="about-feature-text">Manage active EMIs, payments and remaining amounts.</div></article>
+    <article class="about-feature"><div class="about-feature-icon">🆔</div><div class="about-feature-title">My IDs</div><div class="about-feature-text">Keep ID inventory with buy, sell, notes and status.</div></article>
+    <article class="about-feature"><div class="about-feature-icon">📊</div><div class="about-feature-title">Reports</div><div class="about-feature-text">Review cash flow and spending patterns.</div></article>
+    <article class="about-feature"><div class="about-feature-icon">☁️</div><div class="about-feature-title">Backup</div><div class="about-feature-text">Export and restore your local wallet data.</div></article>
+  </div>
+</section>
+
+<section class="about-section">
+  <h2>App Architecture</h2>
+  <div class="about-list">
+    <div class="about-item blue">
+      <div class="about-icon">📱</div>
+      <div class="about-copy"><div class="about-title">Mobile-first PWA</div><div class="about-desc">The project is structured as static HTML/CSS/JS with PWA/service-worker support and a main index.html entry point.</div></div>
+    </div>
+    <div class="about-item purple">
+      <div class="about-icon">🗃️</div>
+      <div class="about-copy"><div class="about-title">Local wallet data</div><div class="about-desc">Core finance records are maintained in browser localStorage under the Tamilanda Wallet storage key.</div></div>
+    </div>
+    <div class="about-item green">
+      <div class="about-icon">🧠</div>
+      <div class="about-copy"><div class="about-title">Shared app logic</div><div class="about-desc">The shared JavaScript layer exposes the wallet data API, calculations, transaction helpers, account helpers and navigation helpers.</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="about-section">
+  <h2>Project Stack</h2>
+  <div class="about-tech">
+    <div class="about-tech-card"><span>Frontend</span><strong>HTML + CSS + JavaScript</strong></div>
+    <div class="about-tech-card"><span>Storage</span><strong>localStorage</strong></div>
+    <div class="about-tech-card"><span>App shell</span><strong>PWA / Service Worker</strong></div>
+    <div class="about-tech-card"><span>Android</span><strong>WebView compatible</strong></div>
+  </div>
+</section>
+
+<section class="about-section">
+  <h2>Useful Pages</h2>
+  <div class="about-actions">
+    <button class="about-action primary" type="button" onclick="goTo('./privacy.html')">
+      <span class="about-action-icon">🛡️</span>
+      <span class="about-action-title">Privacy & Security</span>
+      <span class="about-action-sub">Review local data and security information</span>
+    </button>
+    <button class="about-action" type="button" onclick="goTo('./backup.html')">
+      <span class="about-action-icon">☁️</span>
+      <span class="about-action-title">Backup & Restore</span>
+      <span class="about-action-sub">Create or restore a wallet backup</span>
+    </button>
+  </div>
+</section>
+
+<footer class="about-footer">
+  <div class="about-footer-brand">Tamilanda Wallet 👑</div>
+  <div class="about-footer-note">Built around a simple idea: keep everyday money information organized, understandable and under your control.</div>
+  <div class="about-footer-mark">About this app</div>
+</footer>
+
+</main>
+
+<nav class="bottom-nav" aria-label="Primary navigation">
+  <a class="nav-item" data-page="home" href="../index.html"><span class="nav-icon">🏠</span><span class="nav-label">Home</span></a>
+  <a class="nav-item" data-page="myIds" href="./my-ids.html"><span class="nav-icon">🆔</span><span class="nav-label">My IDs</span></a>
+  <a class="nav-item" data-page="buyers" href="./buyers.html"><span class="nav-icon">💳</span><span class="nav-label">EMI Buyers</span></a>
+  <a class="nav-item" data-page="accounts" href="./accounts.html"><span class="nav-icon">🏦</span><span class="nav-label">Accounts</span></a>
+  <a class="nav-item active" data-page="more" href="./more.html"><span class="nav-icon">☰</span><span class="nav-label">More</span></a>
+</nav>
+
+<script>
+(() => {
+  "use strict";
+  window.goMore = () => window.location.assign("./more.html");
+  window.goTo = url => window.location.assign(url);
+  window.refreshAbout = () => window.location.reload();
+})();
+</script>
+</body>
+</html>

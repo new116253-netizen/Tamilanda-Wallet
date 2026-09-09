@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#09070d">
+<link rel="manifest" href="../manifest.json">
+<link rel="icon" href="../icons/icon-192.png">
+<link rel="apple-touch-icon" href="../icons/icon-192.png">
+<link rel="stylesheet" href="../css/style.css">
+<title>My IDs — Tamilanda Wallet 👑</title>
+
+<style>
+/* My IDs — same visual language as the finalized Tamilanda Wallet Home */
+:root{
+  --mid-bg:#061625;
+  --card:#15111d;
+  --card-2:#1c1725;
+  --edge:rgba(255,255,255,.08);
+  --purple:#9b6dff;
+  --gold:#ffc857;
+  --green:#55d98b;
+  --red:#ff667a;
+  --blue:#55aaff;
+  --text:#fff;
+  --muted:#b7b2bf;
+  --dim:#77717f;
+}
+
+html,body{
+  margin:0;
+  min-height:100%;
+  background:#09070d;
+  color:#fff;
+}
+body{
+  overflow-x:hidden;
+  background:
+    radial-gradient(circle at 95% 8%,rgba(92,82,255,.16),transparent 30%),
+    radial-gradient(circle at 5% 22%,rgba(0,117,255,.07),transparent 26%),
+    linear-gradient(180deg,#0a0d1e 0%,#061625 50%,#04090e 100%);
+  -webkit-font-smoothing:antialiased;
+}
+
+.ids-page{
+  width:min(100%,720px);
+  margin:0 auto;
+  padding:19px 16px calc(104px + env(safe-area-inset-bottom));
+}
+
+/* Header */
+.ids-header{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  margin-bottom:13px;
+}
+.ids-back,
+.ids-add{
+  width:42px;
+  height:42px;
+  flex:0 0 42px;
+  border-radius:13px;
+  border:1px solid rgba(255,255,255,.09);
+  color:#fff;
+  display:grid;
+  place-items:center;
+}
+.ids-back{
+  background:rgba(255,255,255,.045);
+  font-size:20px;
+}
+.ids-add{
+  margin-left:auto;
+  background:linear-gradient(135deg,#9b6dff,#713fff);
+  box-shadow:0 8px 22px rgba(113,63,255,.18);
+  font-size:23px;
+}
+.ids-heading{min-width:0}
+.ids-heading h1{
+  margin:0;
+  font-size:23px;
+  line-height:1.05;
+  font-weight:900;
+  letter-spacing:-.45px;
+}
+.ids-heading p{
+  margin:5px 0 0;
+  color:var(--muted);
+  font-size:10px;
+}
+
+/* Hero card */
+.ids-hero{
+  position:relative;
+  overflow:hidden;
+  padding:18px;
+  border-radius:21px;
+  border:1px solid rgba(155,109,255,.34);
+  background:
+    radial-gradient(circle at 90% 18%,rgba(42,112,255,.35),transparent 34%),
+    radial-gradient(circle at 17% 118%,rgba(123,51,255,.42),transparent 38%),
+    linear-gradient(145deg,#18112c,#0d0b16 76%);
+  box-shadow:0 15px 44px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.035);
+}
+.ids-hero:after{
+  content:"";
+  position:absolute;
+  width:155px;height:155px;right:-57px;top:-56px;
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:50%;
+  box-shadow:0 0 0 18px rgba(255,255,255,.012),0 0 0 38px rgba(255,255,255,.008);
+}
+.ids-hero-label{
+  position:relative;z-index:1;
+  color:rgba(255,255,255,.59);
+  font-size:10px;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:1.1px;
+}
+.ids-hero-row{
+  position:relative;z-index:1;
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:12px;
+  margin-top:6px;
+}
+.ids-hero-amount{
+  font-size:clamp(34px,9vw,47px);
+  line-height:1;
+  font-weight:950;
+  letter-spacing:-1.7px;
+}
+.ids-hero-note{
+  margin-top:7px;
+  color:rgba(255,255,255,.50);
+  font-size:10px;
+}
+.ids-hero-counts{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:7px;
+  width:175px;
+  max-width:44%;
+}
+.ids-hero-stat{
+  padding:9px 9px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.06);
+  background:rgba(255,255,255,.026);
+}
+.ids-hero-stat span{display:block;color:#7f7888;font-size:7px;font-weight:800;text-transform:uppercase}
+.ids-hero-stat strong{display:block;margin-top:4px;color:#fff;font-size:15px;font-weight:900}
+.ids-hero-stat.available strong{color:var(--green)}
+.ids-hero-stat.sold strong{color:var(--red)}
+.ids-hero-bottom{
+  position:relative;z-index:1;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-top:12px;
+}
+.ids-mini{
+  padding:10px 11px;
+  border-radius:13px;
+  background:rgba(255,255,255,.027);
+  border:1px solid rgba(255,255,255,.05);
+}
+.ids-mini span{display:block;color:#77717f;font-size:8px}
+.ids-mini strong{display:block;margin-top:4px;font-size:12px}
+.ids-mini.buy strong{color:var(--blue)}
+.ids-mini.sell strong{color:var(--purple)}
+
+/* Search, sort, filter */
+.ids-tools{
+  margin-top:13px;
+  padding:12px;
+  border-radius:18px;
+  background:rgba(21,17,29,.86);
+  border:1px solid rgba(255,255,255,.07);
+}
+.ids-search{
+  width:100%;
+  height:44px;
+  padding:0 12px;
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:12px;
+  background:#100d17;
+  color:#fff;
+  font-size:12px;
+  outline:none;
+}
+.ids-search::placeholder{color:#756f7f}
+.ids-search:focus,
+.ids-sort:focus{
+  border-color:rgba(155,109,255,.5);
+  box-shadow:0 0 0 2px rgba(155,109,255,.07);
+}
+.ids-tool-row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-top:8px;
+}
+.ids-sort,.ids-add-inline{
+  width:100%;
+  height:42px;
+  padding:0 11px;
+  border-radius:11px;
+  border:1px solid rgba(255,255,255,.08);
+  background:#100d17;
+  color:#fff;
+  font-size:10px;
+}
+.ids-add-inline{
+  background:linear-gradient(135deg,rgba(155,109,255,.20),rgba(113,63,255,.12));
+  border-color:rgba(155,109,255,.25);
+  font-weight:850;
+}
+.ids-tabs{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:7px;
+  margin-top:8px;
+}
+.ids-tab{
+  min-height:39px;
+  border-radius:11px;
+  border:1px solid rgba(255,255,255,.07);
+  background:rgba(255,255,255,.03);
+  color:#898292;
+  font-size:10px;
+  font-weight:850;
+}
+.ids-tab.active{
+  color:#fff;
+  border-color:rgba(155,109,255,.42);
+  background:linear-gradient(135deg,rgba(155,109,255,.21),rgba(113,63,255,.12));
+}
+
+/* List */
+.ids-list-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin:17px 2px 8px;
+}
+.ids-list-header h2{
+  margin:0;
+  font-size:16px;
+  font-weight:900;
+}
+.ids-list-count{color:#77717f;font-size:9px}
+
+.ids-list{
+  display:grid;
+  gap:9px;
+}
+
+.myid-card{
+  padding:13px;
+  border-radius:17px;
+  background:linear-gradient(145deg,rgba(24,20,32,.97),rgba(14,12,20,.97));
+  border:1px solid rgba(255,255,255,.07);
+  box-shadow:0 7px 22px rgba(0,0,0,.11);
+}
+.myid-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+.myid-main{
+  min-width:0;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.myid-icon{
+  width:39px;height:39px;flex:0 0 39px;
+  display:grid;place-items:center;
+  border-radius:12px;
+  background:linear-gradient(145deg,rgba(98,67,177,.33),rgba(38,75,139,.22));
+  border:1px solid rgba(155,109,255,.17);
+  font-size:19px;
+}
+.myid-name{
+  margin:0;
+  color:#fff;
+  font-size:14px;
+  font-weight:900;
+  line-height:1.15;
+  word-break:break-word;
+}
+.myid-added{
+  margin-top:3px;
+  color:#6f6977;
+  font-size:8px;
+}
+.myid-status{
+  flex:0 0 auto;
+  min-height:23px;
+  padding:4px 8px;
+  display:inline-flex;
+  align-items:center;
+  border-radius:999px;
+  font-size:7px;
+  font-weight:900;
+  letter-spacing:.7px;
+}
+.myid-status.available{
+  color:var(--green);
+  background:rgba(85,217,139,.09);
+  border:1px solid rgba(85,217,139,.17);
+}
+.myid-status.sold{
+  color:var(--red);
+  background:rgba(255,102,122,.09);
+  border:1px solid rgba(255,102,122,.17);
+}
+
+.myid-prices{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-top:10px;
+}
+.myid-price{
+  padding:9px 10px;
+  border-radius:11px;
+  background:rgba(255,255,255,.025);
+  border:1px solid rgba(255,255,255,.05);
+}
+.myid-price span{
+  display:block;
+  color:#756e7e;
+  font-size:7px;
+  text-transform:uppercase;
+  letter-spacing:.6px;
+}
+.myid-price strong{
+  display:block;
+  margin-top:4px;
+  color:#fff;
+  font-size:12px;
+}
+.myid-price.myid-buy strong{color:var(--blue)}
+.myid-price.myid-sell strong{color:var(--purple)}
+
+.myid-meta{
+  margin-top:9px;
+  display:grid;
+  gap:4px;
+}
+.myid-meta-line{
+  color:#77717f;
+  font-size:8px;
+}
+.myid-meta-line strong{color:#b8b1bf}
+
+.myid-notes{
+  margin-top:8px;
+  padding:8px 9px;
+  border-left:2px solid rgba(155,109,255,.35);
+  border-radius:9px;
+  background:rgba(155,109,255,.04);
+  color:#98919f;
+  font-size:8px;
+  line-height:1.45;
+  white-space:pre-wrap;
+  word-break:break-word;
+}
+
+.myid-actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:7px;
+  margin-top:9px;
+}
+.myid-action{
+  min-height:35px;
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,.07);
+  background:rgba(255,255,255,.03);
+  color:#d8d2df;
+  font-size:9px;
+  font-weight:800;
+}
+.myid-action.delete{
+  color:var(--red);
+  border-color:rgba(255,102,122,.13);
+  background:rgba(255,102,122,.045);
+}
+
+.myids-empty{
+  padding:34px 16px;
+  text-align:center;
+  border:1px dashed rgba(255,255,255,.10);
+  border-radius:17px;
+  background:rgba(21,17,29,.80);
+}
+.myids-empty-icon{font-size:30px}
+.myids-empty h3{margin:8px 0 0;font-size:14px}
+.myids-empty p{margin:5px 0 0;color:#77717f;font-size:9px}
+
+/* Add/Edit bottom sheet */
+.myids-modal{
+  position:fixed;
+  inset:0;
+  z-index:99999;
+  display:none;
+  align-items:flex-end;
+  justify-content:center;
+  padding:10px;
+  background:rgba(0,0,0,.70);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+}
+.myids-modal.show{display:flex}
+.myids-sheet{
+  width:min(100%,600px);
+  max-height:90vh;
+  overflow:auto;
+  padding:17px;
+  border-radius:21px 21px 13px 13px;
+  border:1px solid rgba(155,109,255,.22);
+  background:linear-gradient(180deg,#191420,#0e0b13);
+  box-shadow:0 -20px 60px rgba(0,0,0,.50);
+}
+.myids-sheet-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:15px;
+}
+.myids-sheet-head h2{margin:0;font-size:18px;font-weight:900}
+.myids-close{
+  width:34px;height:34px;border-radius:10px;
+  border:1px solid rgba(255,255,255,.08);
+  background:rgba(255,255,255,.04);color:#fff;
+}
+.myids-form{display:grid;gap:11px}
+.myids-field label{
+  display:block;
+  margin-bottom:6px;
+  color:#aaa2b1;
+  font-size:10px;
+  font-weight:800;
+}
+.myids-field input,.myids-field select,.myids-field textarea{
+  width:100%;
+  min-height:46px;
+  padding:11px 13px;
+  border-radius:11px;
+  border:1px solid rgba(255,255,255,.08);
+  background:#110e17;
+  color:#fff;
+  font-size:13px;
+  outline:none;
+}
+.myids-field textarea{min-height:88px;resize:vertical}
+.myids-field input:focus,.myids-field select:focus,.myids-field textarea:focus{
+  border-color:rgba(155,109,255,.5);
+  box-shadow:0 0 0 2px rgba(155,109,255,.07);
+}
+.myids-form-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.myids-cancel,.myids-save{
+  min-height:45px;
+  border-radius:11px;
+  font-size:12px;
+  font-weight:850;
+}
+.myids-cancel{
+  color:#fff;
+  background:rgba(255,255,255,.045);
+  border:1px solid rgba(255,255,255,.08);
+}
+.myids-save{
+  color:#fff;
+  background:linear-gradient(135deg,#9b6dff,#713fff);
+  border:1px solid rgba(255,255,255,.07);
+}
+
+@media(max-width:520px){
+  .ids-page{padding-left:13px;padding-right:13px}
+  .ids-hero-row{align-items:center}
+  .ids-hero-counts{width:150px}
+}
+@media(max-width:390px){
+  .ids-heading h1{font-size:21px}
+  .ids-heading p{font-size:9px}
+  .ids-hero{padding:16px}
+  .ids-hero-amount{font-size:34px}
+  .ids-hero-counts{width:132px;max-width:43%}
+  .ids-hero-stat{padding:8px}
+  .ids-hero-stat strong{font-size:13px}
+  .ids-tool-row{grid-template-columns:1fr}
+}
+</style>
+</head>
+
+<body>
+<main class="ids-page">
+
+  <header class="ids-header">
+    <button class="ids-back" type="button" onclick="history.back()" aria-label="Back">‹</button>
+
+    <div class="ids-heading">
+      <h1>My IDs 🆔</h1>
+      <p>Track your IDs, buy price, sell price & status</p>
+    </div>
+
+    <button class="ids-add" type="button" onclick="openIdModal()" aria-label="Add ID">＋</button>
+  </header>
+
+  <section class="ids-hero">
+    <div class="ids-hero-label">Total IDs Worth</div>
+
+    <div class="ids-hero-row">
+      <div>
+        <div class="ids-hero-amount" id="summarySell">₹0.00</div>
+        <div class="ids-hero-note">Current value of available ID inventory</div>
+      </div>
+
+      <div class="ids-hero-counts">
+        <div class="ids-hero-stat"><span>Total IDs</span><strong id="summaryTotal">0</strong></div>
+        <div class="ids-hero-stat available"><span>Available</span><strong id="summaryAvailable">0</strong></div>
+        <div class="ids-hero-stat sold"><span>Sold</span><strong id="summarySold">0</strong></div>
+        <div class="ids-hero-stat"><span>Buy Value</span><strong id="summaryBuy">₹0.00</strong></div>
+      </div>
+    </div>
+
+    <div class="ids-hero-bottom">
+      <div class="ids-mini buy"><span>Total Buy Value</span><strong id="heroBuyValue">₹0.00</strong></div>
+      <div class="ids-mini sell"><span>Total Sell Value</span><strong id="heroSellValue">₹0.00</strong></div>
+    </div>
+  </section>
+
+  <section class="ids-tools">
+    <input id="idSearch" class="ids-search" type="search" placeholder="🔎 Search ID name, bought from or notes">
+
+    <div class="ids-tool-row">
+      <select id="sortBy" class="ids-sort">
+        <option value="newest">Sort: Newest</option>
+        <option value="oldest">Sort: Oldest</option>
+        <option value="buyLow">Buy Price — Low to High</option>
+        <option value="buyHigh">Buy Price — High to Low</option>
+        <option value="sellLow">Sell Price — Low to High</option>
+        <option value="sellHigh">Sell Price — High to Low</option>
+        <option value="nameAZ">Name A → Z</option>
+      </select>
+      <button class="ids-add-inline" type="button" onclick="openIdModal()">＋ Add New ID</button>
+    </div>
+
+    <div class="ids-tabs">
+      <button class="ids-tab active" data-filter="all" type="button">All IDs</button>
+      <button class="ids-tab" data-filter="available" type="button">Available</button>
+      <button class="ids-tab" data-filter="sold" type="button">Sold</button>
+    </div>
+  </section>
+
+  <div class="ids-list-header">
+    <h2 id="listHeading">All IDs</h2>
+    <span class="ids-list-count" id="visibleCount">0 IDs</span>
+  </div>
+
+  <section id="idsList" class="ids-list"></section>
+</main>
+
+<nav class="bottom-nav" aria-label="Primary navigation">
+  <a class="nav-item" data-page="home" href="../index.html"><span class="nav-icon">🏠</span><span class="nav-label">Home</span></a>
+  <a class="nav-item active" data-page="myIds" href="./my-ids.html"><span class="nav-icon">🆔</span><span class="nav-label">My IDs</span></a>
+  <a class="nav-item" data-page="buyers" href="./buyers.html"><span class="nav-icon">💳</span><span class="nav-label">EMI Buyers</span></a>
+  <a class="nav-item" data-page="accounts" href="./accounts.html"><span class="nav-icon">🏦</span><span class="nav-label">Accounts</span></a>
+  <a class="nav-item" data-page="more" href="./more.html"><span class="nav-icon">☰</span><span class="nav-label">More</span></a>
+</nav>
+
+<div id="idModal" class="myids-modal" aria-hidden="true">
+  <div class="myids-sheet" role="dialog" aria-modal="true" aria-labelledby="idModalTitle">
+    <div class="myids-sheet-head">
+      <h2 id="idModalTitle">Add ID</h2>
+      <button class="myids-close" type="button" onclick="closeIdModal()" aria-label="Close">✕</button>
+    </div>
+
+    <form id="idForm" class="myids-form">
+      <div class="myids-field">
+        <label for="idName">ID Name</label>
+        <input id="idName" required maxlength="80" placeholder="Enter ID name">
+      </div>
+
+      <div class="ids-tool-row">
+        <div class="myids-field">
+          <label for="buyPrice">Buy Price</label>
+          <input id="buyPrice" type="number" min="0" step="0.01" required placeholder="₹ Buy price">
+        </div>
+        <div class="myids-field">
+          <label for="sellPrice">Sell Price</label>
+          <input id="sellPrice" type="number" min="0" step="0.01" required placeholder="₹ Sell price">
+        </div>
+      </div>
+
+      <div class="ids-tool-row">
+        <div class="myids-field">
+          <label for="boughtFrom">Bought From <span style="color:var(--dim)">(Optional)</span></label>
+          <input id="boughtFrom" maxlength="100" placeholder="Seller / source">
+        </div>
+        <div class="myids-field">
+          <label for="idStatus">Status</label>
+          <select id="idStatus">
+            <option value="available">Available</option>
+            <option value="sold">Sold</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="myids-field">
+        <label for="idNotes">Notes</label>
+        <textarea id="idNotes" maxlength="1000" placeholder="Add notes about this ID..."></textarea>
+      </div>
+
+      <div class="myids-form-actions">
+        <button class="myids-cancel" type="button" onclick="closeIdModal()">Cancel</button>
+        <button class="myids-save" type="submit" id="saveIdButton">Save ID</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="../js/app.js"></script>
+<script>
+(() => {
+  "use strict";
+  const KEY="tamilanda_wallet_data";
+  let filter="all", editId=null;
+
+  function getData(){
+    if(window.TamilandaWallet?.getData) return window.TamilandaWallet.getData() || {};
+    try{return JSON.parse(localStorage.getItem(KEY)||"{}")||{}}catch{return {}}
+  }
+  function saveData(d){
+    if(window.TamilandaWallet?.save){
+      const target=window.TamilandaWallet.getData();
+      Object.keys(target).forEach(k=>delete target[k]);
+      Object.assign(target,d);
+      return !!window.TamilandaWallet.save();
+    }
+    localStorage.setItem(KEY,JSON.stringify(d)); return true;
+  }
+  function list(){const d=getData();if(!Array.isArray(d.myIds)) d.myIds=[];return d.myIds}
+  function money(v){const n=Number(v)||0;return window.TamilandaWallet?.formatMoney?window.TamilandaWallet.formatMoney(n):"₹"+n.toLocaleString("en-IN",{minimumFractionDigits:2,maximumFractionDigits:2})}
+  function esc(v){return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
+  function sold(x){return ["sold","soldout"].includes(String(x.status??"").toLowerCase())}
+  function buy(x){return Number(x.buyPrice??x.buyRate??0)||0}
+  function sell(x){return Number(x.sellPrice??x.sellRate??0)||0}
+  function date(v){const d=new Date(Number(v)||v||"");return Number.isNaN(d.getTime())?"Unknown":d.toLocaleDateString("en-IN",{day:"2-digit",month:"short",year:"numeric"})}
+
+  function render(){
+    const all=list(), available=all.filter(x=>!sold(x)), solds=all.filter(sold);
+    document.getElementById("summaryTotal").textContent=all.length;
+    document.getElementById("summaryAvailable").textContent=available.length;
+    document.getElementById("summarySold").textContent=solds.length;
+    document.getElementById("summaryBuy").textContent=money(available.reduce((s,x)=>s+buy(x),0));
+    document.getElementById("summarySell").textContent=money(available.reduce((s,x)=>s+sell(x),0));
+
+    const q=document.getElementById("idSearch").value.trim().toLowerCase();
+    let rows=all.filter(x=>filter==="all"?true:filter==="sold"?sold(x):!sold(x));
+    if(q) rows=rows.filter(x=>String(x.name??x.idName??"").toLowerCase().includes(q)||String(x.boughtFrom??"").toLowerCase().includes(q)||String(x.notes??"").toLowerCase().includes(q));
+    const sort=document.getElementById("sortBy").value;
+    rows.sort((a,b)=>{
+      if(sort==="buyLow")return buy(a)-buy(b); if(sort==="buyHigh")return buy(b)-buy(a);
+      if(sort==="sellLow")return sell(a)-sell(b); if(sort==="sellHigh")return sell(b)-sell(a);
+      if(sort==="nameAZ")return String(a.name??a.idName??"").localeCompare(String(b.name??b.idName??""));
+      return sort==="oldest"?Number(a.createdAt||0)-Number(b.createdAt||0):Number(b.createdAt||0)-Number(a.createdAt||0);
+    });
+
+    document.getElementById("listHeading").textContent=filter==="all"?"All IDs":filter==="available"?"Available IDs":"Sold IDs";
+    document.getElementById("visibleCount").textContent=`${rows.length} ID${rows.length===1?"":"s"}`;
+    const box=document.getElementById("idsList");
+
+    if(!rows.length){box.innerHTML='<div class="myids-empty"><div class="myids-empty-icon">🆔</div><h3>No IDs Found</h3><p>Add an ID or change the current filter/search.</p></div>';return}
+
+    box.innerHTML=rows.map(x=>{
+      const name=x.name??x.idName??"Unnamed ID", isS=sold(x);
+      return `<article class="myid-item">
+        <div class="myid-top"><h3 class="myid-name">${esc(name)}</h3><span class="myid-status ${isS?"sold":"available"}">${isS?"SOLD":"AVAILABLE"}</span></div>
+        <div class="myid-price-grid">
+          <div class="myid-price myid-buy"><span>Buy Price</span><strong>${money(buy(x))}</strong></div>
+          <div class="myid-price myid-sell"><span>Sell Price</span><strong>${money(sell(x))}</strong></div>
+        </div>
+        <div class="myid-meta">${x.boughtFrom?`<div class="myid-meta-line">Bought From: <strong>${esc(x.boughtFrom)}</strong></div>`:""}<div class="myid-meta-line">Added: <strong>${date(x.createdAt)}</strong></div></div>
+        ${x.notes?`<div class="myid-notes">${esc(x.notes)}</div>`:""}
+        <div class="myid-actions"><button class="myid-action" type="button" onclick="editId('${esc(x.id)}')">✏️ Edit</button><button class="myid-action delete" type="button" onclick="deleteId('${esc(x.id)}')">🗑️ Delete</button></div>
+      </article>`
+    }).join("");
+  }
+
+  window.openIdModal=()=>{editId=null;document.getElementById("idModalTitle").textContent="Add ID";document.getElementById("saveIdButton").textContent="Save ID";document.getElementById("idForm").reset();document.getElementById("idStatus").value="available";document.getElementById("idModal").classList.add("show");document.getElementById("idModal").setAttribute("aria-hidden","false")};
+  window.closeIdModal=()=>{document.getElementById("idModal").classList.remove("show");document.getElementById("idModal").setAttribute("aria-hidden","true");editId=null};
+  window.editId=(id)=>{const x=list().find(v=>String(v.id)===String(id));if(!x)return;editId=String(id);document.getElementById("idModalTitle").textContent="Edit ID";document.getElementById("saveIdButton").textContent="Update ID";document.getElementById("idName").value=x.name??x.idName??"";document.getElementById("buyPrice").value=buy(x);document.getElementById("sellPrice").value=sell(x);document.getElementById("boughtFrom").value=x.boughtFrom??"";document.getElementById("idStatus").value=sold(x)?"sold":"available";document.getElementById("idNotes").value=x.notes??"";document.getElementById("idModal").classList.add("show");document.getElementById("idModal").setAttribute("aria-hidden","false")};
+  window.deleteId=(id)=>{const x=list().find(v=>String(v.id)===String(id));if(!x)return;if(!confirm(`Delete "${x.name??x.idName??"this ID"}"?`))return;const d=getData();d.myIds=list().filter(v=>String(v.id)!==String(id));if(saveData(d))render();else alert("Unable to save the change.")};
+
+  document.getElementById("idForm").addEventListener("submit",e=>{
+    e.preventDefault();
+    const name=document.getElementById("idName").value.trim(), bp=Number(document.getElementById("buyPrice").value), sp=Number(document.getElementById("sellPrice").value), from=document.getElementById("boughtFrom").value.trim(), status=document.getElementById("idStatus").value, notes=document.getElementById("idNotes").value.trim();
+    if(!name||!Number.isFinite(bp)||bp<0||!Number.isFinite(sp)||sp<0){alert("Please enter valid ID name, Buy Price and Sell Price.");return}
+    const d=getData();if(!Array.isArray(d.myIds))d.myIds=[];
+    if(editId){const i=d.myIds.findIndex(x=>String(x.id)===editId);if(i<0)return;d.myIds[i]={...d.myIds[i],name,idName:name,buyPrice:bp,sellPrice:sp,boughtFrom,status,notes,updatedAt:Date.now()}}
+    else d.myIds.push({id:"id_"+Date.now()+"_"+Math.random().toString(36).slice(2,7),name,idName:name,buyPrice:bp,sellPrice:sp,boughtFrom,status,notes,createdAt:Date.now(),updatedAt:Date.now()});
+    if(saveData(d)){closeIdModal();render()}else alert("Unable to save this ID.");
+  });
+
+  document.getElementById("idSearch").addEventListener("input",render);
+  document.getElementById("sortBy").addEventListener("change",render);
+  document.querySelectorAll(".myids-tab").forEach(b=>b.addEventListener("click",()=>{filter=b.dataset.filter;document.querySelectorAll(".myids-tab").forEach(x=>x.classList.remove("active"));b.classList.add("active");render()}));
+  document.getElementById("idModal").addEventListener("click",e=>{if(e.target.id==="idModal")closeIdModal()});
+  document.addEventListener("keydown",e=>{if(e.key==="Escape")closeIdModal()});
+  window.addEventListener("storage",render); window.addEventListener("pageshow",render);
+  render();
+})();
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const syncHero = () => {
+    const buy = document.getElementById("summaryBuy");
+    const sell = document.getElementById("summarySell");
+    if (buy) document.getElementById("heroBuyValue").textContent = buy.textContent;
+    if (sell) document.getElementById("heroSellValue").textContent = sell.textContent;
+  };
+  syncHero();
+  new MutationObserver(syncHero).observe(document.getElementById("summaryBuy"), {childList:true,characterData:true,subtree:true});
+  new MutationObserver(syncHero).observe(document.getElementById("summarySell"), {childList:true,characterData:true,subtree:true});
+});
+</script>
+
+<style>
+html,body{overflow-x:hidden!important}
+.myids-modal{overflow-x:hidden!important}
+.myids-sheet{
+  box-sizing:border-box!important;
+  width:min(100%,600px)!important;
+  max-width:100%!important;
+  overflow-x:hidden!important;
+}
+.myids-sheet *{box-sizing:border-box!important;min-width:0}
+.myids-form,.myids-field,.ids-tool-row{min-width:0}
+.myids-field input,
+.myids-field select,
+.myids-field textarea{
+  width:100%!important;
+  max-width:100%!important;
+}
+@media(max-width:520px){
+  .myids-sheet{padding:15px!important}
+}
+</style>
+
+</body>
+</html>

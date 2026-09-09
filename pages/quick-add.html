@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#09070d">
+<link rel="manifest" href="../manifest.json">
+<link rel="icon" href="../icons/icon-192.png">
+<link rel="apple-touch-icon" href="../icons/icon-192.png">
+<link rel="stylesheet" href="../css/style.css">
+<title>Quick Add — Tamilanda Wallet 👑</title>
+<style>
+:root{--bg:#09070d;--surface:#15111d;--surface2:#1c1725;--edge:rgba(255,255,255,.08);--text:#fff;--muted:#b7b2bf;--dim:#77717f;--purple:#9b6dff;--green:#55d98b;--red:#ff667a;--blue:#55aaff;--gold:#ffc857}
+html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text)}
+body{overflow-x:hidden;background:radial-gradient(circle at 95% 8%,rgba(92,82,255,.16),transparent 30%),radial-gradient(circle at 5% 20%,rgba(0,117,255,.07),transparent 26%),linear-gradient(180deg,#0a0d1e 0%,#061625 50%,#04090e 100%);-webkit-font-smoothing:antialiased}
+.q-page{width:min(100%,720px);margin:0 auto;padding:18px 16px calc(105px + env(safe-area-inset-bottom));box-sizing:border-box}
+.q-head{display:flex;align-items:center;gap:11px;margin-bottom:13px}.q-back{width:42px;height:42px;flex:0 0 42px;display:grid;place-items:center;border-radius:13px;border:1px solid var(--edge);background:rgba(255,255,255,.04);color:#fff;font-size:22px}.q-title{min-width:0}.q-title h1{margin:0;font-size:23px;line-height:1.05;font-weight:900;letter-spacing:-.5px}.q-title p{margin:5px 0 0;color:var(--muted);font-size:10px}
+.q-card{background:rgba(21,17,29,.9);border:1px solid var(--edge);border-radius:19px;padding:15px;margin-bottom:12px;box-shadow:0 8px 23px rgba(0,0,0,.1)}
+.q-types{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.q-type{min-height:66px;border:1px solid var(--edge);background:rgba(255,255,255,.02);color:#d8d2e0;border-radius:13px;padding:8px 5px;cursor:pointer}.q-type.active{background:linear-gradient(135deg,#713fff,#9b6dff);border-color:transparent;color:#fff}.q-type span{display:block;font-size:19px;line-height:20px}.q-type small{display:block;margin-top:5px;font-size:9px;font-weight:800;white-space:nowrap}
+.q-fields{margin-top:14px}.q-field{margin-bottom:10px}.q-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.q-label{display:block;margin:0 0 5px;color:var(--muted);font-size:9px;font-weight:800}.q-input,.q-select,.q-textarea{width:100%;min-height:44px;box-sizing:border-box;background:#100d17;color:#fff;border:1px solid var(--edge);border-radius:11px;padding:10px 12px;outline:none;font-size:11px}.q-textarea{min-height:72px;resize:vertical}.q-input:focus,.q-select:focus,.q-textarea:focus{border-color:rgba(155,109,255,.55);box-shadow:0 0 0 2px rgba(155,109,255,.07)}
+.q-submit{width:100%;min-height:46px;border:0;border-radius:12px;background:linear-gradient(135deg,#9b6dff,#713fff);color:#fff;font-size:12px;font-weight:900;cursor:pointer}.q-status{display:none;margin-top:10px;padding:10px;border-radius:11px;font-size:9px}.q-status.show{display:block}.q-status.ok{background:rgba(85,217,139,.08);border:1px solid rgba(85,217,139,.16);color:#9ff0c4}.q-status.err{background:rgba(255,102,122,.08);border:1px solid rgba(255,102,122,.16);color:#ffadb9}.hidden{display:none!important}.q-help{margin:0;color:var(--dim);font-size:9px;line-height:1.45}
+@media(max-width:520px){.q-page{padding-left:13px;padding-right:13px}.q-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<main class="q-page">
+<header class="q-head"><button class="q-back" type="button" onclick="goBack()" aria-label="Back">‹</button><div class="q-title"><h1>Quick Add</h1><p>Fast access to every common wallet action</p></div></header>
+
+<section class="q-card">
+<div class="q-types">
+<button class="q-type active" type="button" data-type="income" onclick="selectType('income')"><span>↓</span><small>Income</small></button>
+<button class="q-type" type="button" data-type="expense" onclick="selectType('expense')"><span>↑</span><small>Expense</small></button>
+<button class="q-type" type="button" data-type="transfer" onclick="selectType('transfer')"><span>⇄</span><small>Transfer</small></button>
+<button class="q-type" type="button" data-type="buyer" onclick="selectType('buyer')"><span>💳</span><small>EMI Buyer</small></button>
+<button class="q-type" type="button" data-type="receivable" onclick="selectType('receivable')"><span>💰</span><small>Receivable</small></button>
+<button class="q-type" type="button" data-type="give" onclick="selectType('give')"><span>🤝</span><small>Money To Give</small></button>
+<button class="q-type" type="button" data-type="emi" onclick="selectType('emi')"><span>🏍️</span><small>My EMI</small></button>
+<button class="q-type" type="button" data-type="account" onclick="selectType('account')"><span>🏦</span><small>Account</small></button>
+<button class="q-type" type="button" data-type="id" onclick="selectType('id')"><span>🆔</span><small>My ID</small></button>
+</div>
+
+<form id="quickForm" onsubmit="submitQuick(event)">
+<div class="q-fields">
+<div id="nameField" class="q-field"><label id="nameLabel" class="q-label" for="name">Person / Source</label><input id="name" class="q-input" type="text" maxlength="100" placeholder="Name (optional)"></div>
+
+<div id="amountRow" class="q-grid">
+<div class="q-field"><label class="q-label" for="amount">Amount</label><input id="amount" class="q-input" type="number" min="0" step="0.01" inputmode="decimal" placeholder="₹ 0"></div>
+<div class="q-field" id="dateField"><label class="q-label" for="date">Date</label><input id="date" class="q-input" type="date"></div>
+</div>
+
+<div id="accountGrid" class="q-grid">
+<div class="q-field" id="accountField"><label id="accountLabel" class="q-label" for="account">Account</label><select id="account" class="q-select"></select></div>
+<div class="q-field hidden" id="toAccountField"><label class="q-label" for="toAccount">To Account</label><select id="toAccount" class="q-select"></select></div>
+</div>
+
+<div id="normalExtra" class="q-grid">
+<div class="q-field"><label class="q-label" for="category">Category</label><input id="category" class="q-input" type="text" maxlength="60" placeholder="Optional"></div>
+<div class="q-field"><label class="q-label" for="phone">Phone (Optional)</label><input id="phone" class="q-input" type="tel" maxlength="20" placeholder="Phone"></div>
+</div>
+
+<div id="buyerExtra" class="q-grid hidden">
+<div class="q-field"><label class="q-label" for="buyerInitial">Initial Payment</label><input id="buyerInitial" class="q-input" type="number" min="0" step="0.01" placeholder="₹ 0"></div>
+<div class="q-field"><label class="q-label" for="buyerMonths">EMI Duration</label><input id="buyerMonths" class="q-input" type="number" min="1" step="1" placeholder="Months"></div>
+</div>
+
+<div id="emiExtra" class="q-grid hidden">
+<div class="q-field"><label class="q-label" for="emiInitial">Initial Payment (Optional)</label><input id="emiInitial" class="q-input" type="number" min="0" step="0.01" placeholder="₹ 0"></div>
+<div class="q-field"><label class="q-label" for="emiMonthly">Monthly EMI</label><input id="emiMonthly" class="q-input" type="number" min="0.01" step="0.01" placeholder="₹ 0"></div>
+</div>
+
+<div id="emiMonthsField" class="q-field hidden"><label class="q-label" for="emiMonths">Total Months</label><input id="emiMonths" class="q-input" type="number" min="1" step="1" placeholder="Months"></div>
+
+<div id="idExtra" class="q-grid hidden">
+<div class="q-field"><label class="q-label" for="idBuy">Buy Price</label><input id="idBuy" class="q-input" type="number" min="0" step="0.01" placeholder="₹ 0"></div>
+<div class="q-field"><label class="q-label" for="idSell">Sell Price</label><input id="idSell" class="q-input" type="number" min="0" step="0.01" placeholder="₹ 0"></div>
+</div>
+
+<div id="accountExtra" class="q-field hidden"><label class="q-label" for="accountType">Account Type</label><select id="accountType" class="q-select"><option>Bank</option><option>Cash</option><option>UPI</option><option>Wallet</option><option>Credit Card</option><option>Other</option></select></div>
+
+<div class="q-field"><label class="q-label" for="note">Notes</label><textarea id="note" class="q-textarea" maxlength="500" placeholder="Optional notes..."></textarea></div>
+</div>
+<button id="submitBtn" class="q-submit" type="submit">Add Income</button>
+<div id="status" class="q-status"></div>
+</form>
+</section>
+
+<section class="q-card"><p class="q-help">All actions use the same wallet data. Transfers are not counted as income or expense. EMI Initial Payment is optional. Money Need To Receive is always separate from EMI Buyers.</p></section>
+</main>
+
+<nav class="bottom-nav" aria-label="Primary navigation">
+<a class="nav-item" data-page="home" href="../index.html"><span class="nav-icon">🏠</span><span class="nav-label">Home</span></a>
+<a class="nav-item" data-page="myIds" href="./my-ids.html"><span class="nav-icon">🆔</span><span class="nav-label">My IDs</span></a>
+<a class="nav-item" data-page="buyers" href="./buyers.html"><span class="nav-icon">💳</span><span class="nav-label">EMI Buyers</span></a>
+<a class="nav-item" data-page="accounts" href="./accounts.html"><span class="nav-icon">🏦</span><span class="nav-label">Accounts</span></a>
+<a class="nav-item active" data-page="more" href="./more.html"><span class="nav-icon">☰</span><span class="nav-label">More</span></a>
+</nav>
+
+<script src="../js/app.js"></script>
+<script>
+(() => {
+"use strict";
+const api=window.TamilandaWallet;
+const $=id=>document.getElementById(id);
+const amount=v=>api.toAmount(v);
+const today=()=>api.todayString();
+let type="income";
+
+function data(){return api.getData()||{}}
+function accounts(){return Array.isArray(data().accounts)?data().accounts:[]}
+function money(v){return api.formatMoney(amount(v))}
+function fillAccounts(){
+  const a=accounts();
+  const opts=a.length?'<option value="">Select account</option>'+a.map(x=>`<option value="${String(x.id).replaceAll('"','&quot;')}">${String(x.name||"Account")} • ${money(x.balance)}</option>`).join(""):'<option value="">No accounts available</option>';
+  $("account").innerHTML=opts;$("toAccount").innerHTML=opts;
+}
+function show(id,on){$(id).classList.toggle("hidden",!on)}
+
+window.selectType=function(t){
+  type=t;
+  document.querySelectorAll(".q-type").forEach(b=>b.classList.toggle("active",b.dataset.type===t));
+  const accountNeeded=["income","expense","transfer","buyer","emi"].includes(t);
+  show("accountGrid",accountNeeded);
+  show("toAccountField",t==="transfer");
+  show("normalExtra",["income","expense"].includes(t));
+  show("buyerExtra",t==="buyer");
+  show("emiExtra",t==="emi");
+  show("emiMonthsField",t==="emi");
+  show("idExtra",t==="id");
+  show("accountExtra",t==="account");
+  $("amount").placeholder=t==="account"?"Opening Balance":"₹ 0";
+  $("accountLabel").textContent=t==="emi"?"Payment Account":"Account";
+
+  const labels={income:"Person / Source",expense:"To / Person",transfer:"Transfer",buyer:"Buyer Name",receivable:"Person Name",give:"Person Name",emi:"EMI Name",account:"Account Name",id:"ID Name"};
+  const buttons={income:"Add Income",expense:"Add Expense",transfer:"Transfer Money",buyer:"Add EMI Buyer",receivable:"Add Receivable",give:"Add Money To Give",emi:"Add My EMI",account:"Add Account",id:"Add ID"};
+  $("nameLabel").textContent=labels[t];$("submitBtn").textContent=buttons[t];
+};
+
+window.submitQuick=function(e){
+  e.preventDefault();
+  const name=$("name").value.trim(), amt=amount($("amount").value), date=$("date").value||today(), note=$("note").value.trim();
+  const accountId=$("account").value;
+  const status=$("status");
+  try{
+    let result=false;
+    if(type==="income"||type==="expense"){
+      if(amt<=0)throw new Error("Enter a valid amount.");
+      if(!accountId)throw new Error("Select an account.");
+      result=api.addTransaction({type,amount:amt,accountId,date,note,category:$("category").value.trim(),person:name});
+    }else if(type==="transfer"){
+      if(amt<=0)throw new Error("Enter a valid amount.");
+      if(!accountId||!$("toAccount").value)throw new Error("Select both accounts.");
+      if(accountId===$("toAccount").value)throw new Error("Accounts must be different.");
+      result=api.transferBetweenAccounts(accountId,$("toAccount").value,amt,note,date);
+    }else if(type==="buyer"){
+      if(!name)throw new Error("Enter buyer name.");
+      if(amt<=0)throw new Error("Enter total amount.");
+      const initial=amount($("buyerInitial").value),months=Math.max(1,Number($("buyerMonths").value)||6);
+      if(initial>amt)throw new Error("Initial payment cannot exceed total amount.");
+      if(initial>0&&!accountId)throw new Error("Select the initial-payment account.");
+      result=api.addBuyer({name,phone:$("phone").value.trim(),totalAmount:amt,initialPayment:initial,initialPaymentAccountId:accountId,initialPaymentDate:date,emiDuration:String(months),notes:note});
+      if(result&&initial>0){
+        const tx=api.addTransaction({type:"buyer_initial_payment",amount:initial,accountId,date,note:`${name} initial payment`,category:"FF Account Sale",person:name,buyerId:result.id});
+        if(!tx)throw new Error("Initial payment could not be recorded.");
+      }
+    }else if(type==="receivable"){
+      if(!name)throw new Error("Enter person name.");
+      if(amt<=0)throw new Error("Enter total amount.");
+      result=api.addReceivable({name,phone:$("phone").value.trim(),totalAmount:amt,dueDate:date,notes:note});
+    }else if(type==="give"){
+      if(!name)throw new Error("Enter person name.");
+      if(amt<=0)throw new Error("Enter amount.");
+      result=api.addMoneyToGive({name,phone:$("phone").value.trim(),totalAmount:amt,notes:note});
+    }else if(type==="emi"){
+      if(!name)throw new Error("Enter EMI name.");
+      if(amt<=0)throw new Error("Enter total amount.");
+      const initial=amount($("emiInitial").value),monthly=amount($("emiMonthly").value),months=Math.max(1,Number($("emiMonths").value)||12);
+      if(monthly<=0)throw new Error("Enter monthly EMI.");
+      if(initial>amt)throw new Error("Initial payment cannot exceed total amount.");
+      result=api.addMyEmi({name,totalAmount:amt,monthlyPayment:monthly,totalMonths:months,initialPayment:initial,dueDate:date,notes:note});
+    }else if(type==="account"){
+      if(!name)throw new Error("Enter account name.");
+      result=api.addAccount({name,type:$("accountType").value,balance:amt,note});
+    }else if(type==="id"){
+      if(!name)throw new Error("Enter ID name.");
+      result=api.addMyId({name,buyPrice:amount($("idBuy").value),sellPrice:amount($("idSell").value),status:"available",notes:note});
+    }
+    if(result===false||result==null)throw new Error("Could not save this entry.");
+    status.textContent="Saved successfully. ✅";status.className="q-status show ok";
+    $("quickForm").reset();$("date").value=today();fillAccounts();selectType(type);
+  }catch(err){
+    status.textContent=err?.message||"Could not save the entry.";status.className="q-status show err";
+  }
+};
+
+document.addEventListener("DOMContentLoaded",()=>{$("date").value=today();fillAccounts();selectType("income");});
+})();
+</script>
+</body>
+</html>

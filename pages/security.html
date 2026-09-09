@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#09070d">
+<link rel="manifest" href="../manifest.json">
+<link rel="icon" href="../icons/icon-192.png">
+<link rel="apple-touch-icon" href="../icons/icon-192.png">
+<link rel="stylesheet" href="../css/style.css">
+<title>Security — Tamilanda Wallet 👑</title>
+
+<style>
+:root{
+  --bg:#09070d;--surface:#15111d;--edge:rgba(255,255,255,.08);
+  --text:#fff;--muted:#b7b2bf;--dim:#77717f;
+  --purple:#9b6dff;--blue:#55aaff;--green:#55d98b;--red:#ff667a;--gold:#ffc857
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:var(--bg);color:#fff}
+body{
+  overflow-x:hidden;-webkit-font-smoothing:antialiased;
+  background:
+    radial-gradient(circle at 95% 8%,rgba(92,82,255,.16),transparent 30%),
+    radial-gradient(circle at 5% 20%,rgba(0,117,255,.07),transparent 26%),
+    linear-gradient(180deg,#0a0d1e 0%,#061625 50%,#04090e 100%)
+}
+.security-page{
+  width:min(100%,720px);
+  margin:0 auto;
+  padding:18px 16px calc(105px + env(safe-area-inset-bottom))
+}
+.security-header{
+  display:flex;align-items:center;gap:10px;padding:15px 14px;margin-bottom:12px;
+  border-radius:19px;background:rgba(21,17,29,.90);border:1px solid var(--edge)
+}
+.security-back,.security-refresh{
+  width:42px;height:42px;flex:0 0 42px;display:grid;place-items:center;
+  border-radius:13px;border:1px solid rgba(255,255,255,.09);color:#fff;background:rgba(255,255,255,.04)
+}
+.security-back{font-size:22px}.security-refresh{margin-left:auto;font-size:18px}
+.security-head-copy{min-width:0}.security-head-copy h1{margin:0;font-size:23px;line-height:1.05;font-weight:900;letter-spacing:-.5px}
+.security-head-copy p{margin:5px 0 0;color:var(--muted);font-size:10px}
+
+.security-hero{
+  position:relative;overflow:hidden;padding:20px;border-radius:23px;border:1px solid rgba(155,109,255,.34);
+  background:
+    radial-gradient(circle at 91% 16%,rgba(42,112,255,.34),transparent 34%),
+    radial-gradient(circle at 13% 117%,rgba(123,51,255,.42),transparent 39%),
+    linear-gradient(145deg,#18112c,#0d0b16 76%);
+  box-shadow:0 15px 44px rgba(0,0,0,.27)
+}
+.security-hero-icon{
+  width:50px;height:50px;display:grid;place-items:center;border-radius:15px;
+  background:rgba(155,109,255,.10);border:1px solid rgba(155,109,255,.18);font-size:26px
+}
+.security-hero-title{margin-top:11px;font-size:27px;font-weight:950;letter-spacing:-.7px}
+.security-hero-note{margin-top:6px;color:rgba(255,255,255,.50);font-size:10px;line-height:1.5}
+.security-state{
+  display:inline-flex;align-items:center;gap:6px;margin-top:11px;padding:6px 9px;border-radius:999px;
+  color:var(--gold);background:rgba(255,200,87,.08);border:1px solid rgba(255,200,87,.15);font-size:8px;font-weight:900
+}
+.security-state.secure{color:var(--green);background:rgba(85,217,139,.09);border-color:rgba(85,217,139,.17)}
+
+.security-section{margin-top:16px}
+.security-section h2{margin:0 2px 8px;font-size:15px;font-weight:900}
+.security-status-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.security-status{
+  padding:12px;border-radius:15px;background:rgba(21,17,29,.88);border:1px solid var(--edge)
+}
+.security-status span{display:block;color:#77717f;font-size:7px;font-weight:800;text-transform:uppercase;letter-spacing:.7px}
+.security-status strong{display:block;margin-top:5px;color:#fff;font-size:12px;font-weight:900}
+.security-status .good{color:var(--green)}.security-status .warn{color:var(--gold)}
+
+.security-list{
+  border-radius:18px;overflow:hidden;background:rgba(21,17,29,.88);border:1px solid var(--edge)
+}
+.security-item{
+  display:flex;align-items:flex-start;gap:11px;padding:13px 12px;border-bottom:1px solid rgba(255,255,255,.055)
+}
+.security-item:last-child{border-bottom:0}
+.security-item-icon{
+  width:38px;height:38px;flex:0 0 38px;display:grid;place-items:center;border-radius:12px;
+  background:rgba(155,109,255,.08);border:1px solid rgba(155,109,255,.13);font-size:18px
+}
+.security-item.blue .security-item-icon{background:rgba(85,170,255,.07);border-color:rgba(85,170,255,.13)}
+.security-item.green .security-item-icon{background:rgba(85,217,139,.07);border-color:rgba(85,217,139,.13)}
+.security-copy{min-width:0;flex:1}.security-title{font-size:11px;font-weight:850}.security-desc{margin-top:4px;color:#77717f;font-size:8px;line-height:1.5}
+
+.security-pin-card{
+  padding:15px;border-radius:18px;background:rgba(21,17,29,.88);border:1px solid var(--edge)
+}
+.security-pin-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.security-pin-title{font-size:12px;font-weight:900}.security-pin-status{font-size:8px;font-weight:850;color:var(--gold)}
+.security-form{display:grid;gap:10px;margin-top:13px}
+.security-field label{display:block;margin-bottom:6px;color:#aaa2b1;font-size:9px;font-weight:800}
+.security-field input{
+  width:100%;min-height:46px;padding:11px 13px;border-radius:11px;background:#110e17;color:#fff;
+  border:1px solid rgba(255,255,255,.08);outline:none;font-size:13px
+}
+.security-field input:focus{border-color:rgba(155,109,255,.50);box-shadow:0 0 0 2px rgba(155,109,255,.07)}
+.security-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:2px}
+.security-save,.security-clear{
+  min-height:44px;border-radius:11px;font-size:11px;font-weight:850
+}
+.security-save{border:0;background:linear-gradient(135deg,#9b6dff,#713fff);color:#fff}
+.security-clear{border:1px solid rgba(255,102,122,.14);background:rgba(255,102,122,.05);color:var(--red)}
+.security-help{margin-top:8px;color:#77717f;font-size:8px;line-height:1.5}
+
+.security-links{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.security-link{
+  min-height:78px;padding:12px;border-radius:17px;border:1px solid var(--edge);background:rgba(21,17,29,.88);color:#fff;text-align:left
+}
+.security-link-icon{width:34px;height:34px;display:grid;place-items:center;border-radius:10px;background:rgba(155,109,255,.08);font-size:17px}
+.security-link-title{display:block;margin-top:7px;font-size:10px;font-weight:900}.security-link-sub{display:block;margin-top:3px;color:#77717f;font-size:7px;line-height:1.35}
+
+.security-note{
+  margin-top:13px;padding:11px 12px;border-radius:13px;background:rgba(255,200,87,.045);
+  border:1px solid rgba(255,200,87,.10);color:#8f8997;font-size:8px;line-height:1.5
+}
+.security-note strong{color:#d1c6a2}
+
+@media(max-width:520px){.security-page{padding-left:13px;padding-right:13px}}
+@media(max-width:390px){
+  .security-head-copy h1{font-size:21px}.security-head-copy p{font-size:9px}
+  .security-status-grid,.security-links,.security-actions{grid-template-columns:1fr}
+}
+</style>
+</head>
+
+<body>
+<main class="security-page">
+
+<header class="security-header">
+  <button class="security-back" type="button" onclick="goMore()" aria-label="Back">‹</button>
+  <div class="security-head-copy">
+    <h1>Security 🔐</h1>
+    <p>Security controls and protection status for your wallet</p>
+  </div>
+  <button class="security-refresh" type="button" onclick="refreshSecurity()" aria-label="Refresh">↻</button>
+</header>
+
+<section class="security-hero">
+  <div class="security-hero-icon">🔐</div>
+  <div class="security-hero-title">Keep your wallet protected.</div>
+  <div class="security-hero-note">Tamilanda Wallet keeps security preferences with the local wallet data on this device.</div>
+  <div id="securityState" class="security-state">● PIN not configured</div>
+</section>
+
+<section class="security-section">
+  <h2>Security Status</h2>
+  <div class="security-status-grid">
+    <div class="security-status"><span>PIN</span><strong id="pinStatus" class="warn">Not configured</strong></div>
+    <div class="security-status"><span>PIN Enabled</span><strong id="pinEnabled" class="warn">Off</strong></div>
+    <div class="security-status"><span>Local Storage</span><strong id="storageStatus" class="good">Available</strong></div>
+    <div class="security-status"><span>Wallet Data</span><strong id="dataStatus">Ready</strong></div>
+  </div>
+</section>
+
+<section class="security-section">
+  <h2>Security PIN</h2>
+  <div class="security-pin-card">
+    <div class="security-pin-top">
+      <div class="security-pin-title">PIN Configuration</div>
+      <div id="pinCardStatus" class="security-pin-status">Not configured</div>
+    </div>
+
+    <form id="pinForm" class="security-form">
+      <div class="security-field">
+        <label for="newPin">New PIN</label>
+        <input id="newPin" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="6" minlength="4" placeholder="4–6 digit PIN" autocomplete="new-password">
+      </div>
+      <div class="security-field">
+        <label for="confirmPin">Confirm PIN</label>
+        <input id="confirmPin" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="6" minlength="4" placeholder="Re-enter PIN" autocomplete="new-password">
+      </div>
+
+      <div class="security-actions">
+        <button class="security-clear" type="button" onclick="removePin()">Remove PIN</button>
+        <button class="security-save" type="submit">Save PIN</button>
+      </div>
+    </form>
+
+    <div class="security-help">The wallet data model already includes <code>pinEnabled</code> and <code>pinConfigured</code> security flags. fileciteturn175file0L102-L108</div>
+  </div>
+</section>
+
+<section class="security-section">
+  <h2>Good Security Practices</h2>
+  <div class="security-list">
+    <div class="security-item green">
+      <div class="security-item-icon">☁️</div>
+      <div class="security-copy"><div class="security-title">Keep a backup</div><div class="security-desc">Create a backup before clearing site storage, changing devices or reinstalling the app.</div></div>
+    </div>
+    <div class="security-item blue">
+      <div class="security-item-icon">📱</div>
+      <div class="security-copy"><div class="security-title">Protect the device</div><div class="security-desc">Use your Android/device screen lock and avoid leaving the wallet open on an unlocked shared device.</div></div>
+    </div>
+    <div class="security-item">
+      <div class="security-item-icon">🗑️</div>
+      <div class="security-copy"><div class="security-title">Review Trash</div><div class="security-desc">Permanently deleting records from Trash cannot be undone.</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="security-section">
+  <h2>Useful Pages</h2>
+  <div class="security-links">
+    <button class="security-link" type="button" onclick="goTo('./privacy.html')">
+      <span class="security-link-icon">🛡️</span>
+      <span class="security-link-title">Privacy</span>
+      <span class="security-link-sub">Review local data handling</span>
+    </button>
+    <button class="security-link" type="button" onclick="goTo('./backup.html')">
+      <span class="security-link-icon">☁️</span>
+      <span class="security-link-title">Backup</span>
+      <span class="security-link-sub">Create a safe external copy</span>
+    </button>
+  </div>
+</section>
+
+<div class="security-note">
+  <strong>Important:</strong> this page stores the PIN configuration locally. The current shared application code defines the security flags but does not expose a global app-lock enforcement API, so this page does not pretend to provide a lock screen that the existing app cannot enforce yet.
+</div>
+
+</main>
+
+<nav class="bottom-nav" aria-label="Primary navigation">
+  <a class="nav-item" data-page="home" href="../index.html"><span class="nav-icon">🏠</span><span class="nav-label">Home</span></a>
+  <a class="nav-item" data-page="myIds" href="./my-ids.html"><span class="nav-icon">🆔</span><span class="nav-label">My IDs</span></a>
+  <a class="nav-item" data-page="buyers" href="./buyers.html"><span class="nav-icon">💳</span><span class="nav-label">EMI Buyers</span></a>
+  <a class="nav-item" data-page="accounts" href="./accounts.html"><span class="nav-icon">🏦</span><span class="nav-label">Accounts</span></a>
+  <a class="nav-item active" data-page="more" href="./more.html"><span class="nav-icon">☰</span><span class="nav-label">More</span></a>
+</nav>
+
+<script>
+(() => {
+  "use strict";
+
+  const KEY="tamilanda_wallet_data";
+
+  function read(){
+    try{return JSON.parse(localStorage.getItem(KEY)||"{}")||{}}
+    catch{return {}}
+  }
+
+  async function digestPin(pin){
+    if(window.crypto?.subtle){
+      const bytes=new TextEncoder().encode(pin);
+      const hash=await crypto.subtle.digest("SHA-256",bytes);
+      return Array.from(new Uint8Array(hash)).map(b=>b.toString(16).padStart(2,"0")).join("");
+    }
+
+    // Android WebView fallback: this value is only a local configuration
+    // marker, not claimed to be a cryptographic security boundary.
+    return "local-"+btoa(pin);
+  }
+
+  function render(){
+    const data=read();
+    const sec=data.security||{};
+    const configured=!!sec.pinConfigured;
+    const enabled=!!sec.pinEnabled;
+
+    document.getElementById("pinStatus").textContent=configured?"Configured":"Not configured";
+    document.getElementById("pinStatus").className=configured?"good":"warn";
+    document.getElementById("pinEnabled").textContent=enabled?"On":"Off";
+    document.getElementById("pinEnabled").className=enabled?"good":"warn";
+    document.getElementById("pinCardStatus").textContent=configured?"Configured":"Not configured";
+    document.getElementById("pinCardStatus").style.color=configured?"var(--green)":"var(--gold)";
+
+    const state=document.getElementById("securityState");
+    state.textContent=configured?"● PIN configured":"● PIN not configured";
+    state.classList.toggle("secure",configured);
+
+    document.getElementById("storageStatus").textContent=
+      localStorage.getItem(KEY)!==null?"Available":"Not initialized";
+    document.getElementById("dataStatus").textContent=
+      Object.keys(data).length?"Ready":"Empty";
+  }
+
+  window.goMore=()=>window.location.assign("./more.html");
+  window.goTo=url=>window.location.assign(url);
+  window.refreshSecurity=render;
+
+  document.getElementById("pinForm").addEventListener("submit",async event=>{
+    event.preventDefault();
+
+    const pin=document.getElementById("newPin").value.trim();
+    const confirmPin=document.getElementById("confirmPin").value.trim();
+
+    if(!/^\d{4,6}$/.test(pin)){
+      alert("Please enter a 4–6 digit PIN.");
+      return;
+    }
+
+    if(pin!==confirmPin){
+      alert("PINs do not match.");
+      return;
+    }
+
+    const data=read();
+    try{
+      data.security={
+        ...(data.security||{}),
+        pinHash:await digestPin(pin),
+        pinConfigured:true,
+        pinEnabled:true
+      };
+      localStorage.setItem(KEY,JSON.stringify(data));
+      document.getElementById("newPin").value="";
+      document.getElementById("confirmPin").value="";
+      render();
+      alert("Security PIN saved.");
+    }catch{
+      alert("Could not save the security PIN.");
+    }
+  });
+
+  window.removePin=()=>{
+    const data=read();
+    if(!data.security?.pinConfigured){
+      alert("No PIN is configured.");
+      return;
+    }
+
+    if(!confirm("Remove the saved security PIN?"))return;
+
+    data.security={
+      ...(data.security||{}),
+      pinHash:"",
+      pinConfigured:false,
+      pinEnabled:false
+    };
+
+    try{
+      localStorage.setItem(KEY,JSON.stringify(data));
+      render();
+      alert("Security PIN removed.");
+    }catch{
+      alert("Could not remove the security PIN.");
+    }
+  };
+
+  document.addEventListener("DOMContentLoaded",()=>{
+    render();
+    setTimeout(render,100);
+  });
+  window.addEventListener("storage",render);
+  window.addEventListener("pageshow",render);
+})();
+</script>
+</body>
+</html>

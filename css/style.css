@@ -1,0 +1,2104 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --bg: #09070d;
+    --surface: #15111d;
+    --surface-2: #1c1725;
+    --border: rgba(255, 255, 255, 0.08);
+
+    --gold: #ffc857;
+    --gold-soft: #e6ad3d;
+
+    --green: #55d98b;
+    --red: #ff667a;
+    --purple: #9b6dff;
+    --blue: #55aaff;
+
+    --text: #ffffff;
+    --text-secondary: #b7b2bf;
+    --text-muted: #77717f;
+
+    --radius: 18px;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    min-height: 100vh;
+    background:
+        radial-gradient(
+            circle at top right,
+            rgba(155, 109, 255, 0.10),
+            transparent 35%
+        ),
+        radial-gradient(
+            circle at top left,
+            rgba(255, 200, 87, 0.06),
+            transparent 30%
+        ),
+        var(--bg);
+
+    color: var(--text);
+
+    font-family:
+        Inter,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+    -webkit-font-smoothing: antialiased;
+}
+
+button,
+input,
+select,
+textarea {
+    font: inherit;
+}
+
+button {
+    border: none;
+    cursor: pointer;
+}
+
+button:active {
+    transform: scale(0.97);
+}
+
+
+/* =========================
+   APP
+========================= */
+
+#app {
+    width: 100%;
+    min-height: 100vh;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.app-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    width: 100%;
+    max-width: 720px;
+
+    margin: 0 auto;
+
+    padding: 18px 18px 14px;
+
+    background: rgba(9, 7, 13, 0.88);
+
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+
+/* BRAND */
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+}
+
+.brand-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 42px;
+    height: 42px;
+
+    border-radius: 13px;
+
+    background: linear-gradient(
+        145deg,
+        #ffd76a,
+        #d89d25
+    );
+
+    color: #17100a;
+
+    font-size: 21px;
+    font-weight: 900;
+
+    box-shadow:
+        0 8px 25px rgba(255, 200, 87, 0.15);
+}
+
+.brand h1 {
+    color: var(--gold);
+
+    font-size: 17px;
+    line-height: 1;
+
+    letter-spacing: 1.4px;
+    font-weight: 900;
+}
+
+.brand span {
+    display: block;
+
+    margin-top: 5px;
+
+    color: #ffffff;
+
+    font-size: 11px;
+    line-height: 1;
+
+    letter-spacing: 3px;
+    font-weight: 700;
+}
+
+
+/* SETTINGS BUTTON */
+
+.icon-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 42px;
+    height: 42px;
+
+    border-radius: 13px;
+
+    background: var(--surface);
+
+    color: #ffffff;
+
+    border: 1px solid var(--border);
+
+    font-size: 18px;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.icon-button:hover {
+    background: var(--surface-2);
+    border-color: rgba(255, 200, 87, 0.25);
+}
+
+
+/* =========================
+   MAIN
+========================= */
+
+.main-content {
+    width: 100%;
+    max-width: 720px;
+
+    margin: 0 auto;
+
+    padding: 18px 16px 110px;
+}
+
+
+/* =========================
+   BALANCE CARD
+========================= */
+
+.balance-card {
+    position: relative;
+    overflow: hidden;
+
+    padding: 24px;
+
+    border-radius: 23px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255, 200, 87, 0.13),
+            rgba(155, 109, 255, 0.08)
+        ),
+        var(--surface);
+
+    border: 1px solid rgba(255, 200, 87, 0.16);
+
+    box-shadow:
+        0 20px 45px rgba(0, 0, 0, 0.24);
+}
+
+.balance-card::after {
+    content: "";
+
+    position: absolute;
+
+    width: 170px;
+    height: 170px;
+
+    right: -70px;
+    top: -75px;
+
+    border-radius: 50%;
+
+    background: rgba(255, 200, 87, 0.08);
+
+    pointer-events: none;
+}
+
+.balance-label {
+    position: relative;
+    z-index: 1;
+
+    color: var(--text-muted);
+
+    font-size: 11px;
+    font-weight: 800;
+
+    letter-spacing: 1.4px;
+}
+
+.total-balance,
+.balance-amount {
+    position: relative;
+    z-index: 1;
+
+    margin-top: 7px;
+
+    color: #ffffff;
+
+    font-size: clamp(32px, 8vw, 44px);
+    line-height: 1.1;
+
+    font-weight: 900;
+
+    letter-spacing: -1px;
+}
+
+.balance-subtitle {
+    position: relative;
+    z-index: 1;
+
+    margin-top: 8px;
+
+    color: var(--text-secondary);
+
+    font-size: 13px;
+}
+
+
+/* =========================
+   SECTION
+========================= */
+
+.section {
+    margin-top: 22px;
+}
+
+.section-title {
+    margin-bottom: 10px;
+
+    color: var(--text-muted);
+
+    font-size: 11px;
+    font-weight: 800;
+
+    letter-spacing: 1.5px;
+}
+
+.section-heading-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.section-heading-row .section-title {
+    margin-bottom: 10px;
+}
+
+
+/* =========================
+   SUMMARY GRID
+========================= */
+
+.summary-grid {
+    display: grid;
+
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: 11px;
+}
+
+.summary-card {
+    min-width: 0;
+
+    padding: 17px;
+
+    border-radius: var(--radius);
+
+    background: var(--surface);
+
+    border: 1px solid var(--border);
+}
+
+.summary-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 34px;
+    height: 34px;
+
+    margin-bottom: 13px;
+
+    border-radius: 11px;
+
+    font-size: 19px;
+    font-weight: 900;
+}
+
+.income-card .summary-icon {
+    background: rgba(85, 217, 139, 0.11);
+    color: var(--green);
+}
+
+.expense-card .summary-icon {
+    background: rgba(255, 102, 122, 0.11);
+    color: var(--red);
+}
+
+.summary-label {
+    color: var(--text-muted);
+
+    font-size: 10px;
+    font-weight: 800;
+
+    letter-spacing: 1px;
+}
+
+.summary-value {
+    margin-top: 5px;
+
+    font-size: 20px;
+    font-weight: 800;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.income-card .summary-value {
+    color: var(--green);
+}
+
+.expense-card .summary-value {
+    color: var(--red);
+}
+
+
+/* =========================
+   PROFIT
+========================= */
+
+.profit-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-top: 11px;
+
+    padding: 18px;
+
+    border-radius: var(--radius);
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255, 200, 87, 0.12),
+            rgba(255, 200, 87, 0.035)
+        );
+
+    border: 1px solid rgba(255, 200, 87, 0.15);
+}
+
+.profit-label {
+    color: var(--text-muted);
+
+    font-size: 10px;
+    font-weight: 800;
+
+    letter-spacing: 1px;
+}
+
+.profit-value {
+    margin-top: 5px;
+
+    color: var(--gold);
+
+    font-size: 25px;
+    font-weight: 900;
+}
+
+.profit-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 47px;
+    height: 47px;
+
+    border-radius: 15px;
+
+    background: rgba(255, 200, 87, 0.10);
+
+    font-size: 23px;
+}
+
+
+/* =========================
+   QUICK ACTIONS
+========================= */
+
+.quick-actions {
+    display: grid;
+
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+
+    gap: 9px;
+}
+
+.action-button,
+.quick-action {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 82px;
+
+    padding: 10px 5px;
+
+    border-radius: 16px;
+
+    background: var(--surface);
+
+    border: 1px solid var(--border);
+
+    color: #ffffff;
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease;
+}
+
+.action-button:hover,
+.quick-action:hover {
+    background: var(--surface-2);
+}
+
+.action-icon,
+.quick-action-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 34px;
+    height: 34px;
+
+    margin-bottom: 7px;
+
+    border-radius: 11px;
+
+    font-size: 20px;
+    font-weight: 900;
+}
+
+.action-button span:last-child,
+.quick-action span:last-child {
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.income-action .action-icon {
+    color: var(--green);
+    background: rgba(85, 217, 139, 0.10);
+}
+
+.expense-action .action-icon {
+    color: var(--red);
+    background: rgba(255, 102, 122, 0.10);
+}
+
+.buyer-action .action-icon {
+    color: var(--purple);
+    background: rgba(155, 109, 255, 0.10);
+}
+
+.emi-action .action-icon {
+    color: var(--gold);
+    background: rgba(255, 200, 87, 0.10);
+}
+
+
+/* =========================
+   OVERVIEW
+========================= */
+
+.overview-list {
+    overflow: hidden;
+
+    border-radius: var(--radius);
+
+    background: var(--surface);
+
+    border: 1px solid var(--border);
+}
+
+.overview-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 12px;
+
+    padding: 16px;
+
+    border-bottom: 1px solid var(--border);
+}
+
+.overview-item:last-child {
+    border-bottom: none;
+}
+
+.overview-left {
+    display: flex;
+    align-items: center;
+
+    min-width: 0;
+
+    gap: 12px;
+}
+
+.overview-icon {
+    flex: 0 0 auto;
+
+    font-size: 15px;
+}
+
+.overview-left div {
+    min-width: 0;
+}
+
+.overview-left strong {
+    display: block;
+
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.overview-left small {
+    display: block;
+
+    margin-top: 3px;
+
+    color: var(--text-muted);
+
+    font-size: 10px;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.overview-amount {
+    flex: 0 0 auto;
+
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.overview-amount.receive {
+    color: var(--green);
+}
+
+.overview-amount.give {
+    color: var(--red);
+}
+
+.overview-amount.emi {
+    color: var(--gold);
+}
+
+
+/* =========================
+   BUTTONS
+========================= */
+
+.text-button {
+    margin-bottom: 10px;
+
+    background: transparent;
+
+    color: var(--gold);
+
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.text-button:hover {
+    opacity: 0.8;
+}
+
+
+/* =========================
+   ACCOUNT PREVIEW
+========================= */
+
+.accounts-preview,
+.transactions-preview {
+    display: flex;
+    flex-direction: column;
+
+    gap: 9px;
+}
+
+.account-preview-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 15px;
+
+    border-radius: 15px;
+
+    background: var(--surface);
+
+    border: 1px solid var(--border);
+}
+
+.account-preview-left {
+    display: flex;
+    align-items: center;
+
+    gap: 11px;
+}
+
+.account-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 38px;
+    height: 38px;
+
+    border-radius: 12px;
+
+    background: rgba(255, 200, 87, 0.09);
+
+    font-size: 17px;
+}
+
+.account-name {
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.account-type {
+    margin-top: 3px;
+
+    color: var(--text-muted);
+
+    font-size: 10px;
+}
+
+.account-balance {
+    color: var(--gold);
+
+    font-size: 14px;
+    font-weight: 800;
+}
+
+
+/* =========================
+   TRANSACTION PREVIEW
+========================= */
+
+.transaction-preview-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 15px;
+
+    border-radius: 15px;
+
+    background: var(--surface);
+
+    border: 1px solid var(--border);
+}
+
+.transaction-left {
+    display: flex;
+    align-items: center;
+
+    min-width: 0;
+
+    gap: 11px;
+}
+
+.transaction-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 38px;
+    height: 38px;
+
+    flex: 0 0 auto;
+
+    border-radius: 12px;
+
+    font-size: 16px;
+}
+
+.transaction-icon.income {
+    background: rgba(85, 217, 139, 0.10);
+    color: var(--green);
+}
+
+.transaction-icon.expense {
+    background: rgba(255, 102, 122, 0.10);
+    color: var(--red);
+}
+
+.transaction-title {
+    max-width: 180px;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.transaction-meta {
+    margin-top: 3px;
+
+    color: var(--text-muted);
+
+    font-size: 10px;
+}
+
+.transaction-amount {
+    flex: 0 0 auto;
+
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.transaction-amount.income {
+    color: var(--green);
+}
+
+.transaction-amount.expense {
+    color: var(--red);
+}
+
+
+/* =========================
+   EMPTY STATE
+========================= */
+
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 150px;
+
+    padding: 25px 18px;
+
+    border-radius: var(--radius);
+
+    background: var(--surface);
+
+    border: 1px dashed rgba(255, 255, 255, 0.10);
+
+    text-align: center;
+}
+
+.empty-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 48px;
+    height: 48px;
+
+    margin-bottom: 10px;
+
+    border-radius: 15px;
+
+    background: var(--surface-2);
+
+    font-size: 22px;
+}
+
+.empty-state strong {
+    font-size: 13px;
+}
+
+.empty-state small {
+    max-width: 280px;
+
+    margin-top: 5px;
+
+    color: var(--text-muted);
+
+    font-size: 10px;
+    line-height: 1.5;
+}
+
+
+/* =========================
+   BOTTOM NAVIGATION
+   (canonical rule lives further down, under
+   "BOTTOM NAV: SINGLE ROOT IMPLEMENTATION")
+========================= */
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    gap: 4px;
+
+    min-height: 51px;
+
+    background: transparent;
+
+    color: var(--text-muted);
+
+    transition:
+        color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.nav-item span {
+    font-size: 20px;
+    line-height: 1;
+}
+
+.nav-item small {
+    font-size: 9px;
+    font-weight: 700;
+}
+
+.nav-item.active {
+    color: var(--gold);
+}
+
+.nav-item.active span {
+    text-shadow:
+        0 0 18px rgba(255, 200, 87, 0.28);
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (min-width: 721px) {
+
+    body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+    }
+
+    .app-header,
+    .main-content,
+    .dashboard-container {
+        width: 100%;
+        max-width: 720px;
+    }
+
+    #app {
+        width: 100%;
+        max-width: 720px;
+
+        box-shadow:
+            0 0 80px rgba(0, 0, 0, 0.35);
+    }
+
+}
+
+@media (max-width: 420px) {
+
+    .main-content {
+        padding-left: 13px;
+        padding-right: 13px;
+    }
+
+    .app-header {
+        padding-left: 14px;
+        padding-right: 14px;
+    }
+
+    .quick-actions {
+        gap: 7px;
+    }
+
+    .action-button,
+    .quick-action {
+        min-height: 76px;
+    }
+
+    .action-button span:last-child,
+    .quick-action span:last-child {
+        font-size: 10px;
+    }
+
+    .total-balance,
+    .balance-amount {
+        font-size: 32px;
+    }
+
+}
+
+@media (max-width: 350px) {
+
+    .brand h1 {
+        font-size: 15px;
+    }
+
+    .brand span {
+        font-size: 9px;
+        letter-spacing: 2px;
+    }
+
+    .summary-value {
+        font-size: 17px;
+    }
+
+    .quick-actions {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .action-button,
+    .quick-action {
+        min-height: 70px;
+    }
+
+}
+
+
+/* =========================================================
+   INDEX DASHBOARD COMPATIBILITY
+   Current index.html uses these class names.
+========================================================= */
+
+.dashboard-container {
+    width: 100%;
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 18px 16px 110px;
+}
+
+.app-title {
+    color: var(--gold);
+    font-size: 17px;
+    line-height: 1;
+    letter-spacing: 1.4px;
+    font-weight: 900;
+}
+
+.app-subtitle {
+    display: block;
+    margin-top: 5px;
+    color: #ffffff;
+    font-size: 11px;
+    line-height: 1;
+    letter-spacing: 1px;
+    font-weight: 700;
+}
+
+.balance-note {
+    position: relative;
+    z-index: 1;
+    margin-top: 8px;
+    color: var(--text-secondary);
+    font-size: 13px;
+}
+
+.income-text {
+    color: var(--green);
+}
+
+.expense-text {
+    color: var(--red);
+}
+
+.profit-text {
+    color: var(--gold);
+}
+
+.dashboard-section {
+    margin-top: 22px;
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.section-header h2 {
+    color: #ffffff;
+    font-size: 18px;
+    line-height: 1.2;
+    font-weight: 800;
+}
+
+.section-header p {
+    margin-top: 4px;
+    color: var(--text-muted);
+    font-size: 11px;
+}
+
+.overview-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 9px;
+}
+
+.overview-card {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+    padding: 15px;
+    border-radius: 15px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+}
+
+.overview-card .overview-icon {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 11px;
+    background: var(--surface-2);
+    font-size: 16px;
+}
+
+.overview-title {
+    color: var(--text-muted);
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.overview-value {
+    margin-top: 4px;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.account-preview,
+.transaction-preview {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+}
+
+.bottom-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    min-height: 51px;
+    background: transparent;
+    color: var(--text-muted);
+    transition:
+        color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.bottom-nav-item span {
+    font-size: 20px;
+    line-height: 1;
+}
+
+.bottom-nav-item small {
+    font-size: 9px;
+    font-weight: 700;
+}
+
+.bottom-nav-item.active {
+    color: var(--gold);
+}
+
+.bottom-nav-item.active span {
+    text-shadow:
+        0 0 18px rgba(255, 200, 87, 0.28);
+}
+
+@media (max-width: 420px) {
+    .dashboard-container {
+        padding-left: 13px;
+        padding-right: 13px;
+    }
+
+    .overview-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 350px) {
+    .app-title {
+        font-size: 15px;
+    }
+
+    .app-subtitle {
+        font-size: 9px;
+        letter-spacing: 2px;
+    }
+
+    .summary-value {
+        font-size: 17px;
+    }
+
+    .quick-actions {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* =========================================================
+   TAMILANDA WALLET — FINAL GLOBAL UI NORMALIZATION
+   ========================================================= */
+
+:root {
+    color-scheme: dark;
+}
+
+html,
+body {
+    color-scheme: dark !important;
+    background-color: var(--bg) !important;
+}
+
+body {
+    width: 100%;
+    overflow-x: hidden;
+    touch-action: manipulation;
+}
+
+/* Consistent page width/layout across all pages. */
+.app-header,
+.page-header,
+.page-container,
+.page-content,
+.main-content,
+.dashboard-container {
+    width: 100% !important;
+    max-width: 720px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+.page-container,
+.page-content,
+.main-content,
+.dashboard-container {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+    padding-bottom: 110px !important;
+}
+
+/* Common page cards/controls used by the different HTML pages. */
+.card,
+.panel,
+.section-card,
+.summary-card,
+.form-card {
+    max-width: 100%;
+}
+
+.primary-button,
+.secondary-button,
+.button,
+.button.primary,
+.button.secondary,
+.button.danger,
+.full-width {
+    box-sizing: border-box;
+    min-height: 42px;
+    border-radius: 12px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.primary-button,
+.button.primary {
+    background: linear-gradient(135deg, #9b6dff, #7d4dff) !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(255,255,255,0.08) !important;
+}
+
+.secondary-button,
+.button.secondary {
+    background: rgba(255,255,255,0.05) !important;
+    color: #ffffff !important;
+    border: 1px solid var(--border) !important;
+}
+
+.button.danger {
+    background: rgba(255,102,122,0.12) !important;
+    color: #ff8798 !important;
+    border: 1px solid rgba(255,102,122,0.20) !important;
+}
+
+/* Stop the global button press animation from resizing UI controls. */
+button:active {
+    transform: none;
+}
+
+/* =========================================================
+   BOTTOM NAV — SUPPLEMENTARY RULES
+   (base layout/size rules live in "SINGLE ROOT IMPLEMENTATION"
+   below; these three rules cover things that block doesn't set)
+   ========================================================= */
+
+.bottom-nav .nav-icon,
+.bottom-nav > * > span:first-child,
+.bottom-nav > button > span:first-child,
+.bottom-nav > a > span:first-child {
+    display: block !important;
+    width: auto !important;
+    height: 23px !important;
+    min-height: 23px !important;
+    max-height: 23px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+
+    font-size: 20px !important;
+    line-height: 23px !important;
+    transform: none !important;
+    scale: 1 !important;
+}
+
+.bottom-nav > *:hover {
+    background: rgba(255,255,255,0.035) !important;
+}
+
+.bottom-nav .active span,
+.bottom-nav > .active span {
+    text-shadow: 0 0 18px rgba(255,200,87,0.28);
+}
+
+/* =========================================================
+   COMMON INPUTS / SELECTS
+   ========================================================= */
+
+
+input,
+textarea,
+select {
+    color-scheme: dark !important;
+    background-color: #15111d !important;
+    color: #ffffff !important;
+    border-color: var(--border) !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: #77717f !important;
+    opacity: 1;
+}
+
+select option,
+select optgroup {
+    background: #15111d !important;
+    color: #ffffff !important;
+}
+
+/* Native select is kept as a JS fallback source; the visible control
+   is the custom dark trigger created by app.js. */
+select.tw-select-source {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    overflow: hidden !important;
+}
+
+.tw-select-trigger {
+    position: relative !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    width: 100% !important;
+    min-height: 44px !important;
+    padding: 10px 38px 10px 13px !important;
+
+    border: 1px solid var(--border) !important;
+    border-radius: 12px !important;
+    background: #15111d !important;
+    color: #ffffff !important;
+
+    text-align: left !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    line-height: 1.2 !important;
+
+    cursor: pointer !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    -webkit-tap-highlight-color: transparent !important;
+}
+
+.tw-select-trigger::after {
+    content: "▾";
+    position: absolute;
+    right: 13px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #aaa3b2;
+    font-size: 13px;
+    pointer-events: none;
+}
+
+.tw-select-trigger:disabled {
+    opacity: 0.5 !important;
+    cursor: not-allowed !important;
+}
+
+.tw-select-menu {
+    position: fixed !important;
+    z-index: 2147483000 !important;
+
+    max-width: calc(100vw - 16px) !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+
+    padding: 5px !important;
+    border: 1px solid rgba(255,255,255,0.10) !important;
+    border-radius: 13px !important;
+    background: #15111d !important;
+    box-shadow: 0 18px 45px rgba(0,0,0,0.55) !important;
+}
+
+.tw-select-menu[hidden] {
+    display: none !important;
+}
+
+.tw-select-option {
+    display: block !important;
+    width: 100% !important;
+    min-height: 38px !important;
+    padding: 9px 11px !important;
+    margin: 0 !important;
+
+    border: 0 !important;
+    border-radius: 9px !important;
+    background: transparent !important;
+    color: #ffffff !important;
+
+    text-align: left !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    line-height: 1.25 !important;
+    cursor: pointer !important;
+    transform: none !important;
+}
+
+.tw-select-option:hover,
+.tw-select-option.selected {
+    background: #2a2238 !important;
+    color: #ffffff !important;
+}
+
+/* =========================================================
+   MODALS / FORMS / MOBILE SAFETY
+   ========================================================= */
+
+.modal,
+.dialog,
+.overlay,
+.form-modal {
+    z-index: 11000;
+}
+
+.modal,
+.dialog,
+.form-modal {
+    max-width: calc(100vw - 24px);
+}
+
+img,
+video,
+canvas,
+iframe {
+    max-width: 100%;
+}
+
+@media (max-width: 720px) {
+    .app-header,
+    .page-header {
+        padding-left: 14px !important;
+        padding-right: 14px !important;
+    }
+
+    .page-container,
+    .page-content,
+    .main-content,
+    .dashboard-container {
+        padding-left: 13px !important;
+        padding-right: 13px !important;
+        padding-bottom: 105px !important;
+    }
+
+    .bottom-nav {
+        width: 100% !important;
+        height: 70px !important;
+        min-height: 70px !important;
+        max-height: 70px !important;
+    }
+
+    .bottom-nav > *,
+    .bottom-nav > button,
+    .bottom-nav > a,
+    .bottom-nav > .nav-item,
+    .bottom-nav > .bottom-nav-item,
+    .bottom-nav > *:active,
+    .bottom-nav > *:focus,
+    .bottom-nav > *:focus-visible {
+        height: 56px !important;
+        min-height: 56px !important;
+        max-height: 56px !important;
+    }
+}
+
+@media (max-width: 420px) {
+    .bottom-nav .nav-icon,
+    .bottom-nav > * > span:first-child {
+        font-size: 20px !important;
+    }
+
+    .bottom-nav .nav-label,
+    .bottom-nav > * > span:last-child,
+    .bottom-nav > button > small,
+    .bottom-nav > a > small {
+        font-size: 10px !important;
+    }
+}
+
+
+
+/* =========================================================
+   FINAL INTEGRATION — NEW PAGES + MOBILE SAFETY
+   ========================================================= */
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+input,
+select,
+textarea,
+button {
+    font: inherit;
+}
+
+input,
+select,
+textarea {
+    box-sizing: border-box;
+    max-width: 100%;
+    color-scheme: dark;
+}
+
+img,
+video,
+canvas,
+iframe {
+    max-width: 100%;
+}
+
+@media (max-width: 720px) {
+    .page-container,
+    .page-content,
+    .main-content,
+    .dashboard-container {
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    .bottom-nav {
+        box-sizing: border-box;
+        width: 100% !important;
+    }
+}
+
+/* =========================================================
+   TAMILANDA WALLET — ROOT LEVEL UI CONTRACT v2
+   One central layer for sizing, icons, tap targets, overlays,
+   navigation and responsive behavior. Page CSS should not be
+   required to fix these basics.
+   ========================================================= */
+
+:root {
+    --tw-content-width: 720px;
+    --tw-page-pad: 16px;
+    --tw-nav-height: 72px;
+    --tw-control-height: 44px;
+    --tw-tap-size: 44px;
+}
+
+html,
+body {
+    width: 100%;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden !important;
+}
+
+body {
+    min-height: 100dvh;
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+/* ---------- ROOT CONTENT WIDTH ---------- */
+
+#app,
+.app-header,
+.main-content,
+.page-container,
+.page-content,
+.dashboard-container,
+.content-container {
+    width: 100% !important;
+    max-width: var(--tw-content-width) !important;
+    min-width: 0 !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+.main-content,
+.page-container,
+.page-content,
+.dashboard-container,
+.content-container {
+    padding-left: var(--tw-page-pad) !important;
+    padding-right: var(--tw-page-pad) !important;
+}
+
+/* Prevent long values from stretching cards/layouts. */
+.card,
+.panel,
+.section-card,
+.summary-card,
+.form-card,
+.balance-card,
+.stat-card,
+.summary-panel,
+.list-card,
+.item-card,
+.modal-content,
+.modal-sheet,
+.form-modal,
+.dialog,
+.sheet,
+.tw-select-menu {
+    min-width: 0 !important;
+    max-width: 100% !important;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+small,
+span,
+label,
+a,
+button {
+    overflow-wrap: anywhere;
+}
+
+/* ---------- ONE CONTROL BASE ---------- */
+
+button,
+a,
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+select,
+textarea,
+input {
+    -webkit-tap-highlight-color: transparent !important;
+}
+
+button,
+a,
+[role="button"] {
+    touch-action: manipulation !important;
+}
+
+button,
+.primary-button,
+.secondary-button,
+.button,
+.full-width,
+.action-button,
+.icon-button,
+.icon-btn,
+.back-button,
+.add-button,
+.close-button,
+.edit-button,
+.delete-button,
+.nav-item {
+    min-width: 0;
+}
+
+/* Never resize a control while tapping it. */
+button:active,
+a:active,
+[role="button"]:active {
+    transform: none !important;
+    scale: 1 !important;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+    outline: 2px solid rgba(155,109,255,.75) !important;
+    outline-offset: 2px;
+}
+
+/* ---------- FORM SIZING ---------- */
+
+input,
+select,
+textarea {
+    width: 100%;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+}
+
+input:not([type="checkbox"]):not([type="radio"]),
+select {
+    min-height: var(--tw-control-height);
+}
+
+textarea {
+    min-height: 88px;
+    resize: vertical;
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+    width: 20px !important;
+    height: 20px !important;
+    min-width: 20px !important;
+    min-height: 20px !important;
+    max-width: 20px !important;
+    flex: 0 0 20px !important;
+}
+
+/* Grid/flex children are allowed to shrink instead of causing
+   horizontal overflow on narrow screens. */
+.grid > *,
+.form-grid > *,
+.form-row > *,
+.row > *,
+.flex > *,
+.actions > *,
+.action-row > * {
+    min-width: 0 !important;
+}
+
+/* ---------- ICON SYSTEM ---------- */
+
+.nav-icon,
+.summary-icon,
+.action-icon,
+.overview-icon,
+.account-icon,
+.transaction-icon,
+.quick-action-icon,
+.empty-icon,
+.brand-icon,
+.icon-button,
+.icon-btn,
+.back-button,
+.add-button,
+.close-button,
+.edit-button,
+.delete-button {
+    flex: 0 0 auto !important;
+}
+
+.nav-icon,
+.bottom-nav .nav-icon {
+    width: 24px !important;
+    min-width: 24px !important;
+    max-width: 24px !important;
+    height: 24px !important;
+    min-height: 24px !important;
+    max-height: 24px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    line-height: 1 !important;
+    font-size: 19px !important;
+    overflow: hidden !important;
+}
+
+.summary-icon,
+.action-icon,
+.overview-icon,
+.account-icon,
+.transaction-icon,
+.quick-action-icon,
+.empty-icon {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    overflow: hidden;
+}
+
+/* Emoji/icons must not inherit giant heading sizes. */
+.nav-icon,
+.summary-icon,
+.action-icon,
+.overview-icon,
+.account-icon,
+.transaction-icon,
+.quick-action-icon,
+.empty-icon {
+    font-family: "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", system-ui, sans-serif !important;
+}
+
+/* ---------- BOTTOM NAV: SINGLE ROOT IMPLEMENTATION ---------- */
+
+.bottom-nav {
+    position: fixed !important;
+    left: 50% !important;
+    right: auto !important;
+    bottom: 0 !important;
+    transform: translateX(-50%) !important;
+
+    width: min(100%, var(--tw-content-width)) !important;
+    max-width: var(--tw-content-width) !important;
+    min-width: 0 !important;
+    height: var(--tw-nav-height) !important;
+    min-height: var(--tw-nav-height) !important;
+    max-height: var(--tw-nav-height) !important;
+
+    display: grid !important;
+    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+    grid-auto-flow: column !important;
+    align-items: stretch !important;
+    justify-items: stretch !important;
+    gap: 0 !important;
+
+    margin: 0 !important;
+    padding: 6px 4px env(safe-area-inset-bottom) !important;
+
+    background: rgba(12, 9, 17, 0.97) !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+
+    overflow: hidden !important;
+    z-index: 10000 !important;
+
+    box-sizing: border-box !important;
+}
+
+.bottom-nav > *,
+.bottom-nav > a,
+.bottom-nav > button,
+.bottom-nav > .nav-item,
+.bottom-nav > .bottom-nav-item {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+
+    margin: 0 !important;
+    padding: 4px 1px !important;
+
+    display: flex !important;
+    flex: none !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 2px !important;
+
+    overflow: hidden !important;
+    white-space: nowrap !important;
+    text-overflow: ellipsis !important;
+
+    background: transparent !important;
+    border: 0 !important;
+    border-radius: 10px !important;
+    box-shadow: none !important;
+
+    color: var(--text-muted) !important;
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    line-height: 1 !important;
+    text-decoration: none !important;
+
+    transform: none !important;
+    scale: 1 !important;
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: transparent !important;
+}
+
+.bottom-nav > *:active,
+.bottom-nav > *:focus,
+.bottom-nav > *:focus-visible {
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    transform: none !important;
+    scale: 1 !important;
+    outline: none !important;
+}
+
+.bottom-nav .nav-label,
+.bottom-nav > * > span:last-child,
+.bottom-nav > button > small,
+.bottom-nav > a > small {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 13px !important;
+    min-height: 13px !important;
+    max-height: 13px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+
+    display: block !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+
+    color: inherit !important;
+    font-size: 9px !important;
+    font-weight: 700 !important;
+    line-height: 13px !important;
+}
+
+.bottom-nav .active,
+.bottom-nav > .active {
+    color: var(--gold) !important;
+}
+
+/* ---------- FIX PAGE ACTION ROWS ---------- */
+
+.actions,
+.action-row,
+.button-row,
+.form-actions,
+.modal-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    min-width: 0;
+}
+
+.actions > button,
+.action-row > button,
+.button-row > button,
+.form-actions > button,
+.modal-actions > button {
+    min-height: 42px;
+    min-width: 0;
+}
+
+/* ---------- MODALS / SHEETS ---------- */
+
+.modal,
+.dialog,
+.overlay,
+.form-modal,
+.modal-sheet,
+.sheet {
+    max-width: 100vw !important;
+}
+
+.modal-content,
+.dialog-content,
+.form-modal > *,
+.modal-sheet,
+.sheet {
+    width: min(100%, 600px) !important;
+    max-width: calc(100vw - 24px) !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+}
+
+.modal-content input,
+.modal-content select,
+.modal-content textarea,
+.dialog-content input,
+.dialog-content select,
+.dialog-content textarea,
+.modal-sheet input,
+.modal-sheet select,
+.modal-sheet textarea,
+.sheet input,
+.sheet select,
+.sheet textarea {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+/* ---------- SAFE BOTTOM SPACE ---------- */
+
+.main-content,
+.page-container,
+.page-content,
+.dashboard-container,
+.content-container {
+    padding-bottom: max(105px, calc(105px + env(safe-area-inset-bottom))) !important;
+}
+
+/* ---------- RESPONSIVE ROOT ---------- */
+
+@media (max-width: 720px) {
+    :root {
+        --tw-page-pad: 13px;
+        --tw-nav-height: 70px;
+    }
+
+    .app-header,
+    .page-header {
+        padding-left: var(--tw-page-pad) !important;
+        padding-right: var(--tw-page-pad) !important;
+    }
+
+    .main-content,
+    .page-container,
+    .page-content,
+    .dashboard-container,
+    .content-container {
+        padding-left: var(--tw-page-pad) !important;
+        padding-right: var(--tw-page-pad) !important;
+    }
+
+    .bottom-nav {
+        width: 100% !important;
+        max-width: 720px !important;
+    }
+}
+
+@media (max-width: 420px) {
+    :root {
+        --tw-page-pad: 11px;
+    }
+
+    .bottom-nav {
+        padding-left: 2px !important;
+        padding-right: 2px !important;
+    }
+
+    .bottom-nav .nav-icon,
+    .bottom-nav > * > span:first-child {
+        width: 23px !important;
+        min-width: 23px !important;
+        max-width: 23px !important;
+        height: 23px !important;
+        min-height: 23px !important;
+        max-height: 23px !important;
+        font-size: 18px !important;
+    }
+
+    .bottom-nav .nav-label,
+    .bottom-nav > * > span:last-child,
+    .bottom-nav > button > small,
+    .bottom-nav > a > small {
+        font-size: 8.5px !important;
+    }
+}
+
+/* =========================================================
+   FINAL NAV TAP FOCUS HARD RESET
+   Keeps the visual theme while removing native WebView flash.
+   ========================================================= */
+.bottom-nav,
+.bottom-nav a,
+.bottom-nav button,
+.bottom-nav .nav-item,
+.bottom-nav .bottom-nav-item{
+  -webkit-tap-highlight-color:transparent !important;
+  -webkit-focus-ring-color:transparent !important;
+}
+.bottom-nav a:active,
+.bottom-nav button:active,
+.bottom-nav .nav-item:active,
+.bottom-nav .bottom-nav-item:active{
+  background:transparent !important;
+  outline:none !important;
+  box-shadow:none !important;
+  transform:none !important;
+  scale:1 !important;
+}
+.bottom-nav a:focus,
+.bottom-nav button:focus,
+.bottom-nav .nav-item:focus,
+.bottom-nav .bottom-nav-item:focus,
+.bottom-nav a:focus-visible,
+.bottom-nav button:focus-visible,
+.bottom-nav .nav-item:focus-visible,
+.bottom-nav .bottom-nav-item:focus-visible{
+  background:transparent !important;
+  outline:none !important;
+  box-shadow:none !important;
+}

@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#09070d">
+<link rel="manifest" href="../manifest.json">
+<link rel="icon" href="../icons/icon-192.png">
+<link rel="apple-touch-icon" href="../icons/icon-192.png">
+<link rel="stylesheet" href="../css/style.css">
+<title>Profile — Tamilanda Wallet 👑</title>
+
+<style>
+:root{
+  --bg:#09070d;--surface:#15111d;--edge:rgba(255,255,255,.08);
+  --text:#fff;--muted:#b7b2bf;--dim:#77717f;
+  --purple:#9b6dff;--blue:#55aaff;--green:#55d98b;--red:#ff667a;--gold:#ffc857
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:var(--bg);color:#fff}
+body{
+  overflow-x:hidden;-webkit-font-smoothing:antialiased;
+  background:
+    radial-gradient(circle at 95% 8%,rgba(92,82,255,.16),transparent 30%),
+    radial-gradient(circle at 5% 20%,rgba(0,117,255,.07),transparent 26%),
+    linear-gradient(180deg,#0a0d1e 0%,#061625 50%,#04090e 100%)
+}
+.profile-page{
+  width:min(100%,720px);
+  margin:0 auto;
+  padding:18px 16px calc(105px + env(safe-area-inset-bottom))
+}
+.profile-header{
+  display:flex;align-items:center;gap:10px;padding:15px 14px;margin-bottom:12px;
+  border-radius:19px;background:rgba(21,17,29,.90);border:1px solid var(--edge)
+}
+.profile-back,.profile-refresh{
+  width:42px;height:42px;flex:0 0 42px;display:grid;place-items:center;border-radius:13px;
+  border:1px solid rgba(255,255,255,.09);color:#fff;background:rgba(255,255,255,.04)
+}
+.profile-back{font-size:22px}.profile-refresh{margin-left:auto;font-size:18px}
+.profile-head-copy{min-width:0}.profile-head-copy h1{margin:0;font-size:23px;line-height:1.05;font-weight:900;letter-spacing:-.5px}
+.profile-head-copy p{margin:5px 0 0;color:var(--muted);font-size:10px}
+
+.profile-hero{
+  position:relative;overflow:hidden;padding:20px;border-radius:23px;border:1px solid rgba(155,109,255,.34);
+  background:
+    radial-gradient(circle at 91% 16%,rgba(42,112,255,.34),transparent 34%),
+    radial-gradient(circle at 13% 117%,rgba(123,51,255,.42),transparent 39%),
+    linear-gradient(145deg,#18112c,#0d0b16 76%);
+  box-shadow:0 15px 44px rgba(0,0,0,.27)
+}
+.profile-hero-row{display:flex;align-items:center;gap:13px}
+.profile-avatar{
+  width:66px;height:66px;flex:0 0 66px;display:grid;place-items:center;border-radius:19px;
+  background:linear-gradient(145deg,rgba(155,109,255,.23),rgba(85,170,255,.10));
+  border:1px solid rgba(155,109,255,.24);font-size:34px
+}
+.profile-name-display{font-size:23px;font-weight:950;letter-spacing:-.5px}
+.profile-phone-display{margin-top:5px;color:rgba(255,255,255,.53);font-size:9px}
+.profile-state{
+  display:inline-flex;align-items:center;gap:6px;margin-top:12px;padding:6px 9px;border-radius:999px;
+  color:var(--green);background:rgba(85,217,139,.09);border:1px solid rgba(85,217,139,.17);font-size:8px;font-weight:900
+}
+
+.profile-section{margin-top:16px}
+.profile-section h2{margin:0 2px 8px;font-size:15px;font-weight:900}
+.profile-card{
+  padding:15px;border-radius:18px;background:rgba(21,17,29,.88);border:1px solid var(--edge)
+}
+.profile-form{display:grid;gap:12px}
+.profile-field label{display:block;margin-bottom:6px;color:#aaa2b1;font-size:9px;font-weight:800}
+.profile-field input{
+  width:100%;min-height:46px;padding:11px 13px;border-radius:11px;
+  background:#110e17;color:#fff;border:1px solid rgba(255,255,255,.08);font-size:13px;outline:none
+}
+.profile-field input:focus{border-color:rgba(155,109,255,.50);box-shadow:0 0 0 2px rgba(155,109,255,.07)}
+.profile-help{margin-top:-3px;color:#77717f;font-size:8px;line-height:1.5}
+
+.profile-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:13px}
+.profile-save,.profile-cancel{
+  min-height:45px;border-radius:11px;font-size:11px;font-weight:850
+}
+.profile-save{border:0;background:linear-gradient(135deg,#9b6dff,#713fff);color:#fff}
+.profile-cancel{border:1px solid var(--edge);background:rgba(255,255,255,.04);color:#fff}
+
+.profile-info-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.profile-info{
+  padding:12px;border-radius:15px;background:rgba(21,17,29,.88);border:1px solid var(--edge)
+}
+.profile-info span{display:block;color:#77717f;font-size:7px;font-weight:800;text-transform:uppercase;letter-spacing:.7px}
+.profile-info strong{display:block;margin-top:5px;color:#fff;font-size:11px;font-weight:900;word-break:break-word}
+.profile-info .green{color:var(--green)}.profile-info .purple{color:var(--purple)}
+
+.profile-note{
+  margin-top:13px;padding:11px 12px;border-radius:13px;
+  background:rgba(85,170,255,.045);border:1px solid rgba(85,170,255,.10);
+  color:#8f8997;font-size:8px;line-height:1.5
+}
+.profile-note strong{color:#c5c1ca}
+
+@media(max-width:520px){.profile-page{padding-left:13px;padding-right:13px}}
+@media(max-width:390px){
+  .profile-head-copy h1{font-size:21px}.profile-head-copy p{font-size:9px}
+  .profile-avatar{width:58px;height:58px;flex-basis:58px;font-size:30px}
+  .profile-name-display{font-size:20px}
+  .profile-info-grid,.profile-actions{grid-template-columns:1fr}
+}
+</style>
+</head>
+
+<body>
+<main class="profile-page">
+
+<header class="profile-header">
+  <button class="profile-back" type="button" onclick="goMore()" aria-label="Back">‹</button>
+  <div class="profile-head-copy">
+    <h1>Profile 👤</h1>
+    <p>Manage the profile information saved in your wallet</p>
+  </div>
+  <button class="profile-refresh" type="button" onclick="refreshProfile()" aria-label="Refresh">↻</button>
+</header>
+
+<section class="profile-hero">
+  <div class="profile-hero-row">
+    <div class="profile-avatar">👤</div>
+    <div>
+      <div class="profile-name-display" id="displayName">My Profile</div>
+      <div class="profile-phone-display" id="displayPhone">No phone number added</div>
+    </div>
+  </div>
+  <div class="profile-state">● Profile data is stored locally</div>
+</section>
+
+<section class="profile-section">
+  <h2>Profile Details</h2>
+  <div class="profile-card">
+    <form id="profileForm" class="profile-form">
+      <div class="profile-field">
+        <label for="profileName">Name</label>
+        <input id="profileName" type="text" maxlength="80" placeholder="Enter your name" autocomplete="name">
+      </div>
+
+      <div class="profile-field">
+        <label for="profilePhone">Phone Number</label>
+        <input id="profilePhone" type="tel" maxlength="20" placeholder="Enter phone number" autocomplete="tel">
+      </div>
+
+      <div class="profile-help">
+        These are the profile fields currently supported by the wallet data model. fileciteturn170file0L10-L15
+      </div>
+
+      <div class="profile-actions">
+        <button class="profile-cancel" type="button" onclick="goMore()">Cancel</button>
+        <button class="profile-save" type="submit">Save Profile</button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<section class="profile-section">
+  <h2>Profile Status</h2>
+  <div class="profile-info-grid">
+    <div class="profile-info"><span>Name Status</span><strong id="nameStatus">Not set</strong></div>
+    <div class="profile-info"><span>Phone Status</span><strong id="phoneStatus">Not set</strong></div>
+    <div class="profile-info"><span>Storage</span><strong class="green">Local Wallet</strong></div>
+    <div class="profile-info"><span>Account</span><strong class="purple">Tamilanda Wallet</strong></div>
+  </div>
+</section>
+
+<div class="profile-note">
+  <strong>Privacy:</strong> profile details are saved with the wallet's local data on this device. Create a backup before clearing browser/site storage.
+</div>
+
+</main>
+
+<nav class="bottom-nav" aria-label="Primary navigation">
+  <a class="nav-item" data-page="home" href="../index.html"><span class="nav-icon">🏠</span><span class="nav-label">Home</span></a>
+  <a class="nav-item" data-page="myIds" href="./my-ids.html"><span class="nav-icon">🆔</span><span class="nav-label">My IDs</span></a>
+  <a class="nav-item" data-page="buyers" href="./buyers.html"><span class="nav-icon">💳</span><span class="nav-label">EMI Buyers</span></a>
+  <a class="nav-item" data-page="accounts" href="./accounts.html"><span class="nav-icon">🏦</span><span class="nav-label">Accounts</span></a>
+  <a class="nav-item active" data-page="more" href="./more.html"><span class="nav-icon">☰</span><span class="nav-label">More</span></a>
+</nav>
+
+<script>
+(() => {
+  "use strict";
+  const KEY="tamilanda_wallet_data";
+
+  function readData(){
+    try{return JSON.parse(localStorage.getItem(KEY)||"{}")||{}}
+    catch{return {}}
+  }
+
+  function saveData(data){
+    localStorage.setItem(KEY,JSON.stringify(data));
+  }
+
+  function render(){
+    const data=readData();
+    const profile=data.profile || {};
+    const name=String(profile.name||"").trim();
+    const phone=String(profile.phone||"").trim();
+
+    document.getElementById("profileName").value=name;
+    document.getElementById("profilePhone").value=phone;
+
+    document.getElementById("displayName").textContent=name||"My Profile";
+    document.getElementById("displayPhone").textContent=phone||"No phone number added";
+
+    const ns=document.getElementById("nameStatus");
+    const ps=document.getElementById("phoneStatus");
+
+    ns.textContent=name?"Configured":"Not set";
+    ps.textContent=phone?"Added":"Not set";
+    ns.className=name?"green":"";
+    ps.className=phone?"green":"";
+  }
+
+  window.goMore=()=>window.location.assign("./more.html");
+  window.refreshProfile=render;
+
+  document.getElementById("profileForm").addEventListener("submit",event=>{
+    event.preventDefault();
+
+    const data=readData();
+    data.profile={
+      ...(data.profile||{}),
+      name:document.getElementById("profileName").value.trim(),
+      phone:document.getElementById("profilePhone").value.trim()
+    };
+
+    try{
+      saveData(data);
+      render();
+      alert("Profile saved successfully.");
+    }catch{
+      alert("Could not save your profile.");
+    }
+  });
+
+  document.addEventListener("DOMContentLoaded",()=>{
+    render();
+    setTimeout(render,100);
+  });
+  window.addEventListener("storage",render);
+  window.addEventListener("pageshow",render);
+})();
+</script>
+</body>
+</html>

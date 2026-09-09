@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#09070d">
+<link rel="manifest" href="../manifest.json">
+<link rel="icon" href="../icons/icon-192.png">
+<link rel="apple-touch-icon" href="../icons/icon-192.png">
+<link rel="stylesheet" href="../css/style.css">
+<title>Reports — Tamilanda Wallet 👑</title>
+
+<style>
+:root{
+  --bg:#09070d;--surface:#15111d;--edge:rgba(255,255,255,.08);
+  --text:#fff;--muted:#b7b2bf;--dim:#77717f;
+  --purple:#9b6dff;--blue:#55aaff;--green:#55d98b;--red:#ff667a;--gold:#ffc857
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:var(--bg);color:#fff}
+body{
+  overflow-x:hidden;-webkit-font-smoothing:antialiased;
+  background:
+    radial-gradient(circle at 95% 8%,rgba(92,82,255,.16),transparent 30%),
+    radial-gradient(circle at 5% 20%,rgba(0,117,255,.07),transparent 26%),
+    linear-gradient(180deg,#0a0d1e 0%,#061625 50%,#04090e 100%)
+}
+.reports-page{
+  width:min(100%,720px);
+  margin:0 auto;
+  padding:18px 16px calc(105px + env(safe-area-inset-bottom))
+}
+.rp-header{
+  display:flex;align-items:center;gap:10px;
+  padding:15px 14px;margin-bottom:12px;
+  border-radius:19px;background:rgba(21,17,29,.90);border:1px solid var(--edge)
+}
+.rp-back,.rp-refresh{
+  width:42px;height:42px;flex:0 0 42px;display:grid;place-items:center;
+  border-radius:13px;border:1px solid rgba(255,255,255,.09);color:#fff;background:rgba(255,255,255,.04)
+}
+.rp-back{font-size:22px}.rp-refresh{margin-left:auto;font-size:18px}
+.rp-head-copy{min-width:0}.rp-head-copy h1{margin:0;font-size:23px;line-height:1.05;font-weight:900;letter-spacing:-.5px}
+.rp-head-copy p{margin:5px 0 0;color:var(--muted);font-size:10px}
+
+.rp-periods{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:7px;
+  padding:5px;border-radius:15px;background:rgba(21,17,29,.90);border:1px solid var(--edge)
+}
+.rp-period{
+  min-height:38px;border:1px solid transparent;border-radius:10px;background:transparent;
+  color:#85808e;font-size:9px;font-weight:850
+}
+.rp-period.active{
+  color:#fff;border-color:rgba(155,109,255,.35);
+  background:linear-gradient(135deg,rgba(155,109,255,.22),rgba(113,63,255,.12))
+}
+
+.rp-hero{
+  margin-top:11px;padding:18px;border-radius:22px;border:1px solid rgba(155,109,255,.34);
+  background:
+    radial-gradient(circle at 91% 16%,rgba(42,112,255,.34),transparent 34%),
+    radial-gradient(circle at 13% 117%,rgba(123,51,255,.42),transparent 39%),
+    linear-gradient(145deg,#18112c,#0d0b16 76%);
+  box-shadow:0 15px 44px rgba(0,0,0,.27),inset 0 1px 0 rgba(255,255,255,.035)
+}
+.rp-hero-label{color:rgba(255,255,255,.60);font-size:9px;font-weight:800;letter-spacing:1px;text-transform:uppercase}
+.rp-hero-value{margin-top:7px;font-size:clamp(36px,9vw,48px);line-height:1;font-weight:950;letter-spacing:-1.6px}
+.rp-hero-note{margin-top:7px;color:rgba(255,255,255,.50);font-size:10px}
+
+.rp-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.rp-stat{padding:12px 10px;border-radius:15px;background:rgba(21,17,29,.9);border:1px solid var(--edge)}
+.rp-stat span{display:block;color:#77717f;font-size:7px;font-weight:800;text-transform:uppercase;letter-spacing:.7px}
+.rp-stat strong{display:block;margin-top:5px;font-size:15px;font-weight:900}
+.rp-stat.in strong{color:var(--green)}.rp-stat.out strong{color:var(--red)}.rp-stat.net strong{color:var(--purple)}
+
+.rp-section{margin-top:16px}
+.rp-section-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 2px 8px}
+.rp-section-title h2{margin:0;font-size:15px;font-weight:900}
+.rp-section-title span{color:#77717f;font-size:8px}
+
+.rp-chart{
+  padding:15px 13px 11px;border-radius:18px;background:rgba(21,17,29,.88);border:1px solid var(--edge)
+}
+.rp-bars{
+  height:180px;display:flex;align-items:flex-end;gap:7px;
+  padding:8px 2px 17px;border-bottom:1px solid rgba(255,255,255,.06);
+  background:repeating-linear-gradient(to top,transparent 0,transparent 43px,rgba(255,255,255,.025) 44px)
+}
+.rp-bar-col{position:relative;flex:1;height:100%;display:flex;align-items:flex-end;justify-content:center}
+.rp-bar-stack{height:100%;width:min(60px,74%);display:flex;flex-direction:column;justify-content:flex-end;gap:2px}
+.rp-bar{min-height:3px;border-radius:6px 6px 2px 2px}
+.rp-bar.in{background:linear-gradient(180deg,#55d98b,#2fae70)}
+.rp-bar.out{background:linear-gradient(180deg,#ff667a,#c63e52)}
+.rp-axis{position:absolute;bottom:-14px;color:#6f6977;font-size:7px}
+.rp-legend{display:flex;gap:14px;margin-top:12px}
+.rp-legend-item{display:flex;align-items:center;gap:5px;color:#8c8694;font-size:8px}
+.rp-dot{width:7px;height:7px;border-radius:50%}.rp-dot.in{background:var(--green)}.rp-dot.out{background:var(--red)}
+
+.rp-category-list{display:grid;gap:7px}
+.rp-cat{
+  display:grid;grid-template-columns:38px 1fr auto;align-items:center;gap:9px;
+  padding:10px 11px;border-radius:13px;background:rgba(21,17,29,.88);border:1px solid rgba(255,255,255,.065)
+}
+.rp-cat-icon{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;background:rgba(155,109,255,.07);border:1px solid rgba(155,109,255,.12)}
+.rp-cat-main{min-width:0}.rp-cat-name{font-size:10px;font-weight:850;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rp-cat-bar{height:5px;margin-top:6px;border-radius:999px;background:#251f2d;overflow:hidden}
+.rp-cat-fill{height:100%;border-radius:inherit;background:linear-gradient(90deg,#9b6dff,#55aaff)}
+.rp-cat-amount{text-align:right;font-size:10px;font-weight:900}.rp-cat-percent{margin-top:3px;color:#77717f;font-size:7px}
+
+.rp-insights{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.rp-insight{padding:12px;border-radius:15px;background:rgba(21,17,29,.88);border:1px solid var(--edge)}
+.rp-insight span{display:block;color:#77717f;font-size:7px;font-weight:800;text-transform:uppercase}
+.rp-insight strong{display:block;margin-top:5px;font-size:13px;font-weight:900;color:#fff}
+.rp-insight p{margin:4px 0 0;color:#8b8491;font-size:8px;line-height:1.4}
+.rp-insight.good strong{color:var(--green)}.rp-insight.alert strong{color:var(--gold)}
+
+.rp-empty{padding:35px 16px;text-align:center;border-radius:17px;background:rgba(21,17,29,.80);border:1px dashed rgba(255,255,255,.09)}
+.rp-empty-icon{font-size:31px}.rp-empty-title{margin-top:8px;font-size:14px;font-weight:850}.rp-empty-text{margin-top:5px;color:#77717f;font-size:9px}
+
+@media(max-width:520px){.reports-page{padding-left:13px;padding-right:13px}}
+@media(max-width:390px){
+  .rp-head-copy h1{font-size:21px}.rp-head-copy p{font-size:9px}
+  .rp-period{font-size:8px}.rp-stats{gap:6px}.rp-stat{padding:11px 7px}.rp-stat strong{font-size:13px}
+  .rp-insights{grid-template-columns:1fr}
+}
+</style>
+</head>
+
+<body>
+<main class="reports-page">
+
+<header class="rp-header">
+  <button class="rp-back" type="button" onclick="goBack()" aria-label="Back">‹</button>
+  <div class="rp-head-copy">
+    <h1>Reports 📊</h1>
+    <p>Understand where your money goes</p>
+  </div>
+  <button class="rp-refresh" type="button" onclick="renderReport()" aria-label="Refresh">↻</button>
+</header>
+
+<section class="rp-periods">
+  <button class="rp-period active" data-period="today" type="button">Today</button>
+  <button class="rp-period" data-period="week" type="button">This Week</button>
+  <button class="rp-period" data-period="month" type="button">This Month</button>
+  <button class="rp-period" data-period="year" type="button">This Year</button>
+</section>
+
+<section class="rp-hero">
+  <div class="rp-hero-label">Net Result</div>
+  <div id="reportNet" class="rp-hero-value">₹0.00</div>
+  <div id="reportHeroNote" class="rp-hero-note">Received minus paid for the selected period</div>
+</section>
+
+<section class="rp-stats">
+  <article class="rp-stat in"><span>Received</span><strong id="reportIncome">₹0.00</strong></article>
+  <article class="rp-stat out"><span>Paid</span><strong id="reportExpense">₹0.00</strong></article>
+  <article class="rp-stat net"><span>Transactions</span><strong id="reportCount">0</strong></article>
+</section>
+
+<section class="rp-section">
+  <div class="rp-section-title"><h2>Cash Flow</h2><span id="chartCaption">Selected period</span></div>
+  <div class="rp-chart">
+    <div id="reportBars" class="rp-bars"></div>
+    <div class="rp-legend">
+      <div class="rp-legend-item"><i class="rp-dot in"></i>Received</div>
+      <div class="rp-legend-item"><i class="rp-dot out"></i>Paid</div>
+    </div>
+  </div>
+</section>
+
+<section class="rp-section">
+  <div class="rp-section-title"><h2>Spending by Category</h2><span>Paid only</span></div>
+  <div id="categoryList" class="rp-category-list"></div>
+</section>
+
+<section class="rp-section">
+  <div class="rp-section-title"><h2>Quick Insights</h2><span>Based on selected period</span></div>
+  <div class="rp-insights">
+    <article class="rp-insight good"><span>Top Category</span><strong id="topCategory">—</strong><p id="topCategoryText">No spending data yet.</p></article>
+    <article class="rp-insight"><span>Average Paid</span><strong id="averagePaid">₹0.00</strong><p id="averagePaidText">Average of paid transactions.</p></article>
+    <article class="rp-insight"><span>Largest Payment</span><strong id="largestPaid">₹0.00</strong><p id="largestPaidText">Your biggest payment in this period.</p></article>
+    <article class="rp-insight alert"><span>Money Flow</span><strong id="flowStatus">Balanced</strong><p id="flowStatusText">Received and paid are equal.</p></article>
+  </div>
+</section>
+
+</main>
+
+<nav class="bottom-nav" aria-label="Primary navigation">
+  <a class="nav-item" data-page="home" href="../index.html"><span class="nav-icon">🏠</span><span class="nav-label">Home</span></a>
+  <a class="nav-item" data-page="myIds" href="./my-ids.html"><span class="nav-icon">🆔</span><span class="nav-label">My IDs</span></a>
+  <a class="nav-item" data-page="buyers" href="./buyers.html"><span class="nav-icon">💳</span><span class="nav-label">EMI Buyers</span></a>
+  <a class="nav-item" data-page="accounts" href="./accounts.html"><span class="nav-icon">🏦</span><span class="nav-label">Accounts</span></a>
+  <a class="nav-item active" data-page="more" href="./more.html"><span class="nav-icon">☰</span><span class="nav-label">More</span></a>
+</nav>
+
+<script>
+(() => {
+  "use strict";
+
+  const STORAGE_KEY = "tamilanda_wallet_data";
+  const PERIODS = ["today","week","month","year"];
+  let currentPeriod = "today";
+
+  const $ = id => document.getElementById(id);
+
+  function readData(){
+    try{
+      return JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}") || {};
+    }catch(error){
+      console.error("Reports: failed to read wallet data", error);
+      return {};
+    }
+  }
+
+  function money(value){
+    const n = Number(value) || 0;
+    return "₹" + n.toLocaleString("en-IN", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
+  }
+
+  function localDate(value){
+    if(!value) return null;
+
+    // YYYY-MM-DD is treated as a calendar date in the user's local time.
+    if(typeof value === "string" && /^\d{4}-\d{2}-\d{2}$/.test(value)){
+      const [y,m,d] = value.split("-").map(Number);
+      return new Date(y, m-1, d, 12, 0, 0, 0);
+    }
+
+    const d = new Date(value);
+    return Number.isNaN(d.getTime()) ? null : d;
+  }
+
+  function dayStart(d){
+    const x = new Date(d);
+    x.setHours(0,0,0,0);
+    return x;
+  }
+
+  function dayEnd(d){
+    const x = new Date(d);
+    x.setHours(23,59,59,999);
+    return x;
+  }
+
+  function isReceived(t){
+    return ["income","buyer_payment","buyer_initial_payment"]
+      .includes(String(t?.type || "").toLowerCase());
+  }
+
+  function isPaid(t){
+    return ["expense","emi_payment","recurring_payment","money_to_give_payment"]
+      .includes(String(t?.type || "").toLowerCase());
+  }
+
+  function getBounds(){
+    const now = new Date();
+    const today = dayStart(now);
+    const end = dayEnd(now);
+
+    if(currentPeriod === "today"){
+      return {start:today,end};
+    }
+
+    if(currentPeriod === "week"){
+      const mondayOffset = (today.getDay() + 6) % 7;
+      const start = new Date(today);
+      start.setDate(start.getDate() - mondayOffset);
+      return {start,end};
+    }
+
+    if(currentPeriod === "month"){
+      return {
+        start:new Date(now.getFullYear(), now.getMonth(), 1, 0,0,0,0),
+        end
+      };
+    }
+
+    return {
+      start:new Date(now.getFullYear(), 0, 1, 0,0,0,0),
+      end
+    };
+  }
+
+  function getPeriodTransactions(){
+    const all = Array.isArray(readData().transactions)
+      ? readData().transactions
+      : [];
+    const {start,end} = getBounds();
+
+    return all
+      .map(transaction => ({
+        transaction,
+        date:localDate(transaction.date || transaction.createdAt)
+      }))
+      .filter(item => item.date && item.date >= start && item.date <= end);
+  }
+
+  function setActivePeriod(period){
+    if(!PERIODS.includes(period)) return;
+    currentPeriod = period;
+
+    document.querySelectorAll(".rp-period").forEach(button => {
+      button.classList.toggle("active", button.dataset.period === currentPeriod);
+    });
+
+    renderReport();
+  }
+
+  function renderChart(items){
+    const buckets = [];
+    let labels = [];
+
+    if(currentPeriod === "today"){
+      labels = ["12 AM","4 AM","8 AM","12 PM","4 PM","8 PM"];
+      for(let i=0;i<6;i++) buckets.push({received:0,paid:0});
+
+      items.forEach(({transaction,date}) => {
+        const i = Math.min(5, Math.floor(date.getHours()/4));
+        const amount = Number(transaction.amount) || 0;
+        if(isReceived(transaction)) buckets[i].received += amount;
+        if(isPaid(transaction)) buckets[i].paid += amount;
+      });
+    }
+
+    if(currentPeriod === "week"){
+      labels = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+      for(let i=0;i<7;i++) buckets.push({received:0,paid:0});
+
+      items.forEach(({transaction,date}) => {
+        const i = (date.getDay() + 6) % 7;
+        const amount = Number(transaction.amount) || 0;
+        if(isReceived(transaction)) buckets[i].received += amount;
+        if(isPaid(transaction)) buckets[i].paid += amount;
+      });
+    }
+
+    if(currentPeriod === "month"){
+      labels = ["Week 1","Week 2","Week 3","Week 4","Week 5"];
+      for(let i=0;i<5;i++) buckets.push({received:0,paid:0});
+
+      items.forEach(({transaction,date}) => {
+        const i = Math.min(4, Math.floor((date.getDate()-1)/7));
+        const amount = Number(transaction.amount) || 0;
+        if(isReceived(transaction)) buckets[i].received += amount;
+        if(isPaid(transaction)) buckets[i].paid += amount;
+      });
+    }
+
+    if(currentPeriod === "year"){
+      labels = ["Q1","Q2","Q3","Q4"];
+      for(let i=0;i<4;i++) buckets.push({received:0,paid:0});
+
+      items.forEach(({transaction,date}) => {
+        const i = Math.floor(date.getMonth()/3);
+        const amount = Number(transaction.amount) || 0;
+        if(isReceived(transaction)) buckets[i].received += amount;
+        if(isPaid(transaction)) buckets[i].paid += amount;
+      });
+    }
+
+    const max = Math.max(
+      1,
+      ...buckets.map(b => Math.max(b.received,b.paid))
+    );
+
+    $("reportBars").innerHTML = buckets.map((bucket,index) => {
+      const receivedHeight = Math.max(2, bucket.received/max*100);
+      const paidHeight = Math.max(2, bucket.paid/max*100);
+
+      return `
+        <div class="rp-bar-col">
+          <div class="rp-bar-stack">
+            <div class="rp-bar in" style="height:${receivedHeight}%"></div>
+            <div class="rp-bar out" style="height:${paidHeight}%"></div>
+          </div>
+          <span class="rp-axis">${labels[index]}</span>
+        </div>
+      `;
+    }).join("");
+
+    $("chartCaption").textContent =
+      currentPeriod === "today" ? "Today" :
+      currentPeriod === "week" ? "This Week" :
+      currentPeriod === "month" ? "This Month" : "This Year";
+  }
+
+  function escapeHtml(value){
+    return String(value ?? "").replace(/[&<>"']/g, c => ({
+      "&":"&amp;",
+      "<":"&lt;",
+      ">":"&gt;",
+      '"':"&quot;",
+      "'":"&#39;"
+    }[c]));
+  }
+
+  function renderCategories(items){
+    const totals = {};
+
+    items.forEach(({transaction}) => {
+      if(!isPaid(transaction)) return;
+      const category = String(transaction.category || "Other").trim() || "Other";
+      totals[category] = (totals[category] || 0) + (Number(transaction.amount) || 0);
+    });
+
+    const entries = Object.entries(totals).sort((a,b) => b[1]-a[1]);
+    const box = $("categoryList");
+
+    if(!entries.length){
+      box.innerHTML = `
+        <div class="rp-empty">
+          <div class="rp-empty-icon">📊</div>
+          <div class="rp-empty-title">No spending data</div>
+          <div class="rp-empty-text">Paid transactions for this period will appear here.</div>
+        </div>
+      `;
+      return;
+    }
+
+    const totalPaid = entries.reduce((sum,item) => sum + item[1], 0);
+    const max = entries[0][1] || 1;
+
+    box.innerHTML = entries.slice(0,8).map(([name,value]) => `
+      <div class="rp-cat">
+        <div class="rp-cat-icon">📁</div>
+        <div class="rp-cat-main">
+          <div class="rp-cat-name">${escapeHtml(name)}</div>
+          <div class="rp-cat-bar">
+            <div class="rp-cat-fill" style="width:${(value/max)*100}%"></div>
+          </div>
+        </div>
+        <div>
+          <div class="rp-cat-amount">${money(value)}</div>
+          <div class="rp-cat-percent">${Math.round(value/(totalPaid||1)*100)}%</div>
+        </div>
+      </div>
+    `).join("");
+  }
+
+  function renderReport(){
+    const items = getPeriodTransactions();
+
+    let received = 0;
+    let paid = 0;
+    const paidAmounts = [];
+
+    items.forEach(({transaction}) => {
+      const amount = Number(transaction.amount) || 0;
+
+      if(isReceived(transaction)){
+        received += amount;
+      }
+
+      if(isPaid(transaction)){
+        paid += amount;
+        paidAmounts.push(amount);
+      }
+    });
+
+    const net = received - paid;
+
+    $("reportNet").textContent = money(net);
+    $("reportIncome").textContent = money(received);
+    $("reportExpense").textContent = money(paid);
+    $("reportCount").textContent = items.length;
+
+    $("reportHeroNote").textContent =
+      net > 0 ? "More money received than paid" :
+      net < 0 ? "More money paid than received" :
+      "Received and paid are equal";
+
+    renderChart(items);
+    renderCategories(items);
+
+    const categoryTotals = {};
+    items.forEach(({transaction}) => {
+      if(!isPaid(transaction)) return;
+      const category = String(transaction.category || "Other").trim() || "Other";
+      categoryTotals[category] = (categoryTotals[category] || 0) + (Number(transaction.amount) || 0);
+    });
+
+    const top = Object.entries(categoryTotals).sort((a,b) => b[1]-a[1])[0];
+    $("topCategory").textContent = top ? top[0] : "—";
+    $("topCategoryText").textContent =
+      top ? `${money(top[1])} spent in this category.` : "No spending data yet.";
+
+    const average = paidAmounts.length ? paid/paidAmounts.length : 0;
+    $("averagePaid").textContent = money(average);
+    $("averagePaidText").textContent =
+      `Across ${paidAmounts.length} paid transaction${paidAmounts.length===1?"":"s"}.`;
+
+    const largest = paidAmounts.length ? Math.max(...paidAmounts) : 0;
+    $("largestPaid").textContent = money(largest);
+    $("largestPaidText").textContent =
+      paidAmounts.length ? "Largest payment in this period." : "No paid transactions yet.";
+
+    const status = $("flowStatus");
+    const statusText = $("flowStatusText");
+
+    if(net > 0){
+      status.textContent = "Positive";
+      statusText.textContent = "You received more than you paid.";
+    }else if(net < 0){
+      status.textContent = "Negative";
+      statusText.textContent = "You paid more than you received.";
+    }else{
+      status.textContent = "Balanced";
+      statusText.textContent = "Received and paid are equal.";
+    }
+  }
+
+  // Explicit, direct controls — not dependent on the global navigation bridge.
+  document.addEventListener("DOMContentLoaded", () => {
+    const back = document.querySelector(".rp-back");
+    const refresh = document.querySelector(".rp-refresh");
+
+    if(back){
+      back.addEventListener("click", event => {
+        event.preventDefault();
+        window.location.assign("./more.html");
+      });
+    }
+
+    if(refresh){
+      refresh.addEventListener("click", event => {
+        event.preventDefault();
+        renderReport();
+      });
+    }
+
+    document.querySelectorAll(".rp-period").forEach(button => {
+      button.addEventListener("click", event => {
+        event.preventDefault();
+        setActivePeriod(button.dataset.period);
+      });
+    });
+
+    renderReport();
+    setTimeout(renderReport,100);
+  });
+
+  window.addEventListener("storage", renderReport);
+  window.addEventListener("pageshow", renderReport);
+})();
+</script>
+</body>
+</html>

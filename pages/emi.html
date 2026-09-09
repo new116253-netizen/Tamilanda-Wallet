@@ -1,0 +1,3687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#09070d">
+<link rel="manifest" href="../manifest.json">
+<link rel="icon" href="../icons/icon-192.png">
+<link rel="apple-touch-icon" href="../icons/icon-192.png">
+<link rel="stylesheet" href="../css/style.css">
+<title>My EMI — Tamilanda Wallet 👑</title>
+
+<style>
+:root{
+  --bg:#09070d;
+  --surface:#15111d;
+  --surface2:#1c1725;
+  --edge:rgba(255,255,255,.08);
+  --text:#fff;
+  --muted:#b7b2bf;
+  --dim:#77717f;
+  --purple:#9b6dff;
+  --blue:#55aaff;
+  --green:#55d98b;
+  --red:#ff667a;
+  --gold:#ffc857;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text)}
+body{
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+  background:
+    radial-gradient(circle at 95% 8%,rgba(92,82,255,.16),transparent 30%),
+    radial-gradient(circle at 5% 20%,rgba(0,117,255,.07),transparent 26%),
+    linear-gradient(180deg,#0a0d1e 0%,#061625 50%,#04090e 100%);
+}
+button,input,select,textarea{font:inherit}
+
+.emi-page{
+  width:min(100%,720px);
+  margin:0 auto;
+  padding:18px 16px calc(105px + env(safe-area-inset-bottom));
+}
+
+/* Header */
+.emi-header-page{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:15px 14px;
+  border-radius:19px;
+  background:rgba(21,17,29,.90);
+  border:1px solid var(--edge);
+  margin-bottom:12px;
+}
+.emi-back,.emi-add{
+  width:42px;height:42px;flex:0 0 42px;
+  display:grid;place-items:center;
+  border-radius:13px;
+  border:1px solid rgba(255,255,255,.09);
+  color:#fff;
+}
+.emi-back{background:rgba(255,255,255,.04);font-size:22px}
+.emi-add{
+  margin-left:auto;
+  background:linear-gradient(135deg,#9b6dff,#713fff);
+  font-size:22px;
+  box-shadow:0 9px 22px rgba(113,63,255,.17)
+}
+.emi-heading{min-width:0}
+.emi-heading h1{
+  margin:0;
+  font-size:23px;
+  line-height:1.05;
+  font-weight:900;
+  letter-spacing:-.5px;
+}
+.emi-heading p{margin:5px 0 0;color:var(--muted);font-size:10px}
+
+/* Summary */
+.emi-summary{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:9px;
+}
+.emi-summary-card{
+  padding:14px;
+  border-radius:16px;
+  background:rgba(21,17,29,.90);
+  border:1px solid var(--edge);
+}
+.emi-summary-label{
+  display:block;
+  color:#77717f;
+  font-size:8px;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.8px;
+}
+.emi-summary-value{
+  display:block;
+  margin-top:6px;
+  font-size:18px;
+  font-weight:900;
+}
+.emi-summary-value.purple{color:var(--purple)}
+.emi-summary-value.blue{color:var(--blue)}
+.emi-summary-value.red{color:var(--red)}
+.emi-summary-value.gold{color:var(--gold)}
+
+/* Add action */
+.emi-main-add{
+  width:100%;
+  min-height:48px;
+  margin-top:12px;
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,.07);
+  background:linear-gradient(135deg,#9b6dff,#713fff);
+  color:#fff;
+  font-size:12px;
+  font-weight:900;
+  box-shadow:0 10px 24px rgba(113,63,255,.14);
+}
+
+/* Search + status filter */
+.emi-tools{
+  margin-top:10px;
+  padding:12px;
+  border-radius:18px;
+  background:rgba(21,17,29,.86);
+  border:1px solid var(--edge);
+}
+.emi-search,.emi-filter{
+  width:100%;
+  height:44px;
+  padding:0 12px;
+  border-radius:12px;
+  background:#100d17;
+  color:#fff;
+  border:1px solid rgba(255,255,255,.08);
+  outline:none;
+  font-size:11px;
+}
+.emi-search::placeholder{color:#756f7f}
+.emi-filter{margin-top:8px;height:42px;font-size:10px}
+
+/* List */
+.emi-list-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin:17px 2px 8px;
+}
+.emi-list-head h2{margin:0;font-size:16px;font-weight:900}
+.emi-list-count{color:#77717f;font-size:9px}
+
+/* Generated EMI cards */
+.emi-card{
+  margin-bottom:9px!important;
+  padding:14px!important;
+  border-radius:18px!important;
+  background:linear-gradient(145deg,rgba(24,20,32,.97),rgba(14,12,20,.97))!important;
+  border:1px solid rgba(255,255,255,.07)!important;
+  box-shadow:0 8px 23px rgba(0,0,0,.12);
+}
+.emi-header{
+  display:flex!important;
+  align-items:flex-start!important;
+  justify-content:space-between!important;
+  gap:10px!important;
+}
+.emi-title{
+  display:flex!important;
+  align-items:center!important;
+  gap:7px!important;
+  flex-wrap:wrap!important;
+}
+.emi-title h3{
+  margin:0!important;
+  color:#fff!important;
+  font-size:15px!important;
+  font-weight:900!important;
+}
+.emi-header p{
+  margin:4px 0 0!important;
+  color:#7e7885!important;
+  font-size:9px!important;
+}
+.emi-product-line{color:#c0b6cc!important}
+.emi-menu{display:flex!important;gap:6px!important}
+.emi-menu .icon-button{
+  width:33px!important;height:33px!important;
+  border-radius:10px!important;
+  font-size:14px!important;
+  border:1px solid rgba(255,255,255,.07)!important;
+  background:rgba(255,255,255,.035)!important;
+}
+
+/* status pills */
+.status-warning,.status-success,.status-danger{
+  display:inline-flex!important;
+  align-items:center!important;
+  min-height:22px!important;
+  padding:4px 8px!important;
+  border-radius:999px!important;
+  font-size:7px!important;
+  font-weight:900!important;
+  letter-spacing:.7px!important;
+}
+.status-warning{color:var(--blue)!important;background:rgba(85,170,255,.08)!important;border:1px solid rgba(85,170,255,.17)!important}
+.status-success{color:var(--green)!important;background:rgba(85,217,139,.09)!important;border:1px solid rgba(85,217,139,.17)!important}
+.status-danger{color:var(--red)!important;background:rgba(255,102,122,.09)!important;border:1px solid rgba(255,102,122,.17)!important}
+
+/* Progress */
+.progress-section{margin-top:11px!important}
+.progress-label{
+  display:flex!important;
+  justify-content:space-between!important;
+  color:#7d7785!important;
+  font-size:8px!important;
+}
+.progress-label strong{color:#c6bdcf!important}
+.progress-bar{
+  margin-top:6px!important;
+  height:6px!important;
+  border-radius:999px!important;
+  background:#28212f!important;
+  overflow:hidden!important;
+}
+.progress-fill{
+  height:100%!important;
+  border-radius:inherit!important;
+  background:linear-gradient(90deg,#9b6dff,#5c9cff)!important;
+}
+
+/* Money grid */
+.money-grid{
+  display:grid!important;
+  grid-template-columns:repeat(2,1fr)!important;
+  gap:7px!important;
+  margin-top:10px!important;
+}
+.money-grid>div{
+  padding:9px!important;
+  border-radius:11px!important;
+  background:rgba(255,255,255,.025)!important;
+  border:1px solid rgba(255,255,255,.045)!important;
+}
+.money-grid span{display:block!important;color:#77717f!important;font-size:7px!important}
+.money-grid strong{display:block!important;margin-top:4px!important;color:#fff!important;font-size:12px!important}
+
+/* Due / tenure */
+.emi-card .info-box{
+  display:grid!important;
+  grid-template-columns:1fr 1fr!important;
+  gap:7px!important;
+  margin-top:9px!important;
+  padding:0!important;
+  background:transparent!important;
+  border:0!important;
+}
+.emi-card .info-box>div{
+  padding:9px!important;
+  border-radius:11px!important;
+  background:rgba(255,255,255,.025)!important;
+  border:1px solid rgba(255,255,255,.045)!important;
+}
+.emi-card .info-box span{
+  display:block!important;color:#77717f!important;font-size:7px!important
+}
+.emi-card .info-box strong{
+  display:block!important;margin-top:4px!important;color:#d9d1e0!important;font-size:10px!important
+}
+.small-info{
+  margin-top:8px!important;
+  padding:8px 9px!important;
+  border-radius:10px!important;
+  background:rgba(85,170,255,.045)!important;
+  border:1px solid rgba(85,170,255,.10)!important;
+  color:#8f8997!important;
+  font-size:8px!important;
+}
+.note-box{
+  margin-top:8px!important;
+  padding:9px 10px!important;
+  border-radius:11px!important;
+  background:rgba(155,109,255,.045)!important;
+  border-left:2px solid rgba(155,109,255,.38)!important;
+  color:#9d96a5!important;
+  font-size:8px!important;
+  line-height:1.45!important;
+}
+.muted-text{color:#77717f!important;font-size:8px!important}
+
+/* Action row / payment history */
+.emi-actions{
+  display:grid!important;
+  grid-template-columns:1.1fr 1fr!important;
+  gap:8px!important;
+  margin-top:10px!important;
+}
+.emi-actions .primary-button,.emi-actions .secondary-button{
+  min-height:39px!important;
+  margin:0!important;
+  border-radius:11px!important;
+  font-size:9px!important;
+  font-weight:850!important;
+}
+.emi-actions .primary-button{
+  background:linear-gradient(135deg,#9b6dff,#713fff)!important;
+  border:1px solid rgba(255,255,255,.07)!important;
+  color:#fff!important;
+}
+.emi-actions .secondary-button{
+  background:rgba(255,255,255,.035)!important;
+  border:1px solid rgba(255,255,255,.07)!important;
+  color:#d3cbd9!important;
+}
+.payment-history{
+  margin-top:10px!important;
+  padding-top:10px!important;
+  border-top:1px solid rgba(255,255,255,.06)!important;
+}
+.payment-history h4{
+  margin:0 0 8px!important;
+  color:#bba9d2!important;
+  font-size:10px!important;
+}
+.payment-history-item{
+  display:flex!important;
+  justify-content:space-between!important;
+  gap:10px!important;
+  padding:8px 0!important;
+  border-bottom:1px solid rgba(255,255,255,.05)!important;
+}
+.payment-history-item strong{font-size:10px!important;color:var(--green)!important}
+.payment-history-item small{display:block!important;margin-top:3px!important;color:#77717f!important;font-size:7px!important}
+
+/* Add/Edit EMI fixed sheet */
+#emiFormCard{
+  position:fixed!important;
+  inset:0!important;
+  z-index:99999!important;
+  display:none!important;
+  align-items:flex-end!important;
+  justify-content:center!important;
+  width:100%!important;
+  height:100%!important;
+  margin:0!important;
+  padding:10px!important;
+  background:rgba(0,0,0,.72)!important;
+  backdrop-filter:blur(14px)!important;
+  -webkit-backdrop-filter:blur(14px)!important;
+  overflow:hidden!important;
+  border:0!important;
+}
+#emiFormCard[style*="display: block"]{display:flex!important}
+#emiFormCard .emi-form-sheet{
+  width:min(100%,620px)!important;
+  max-height:88vh!important;
+  overflow:auto!important;
+  padding:17px!important;
+  border-radius:21px 21px 13px 13px!important;
+  background:linear-gradient(180deg,#191420,#0e0b13)!important;
+  border:1px solid rgba(155,109,255,.22)!important;
+  box-shadow:0 -20px 65px rgba(0,0,0,.55)!important;
+}
+#emiFormCard .section-title{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:10px!important;
+  margin:0 0 13px!important;
+}
+#emiFormCard .section-title h2{margin:0!important;font-size:18px!important}
+#emiFormCard .section-title p{margin:4px 0 0!important;color:#77717f!important;font-size:9px!important}
+#emiFormCard .field-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:9px;
+}
+#emiFormCard label{
+  display:block!important;
+  margin:5px 0 6px!important;
+  color:#aaa2b1!important;
+  font-size:9px!important;
+  font-weight:800!important;
+}
+#emiFormCard .input{
+  width:100%!important;
+  min-height:46px!important;
+  margin:0 0 8px!important;
+  padding:11px 13px!important;
+  border-radius:11px!important;
+  background:#110e17!important;
+  border:1px solid rgba(255,255,255,.08)!important;
+  color:#fff!important;
+  font-size:13px!important;
+  outline:none!important;
+}
+#emiFormCard .input:focus{
+  border-color:rgba(155,109,255,.5)!important;
+  box-shadow:0 0 0 2px rgba(155,109,255,.07)!important;
+}
+#emiFormCard .info-box{
+  margin:0 0 8px!important;
+  padding:11px!important;
+  border-radius:12px!important;
+  background:rgba(255,255,255,.035)!important;
+  border:1px solid rgba(255,255,255,.06)!important;
+  color:#fff!important;
+}
+#emiFormCard .info-box span{display:block!important;color:#77717f!important;font-size:8px!important}
+#emiFormCard .info-box strong{display:block!important;margin-top:4px!important;color:#bb9fff!important;font-size:14px!important}
+#emiFormCard .primary-button{
+  width:100%!important;
+  min-height:45px!important;
+  border-radius:12px!important;
+  margin-top:3px!important;
+  background:linear-gradient(135deg,#9b6dff,#713fff)!important;
+  border:0!important;color:#fff!important;font-weight:900!important
+}
+
+/* EMI payment modal */
+#emiPaymentModal{
+  position:fixed!important;
+  inset:0!important;
+  z-index:100000!important;
+  display:none!important;
+  align-items:flex-end!important;
+  justify-content:center!important;
+  padding:10px!important;
+  background:rgba(0,0,0,.72)!important;
+  backdrop-filter:blur(14px)!important;
+  -webkit-backdrop-filter:blur(14px)!important;
+  overflow:hidden!important;
+}
+#emiPaymentModal[style*="display: block"]{display:flex!important}
+#emiPaymentModal .modal-content{
+  width:min(100%,590px)!important;
+  max-height:88vh!important;
+  overflow:auto!important;
+  padding:17px!important;
+  border-radius:21px 21px 13px 13px!important;
+  background:linear-gradient(180deg,#191420,#0e0b13)!important;
+  border:1px solid rgba(155,109,255,.22)!important;
+  box-shadow:0 -20px 65px rgba(0,0,0,.55)!important;
+}
+#emiPaymentModal .section-title{
+  display:flex!important;align-items:center!important;justify-content:space-between!important;gap:10px!important;margin:0 0 12px!important
+}
+#emiPaymentModal .section-title h2{margin:0!important;font-size:18px!important}
+#emiPaymentModal .section-title p{margin:4px 0 0!important;color:#77717f!important;font-size:9px!important}
+#emiPaymentModal .payment-summary-box{
+  display:grid!important;grid-template-columns:1fr 1fr!important;gap:7px!important;
+  margin-bottom:10px!important
+}
+#emiPaymentModal .payment-summary-box>div{
+  padding:10px!important;border-radius:11px!important;background:rgba(255,255,255,.035)!important;border:1px solid rgba(255,255,255,.06)!important
+}
+#emiPaymentModal .payment-summary-box span{display:block!important;color:#77717f!important;font-size:8px!important}
+#emiPaymentModal .payment-summary-box strong{display:block!important;margin-top:4px!important;color:#bb9fff!important;font-size:13px!important}
+#emiPaymentModal label{
+  display:block!important;margin:8px 0 6px!important;color:#aaa2b1!important;font-size:9px!important;font-weight:800!important
+}
+#emiPaymentModal .input{
+  width:100%!important;min-height:46px!important;padding:11px 13px!important;border-radius:11px!important;
+  background:#110e17!important;border:1px solid rgba(255,255,255,.08)!important;color:#fff!important;font-size:13px!important
+}
+#emiPaymentModal .primary-button{
+  width:100%!important;min-height:45px!important;margin-top:12px!important;border-radius:12px!important;
+  background:linear-gradient(135deg,#9b6dff,#713fff)!important;border:0!important;color:#fff!important;font-weight:900!important
+}
+
+/* Hidden compatibility inputs for the old accounting model */
+.emi-hidden-fields{display:none!important}
+
+@media(max-width:520px){
+  .emi-page{padding-left:13px;padding-right:13px}
+  .buyers-placeholder{display:none}
+}
+@media(max-width:390px){
+  .emi-heading h1{font-size:21px}
+  .emi-heading p{font-size:9px}
+  .emi-summary-value{font-size:16px}
+  .buyers-count-grid{width:auto}
+  .emi-card .info-box{grid-template-columns:1fr!important}
+  .emi-actions{grid-template-columns:1fr!important}
+  #emiFormCard .field-grid{grid-template-columns:1fr!important}
+  #emiPaymentModal .payment-summary-box{grid-template-columns:1fr!important}
+}
+</style>
+</head>
+
+<body>
+<main class="emi-page">
+
+<header class="emi-header-page">
+  <button class="emi-back" type="button" onclick="goBack()" aria-label="Back">‹</button>
+  <div class="emi-heading">
+    <h1>My EMI 💳</h1>
+    <p>Track active EMIs, monthly payments & closed EMIs</p>
+  </div>
+  <button class="emi-add" type="button" onclick="openEmiForm()" aria-label="Add EMI">＋</button>
+</header>
+
+<section class="emi-summary">
+  <article class="emi-summary-card">
+    <span class="emi-summary-label">Total EMI</span>
+    <strong id="totalEmis" class="emi-summary-value purple">0</strong>
+  </article>
+  <article class="emi-summary-card">
+    <span class="emi-summary-label">Monthly Payment</span>
+    <strong id="monthlyEmi" class="emi-summary-value blue">₹0.00</strong>
+  </article>
+  <article class="emi-summary-card">
+    <span class="emi-summary-label">Total Remaining</span>
+    <strong id="totalRemaining" class="emi-summary-value red">₹0.00</strong>
+  </article>
+  <article class="emi-summary-card">
+    <span class="emi-summary-label">Due Soon</span>
+    <strong id="dueSoon" class="emi-summary-value gold">0</strong>
+  </article>
+</section>
+
+<button class="emi-main-add" type="button" onclick="openEmiForm()">＋ Add My EMI</button>
+
+<section class="emi-tools">
+  <input id="searchInput" class="emi-search" type="search" placeholder="🔎 Search EMI, product, bank or notes..." oninput="renderEmis()">
+  <select id="statusFilter" class="emi-filter" onchange="renderEmis()">
+    <option value="all">All EMIs</option>
+    <option value="active">Active EMIs</option>
+    <option value="completed">Closed EMIs</option>
+    <option value="overdue">Overdue EMIs</option>
+  </select>
+</section>
+
+<div class="emi-list-head">
+  <h2>My EMI List</h2>
+  <span class="emi-list-count" id="emiListCount">0 EMIs</span>
+</div>
+
+<section id="emiList"></section>
+
+</main>
+
+<!-- Add/Edit EMI -->
+<section id="emiFormCard" class="card" style="display:none" aria-label="Add or edit EMI">
+  <div class="emi-form-sheet">
+
+    <div class="section-title">
+      <div>
+        <h2 id="formTitle">Add EMI</h2>
+        <p>Keep your EMI details in one place</p>
+      </div>
+      <button class="secondary-button" type="button" onclick="closeEmiForm()">Cancel</button>
+    </div>
+
+    <input type="hidden" id="editingEmiId">
+
+    <!-- Compatibility fields required by the existing data model -->
+    <div class="emi-hidden-fields">
+      <input id="lenderName" class="input" type="text">
+      <input id="loanNumber" class="input" type="text">
+    </div>
+
+    <label for="emiName">EMI Name</label>
+    <input id="emiName" class="input" type="text" placeholder="Example: Bike EMI" required>
+
+    <label for="emiProduct">Product</label>
+    <input id="emiProduct" class="input" type="text" placeholder="Example: Yamaha R15 V4">
+
+    <div class="field-grid">
+      <div>
+        <label for="monthlyPayment">Monthly Payment</label>
+        <input id="monthlyPayment" class="input" type="number" min="0" step="0.01" inputmode="decimal" placeholder="₹ Monthly payment">
+      </div>
+      <div>
+        <label for="emiTotalAmount">Total Payment</label>
+        <input id="emiTotalAmount" class="input" type="number" min="0" step="0.01" inputmode="decimal" placeholder="₹ Total payment" oninput="updateEmiPreview()">
+      </div>
+    </div>
+
+    <label for="emiAlreadyPaid">Initial Payment <span style="color:var(--dim)">(Optional)</span></label>
+    <input id="emiAlreadyPaid" class="input" type="number" min="0" step="0.01" inputmode="decimal" placeholder="₹ Initial payment (optional)" oninput="updateEmiPreview()">
+
+    <div class="info-box">
+      <span>Remaining Payment</span>
+      <strong id="emiRemainingPreview">₹0.00</strong>
+    </div>
+
+    <div class="field-grid">
+      <div>
+        <label for="emiAccount">Payment Account</label>
+        <select id="emiAccount" class="input">
+          <option value="">Select account</option>
+        </select>
+      </div>
+      <div>
+        <label for="emiDueDate">EMI Date</label>
+        <input id="emiDueDate" class="input" type="date">
+      </div>
+    </div>
+
+    <label for="totalMonths">Total Months</label>
+    <input id="totalMonths" class="input" type="number" min="1" step="1" placeholder="Example: 12">
+
+    <label for="emiNotes">Notes</label>
+    <textarea id="emiNotes" class="input" rows="3" placeholder="Optional notes..."></textarea>
+
+    <button id="saveEmiButton" class="primary-button" type="button" onclick="saveEmi()">Save EMI</button>
+  </div>
+</section>
+
+<!-- Pay EMI -->
+<div id="emiPaymentModal" class="modal" style="display:none" onclick="if(event.target===this)closeEmiPaymentModal()">
+  <div class="modal-content">
+
+    <div class="section-title">
+      <div>
+        <h2>Pay EMI</h2>
+        <p id="paymentEmiName">EMI</p>
+      </div>
+      <button class="icon-button" type="button" onclick="closeEmiPaymentModal()">×</button>
+    </div>
+
+    <div class="payment-summary-box">
+      <div>
+        <span>Remaining</span>
+        <strong id="paymentEmiRemaining">₹0.00</strong>
+      </div>
+      <div>
+        <span>Monthly Payment</span>
+        <strong id="paymentMonthlyEmi">₹0.00</strong>
+      </div>
+    </div>
+
+    <input type="hidden" id="paymentEmiId">
+
+    <label for="emiPaymentAmount">Amount Paid</label>
+    <input id="emiPaymentAmount" class="input" type="number" min="0" step="0.01" inputmode="decimal" placeholder="₹ EMI amount">
+
+    <label for="emiPaymentAccount">Paid From</label>
+    <select id="emiPaymentAccount" class="input">
+      <option value="">Select account</option>
+    </select>
+
+    <label for="emiPaymentDate">Payment Date</label>
+    <input id="emiPaymentDate" class="input" type="date">
+
+    <label for="emiPaymentNote">Note</label>
+    <textarea id="emiPaymentNote" class="input" rows="3" placeholder="Optional payment note..."></textarea>
+
+    <button class="primary-button" type="button" onclick="saveEmiPayment()">＋ Record EMI Payment</button>
+  </div>
+</div>
+
+<nav class="bottom-nav" aria-label="Primary navigation">
+  <a class="nav-item" data-page="home" href="../index.html"><span class="nav-icon">🏠</span><span class="nav-label">Home</span></a>
+  <a class="nav-item" data-page="myIds" href="./my-ids.html"><span class="nav-icon">🆔</span><span class="nav-label">My IDs</span></a>
+  <a class="nav-item" data-page="buyers" href="./buyers.html"><span class="nav-icon">💳</span><span class="nav-label">EMI Buyers</span></a>
+  <a class="nav-item" data-page="accounts" href="./accounts.html"><span class="nav-icon">🏦</span><span class="nav-label">Accounts</span></a>
+  <a class="nav-item active" data-page="more" href="./more.html"><span class="nav-icon">☰</span><span class="nav-label">More</span></a>
+</nav>
+
+<script src="../js/app.js"></script>
+
+
+  <script>
+
+    let walletData;
+
+    let editingEmiId = null;
+
+
+
+    /* =========================
+       HELPERS
+    ========================== */
+
+    function money(value) {
+
+      if (
+        window.TamilandaWallet &&
+        typeof window.TamilandaWallet.formatMoney ===
+          "function"
+      ) {
+
+        return window.TamilandaWallet.formatMoney(
+          Number(value) || 0
+        );
+
+      }
+
+
+      return "₹" +
+        (Number(value) || 0).toLocaleString(
+          "en-IN",
+          {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+          }
+        );
+
+    }
+
+
+
+    function today() {
+
+      if (
+        window.TamilandaWallet &&
+        typeof window.TamilandaWallet.todayString ===
+          "function"
+      ) {
+
+        return window.TamilandaWallet.todayString();
+
+      }
+
+
+      const d = new Date();
+
+      return (
+        d.getFullYear() +
+        "-" +
+        String(
+          d.getMonth() + 1
+        ).padStart(2, "0") +
+        "-" +
+        String(
+          d.getDate()
+        ).padStart(2, "0")
+      );
+
+    }
+
+
+
+    function generateId() {
+
+      if (
+        window.TamilandaWallet &&
+        typeof window.TamilandaWallet.generateId ===
+          "function"
+      ) {
+
+        return window.TamilandaWallet.generateId();
+
+      }
+
+
+      return (
+        Date.now().toString(36) +
+        Math.random()
+          .toString(36)
+          .substring(2, 8)
+      );
+
+    }
+
+
+
+    function saveData() {
+
+      if (
+        window.TamilandaWallet &&
+        typeof window.TamilandaWallet.save ===
+          "function"
+      ) {
+
+        window.TamilandaWallet.save();
+
+      }
+
+    }
+
+
+
+    function escapeHtml(value) {
+
+      if (
+        window.TamilandaWallet &&
+        typeof window.TamilandaWallet.escapeHtml ===
+          "function"
+      ) {
+
+        return window.TamilandaWallet.escapeHtml(
+          value
+        );
+
+      }
+
+
+      return String(value || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+    }
+
+
+
+    function formatDate(dateString) {
+
+      if (!dateString) {
+        return "-";
+      }
+
+
+      const parts =
+        String(dateString).split("-");
+
+
+      if (parts.length !== 3) {
+        return dateString;
+      }
+
+
+      return (
+        parts[2] +
+        "/" +
+        parts[1] +
+        "/" +
+        parts[0]
+      );
+
+    }
+
+
+
+    function getAccountName(accountId) {
+
+      const account =
+        (walletData.accounts || [])
+          .find(
+            account =>
+              String(account.id) ===
+              String(accountId)
+          );
+
+
+      return account
+        ? account.name
+        : "Unknown Account";
+
+    }
+
+
+
+    /* =========================
+       EMI REMAINING
+    ========================== */
+
+    function getRemaining(emi) {
+
+      if (
+        window.TamilandaWallet &&
+        typeof window.TamilandaWallet.getEmiRemaining ===
+          "function"
+      ) {
+
+        return Number(
+          window.TamilandaWallet.getEmiRemaining(
+            emi.id
+          )
+        ) || 0;
+
+      }
+
+
+      const payments =
+        (walletData.emiPayments || [])
+          .filter(
+            payment =>
+              String(payment.emiId) ===
+              String(emi.id)
+          )
+          .reduce(
+            (sum, payment) =>
+              sum +
+              Number(payment.amount || 0),
+            0
+          );
+
+
+      return Math.max(
+        0,
+        Number(
+          emi.totalAmount ??
+          emi.amount ??
+          0
+        ) -
+        Number(
+          emi.alreadyPaid || 0
+        ) -
+        payments
+      );
+
+    }
+
+
+
+    function getPaid(emi) {
+
+      const total =
+        Number(
+          emi.totalAmount ??
+          emi.amount ??
+          0
+        );
+
+
+      const remaining =
+        getRemaining(emi);
+
+
+      return Math.max(
+        0,
+        total - remaining
+      );
+
+    }
+
+
+
+    function isOverdue(emi) {
+
+      const remaining =
+        getRemaining(emi);
+
+
+      if (
+        remaining <= 0 ||
+        !emi.dueDate
+      ) {
+
+        return false;
+
+      }
+
+
+      return (
+        emi.dueDate <
+        today()
+      );
+
+    }
+
+
+
+    function daysUntil(dateString) {
+
+      if (!dateString) {
+        return null;
+      }
+
+
+      const todayDate =
+        new Date(
+          today() +
+          "T00:00:00"
+        );
+
+
+      const dueDate =
+        new Date(
+          dateString +
+          "T00:00:00"
+        );
+
+
+      return Math.ceil(
+        (
+          dueDate -
+          todayDate
+        ) /
+        (1000 * 60 * 60 * 24)
+      );
+
+    }
+
+
+
+    /* =========================
+       INIT
+    ========================== */
+
+    document.addEventListener(
+      "DOMContentLoaded",
+      function() {
+
+        walletData =
+          window.TamilandaWallet.getData();
+
+
+        document.getElementById(
+          "emiDueDate"
+        ).value =
+          today();
+
+
+        document.getElementById(
+          "emiPaymentDate"
+        ).value =
+          today();
+
+
+        populateAccounts();
+
+        renderSummary();
+
+        renderEmis();
+
+      }
+    );
+
+
+
+    /* =========================
+       ACCOUNT SELECTS
+    ========================== */
+
+    function populateAccounts() {
+
+      const formSelect =
+        document.getElementById(
+          "emiAccount"
+        );
+
+
+      const paymentSelect =
+        document.getElementById(
+          "emiPaymentAccount"
+        );
+
+
+      formSelect.innerHTML =
+        `
+          <option value="">
+            Select account
+          </option>
+        `;
+
+
+      paymentSelect.innerHTML =
+        `
+          <option value="">
+            Select account
+          </option>
+        `;
+
+
+      (walletData.accounts || [])
+        .forEach(account => {
+
+          const option1 =
+            document.createElement(
+              "option"
+            );
+
+
+          option1.value =
+            account.id;
+
+
+          option1.textContent =
+            account.name +
+            " — " +
+            money(
+              account.balance
+            );
+
+
+          formSelect.appendChild(
+            option1
+          );
+
+
+          const option2 =
+            document.createElement(
+              "option"
+            );
+
+
+          option2.value =
+            account.id;
+
+
+          option2.textContent =
+            account.name +
+            " — " +
+            money(
+              account.balance
+            );
+
+
+          paymentSelect.appendChild(
+            option2
+          );
+
+        });
+
+    }
+
+
+
+    /* =========================
+       SUMMARY
+    ========================== */
+
+    function renderSummary() {
+
+      const emis =
+        walletData.myEmis || [];
+
+
+      let monthly = 0;
+
+      let remaining = 0;
+
+      let dueSoon = 0;
+
+
+      emis.forEach(emi => {
+
+        const emiRemaining =
+          getRemaining(emi);
+
+
+        remaining +=
+          emiRemaining;
+
+
+        monthly +=
+          Number(
+            emi.monthlyPayment ??
+            emi.emiAmount ??
+            0
+          );
+
+
+        if (
+          emiRemaining > 0 &&
+          emi.dueDate
+        ) {
+
+          const days =
+            daysUntil(
+              emi.dueDate
+            );
+
+
+          if (
+            days !== null &&
+            days >= 0 &&
+            days <= 7
+          ) {
+
+            dueSoon++;
+
+          }
+
+        }
+
+      });
+
+
+      document.getElementById(
+        "totalEmis"
+      ).textContent =
+        emis.length;
+
+
+      document.getElementById(
+        "monthlyEmi"
+      ).textContent =
+        money(monthly);
+
+
+      document.getElementById(
+        "totalRemaining"
+      ).textContent =
+        money(remaining);
+
+
+      document.getElementById(
+        "dueSoon"
+      ).textContent =
+        dueSoon;
+
+    }
+
+
+
+    /* =========================
+       FORM
+    ========================== */
+
+    function openEmiForm() {
+
+      editingEmiId =
+        null;
+
+
+      document.getElementById(
+        "formTitle"
+      ).textContent =
+        "Add EMI";
+
+
+      clearEmiForm();
+
+
+      document.getElementById(
+        "emiFormCard"
+      ).style.display =
+        "block";
+
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+
+    }
+
+
+
+    function closeEmiForm() {
+
+      document.getElementById(
+        "emiFormCard"
+      ).style.display =
+        "none";
+
+
+      editingEmiId =
+        null;
+
+
+      clearEmiForm();
+
+    }
+
+
+
+    function clearEmiForm() {
+
+      document.getElementById(
+        "editingEmiId"
+      ).value =
+        "";
+
+
+      document.getElementById(
+        "emiName"
+      ).value =
+        "";
+
+
+      document.getElementById(
+        "emiProduct"
+      ).value =
+        "";
+
+
+      document.getElementById(
+        "lenderName"
+      ).value =
+        "";
+
+
+      document.getElementById(
+        "loanNumber"
+      ).value =
+        "";
+
+
+      document.getElementById(
+        "emiTotalAmount"
+      ).value =
+        "";
+
+
+      document.getElementById(
+        "emiAlreadyPaid"
+      ).value =
+        "";
+
+
+      document.getElementById(
+        "monthlyPayment"
+      ).value =
+        "";
+
+
+      document.getElementById(
+        "totalMonths"
+      ).value =
+        "";
+
+
+      document.getElementById(
+        "emiDueDate"
+      ).value =
+        today();
+
+
+      document.getElementById(
+        "emiAccount"
+      ).value =
+        "";
+
+
+      document.getElementById(
+        "emiNotes"
+      ).value =
+        "";
+
+
+      document.getElementById(
+        "emiRemainingPreview"
+      ).textContent =
+        money(0);
+
+
+      /*
+        Reset financial field locks
+        whenever Add EMI is opened.
+      */
+
+      document.getElementById(
+        "emiTotalAmount"
+      ).readOnly =
+        false;
+
+
+      document.getElementById(
+        "emiAlreadyPaid"
+      ).readOnly =
+        false;
+
+
+      document.getElementById(
+        "monthlyPayment"
+      ).readOnly =
+        false;
+
+
+      document.getElementById(
+        "totalMonths"
+      ).readOnly =
+        false;
+
+
+      document.getElementById(
+        "emiAccount"
+      ).disabled =
+        false;
+
+    }
+
+
+
+    function updateEmiPreview() {
+
+      const total =
+        Number(
+          document.getElementById(
+            "emiTotalAmount"
+          ).value
+        ) || 0;
+
+
+      const paid =
+        Number(
+          document.getElementById(
+            "emiAlreadyPaid"
+          ).value
+        ) || 0;
+
+
+      const remaining =
+        Math.max(
+          0,
+          total - paid
+        );
+
+
+      document.getElementById(
+        "emiRemainingPreview"
+      ).textContent =
+        money(remaining);
+
+    }
+
+
+
+    /* =========================
+       SAVE EMI
+    ========================== */
+
+    function saveEmi() {
+
+      const name =
+        document.getElementById(
+          "emiName"
+        ).value.trim();
+
+
+      const product =
+        document.getElementById(
+          "emiProduct"
+        ).value.trim();
+
+
+      const lender =
+        document.getElementById(
+          "lenderName"
+        ).value.trim();
+
+
+      const loanNumber =
+        document.getElementById(
+          "loanNumber"
+        ).value.trim();
+
+
+      const total =
+        Number(
+          document.getElementById(
+            "emiTotalAmount"
+          ).value
+        ) || 0;
+
+
+      const alreadyPaid =
+        Number(
+          document.getElementById(
+            "emiAlreadyPaid"
+          ).value
+        ) || 0;
+
+
+      const monthlyPayment =
+        Number(
+          document.getElementById(
+            "monthlyPayment"
+          ).value
+        ) || 0;
+
+
+      const totalMonths =
+        Number(
+          document.getElementById(
+            "totalMonths"
+          ).value
+        ) || 0;
+
+
+      const dueDate =
+        document.getElementById(
+          "emiDueDate"
+        ).value;
+
+
+      const accountId =
+        document.getElementById(
+          "emiAccount"
+        ).value;
+
+
+      const notes =
+        document.getElementById(
+          "emiNotes"
+        ).value.trim();
+
+
+
+      /* =========================
+         VALIDATION
+      ========================== */
+
+      if (!name) {
+
+        alert(
+          "Please enter EMI name."
+        );
+
+        return;
+
+      }
+
+
+      if (
+        !Number.isFinite(total) ||
+        total <= 0
+      ) {
+
+        alert(
+          "Please enter a valid total amount."
+        );
+
+        return;
+
+      }
+
+
+      if (
+        !Number.isFinite(alreadyPaid) ||
+        alreadyPaid < 0
+      ) {
+
+        alert(
+          "Already paid amount is invalid."
+        );
+
+        return;
+
+      }
+
+
+      if (
+        alreadyPaid > total
+      ) {
+
+        alert(
+          "Already paid cannot be greater than total amount."
+        );
+
+        return;
+
+      }
+
+
+      if (
+        !Number.isFinite(monthlyPayment) ||
+        monthlyPayment <= 0
+      ) {
+
+        alert(
+          "Please enter monthly EMI amount."
+        );
+
+        return;
+
+      }
+
+
+      if (
+        !Number.isFinite(totalMonths) ||
+        totalMonths <= 0
+      ) {
+
+        alert(
+          "Please enter total EMI months."
+        );
+
+        return;
+
+      }
+
+
+      if (!dueDate) {
+
+        alert(
+          "Please select next due date."
+        );
+
+        return;
+
+      }
+
+
+
+      if (!walletData.myEmis) {
+
+        walletData.myEmis = [];
+
+      }
+
+
+
+      /* =========================
+         EDIT
+      ========================== */
+
+      if (editingEmiId) {
+
+        const emi =
+          walletData.myEmis.find(
+            item =>
+              String(item.id) ===
+              String(editingEmiId)
+          );
+
+
+        if (!emi) {
+
+          alert(
+            "EMI record not found."
+          );
+
+          return;
+
+        }
+
+
+        const hasPayments =
+          (walletData.emiPayments || [])
+            .some(
+              payment =>
+                String(payment.emiId) ===
+                String(emi.id)
+            );
+
+
+
+        /*
+          If payment history exists,
+          financial base values cannot
+          be changed.
+        */
+
+        if (hasPayments) {
+
+          const existingTotal =
+            Number(
+              emi.totalAmount ??
+              emi.amount ??
+              0
+            );
+
+
+          const existingAlreadyPaid =
+            Number(
+              emi.alreadyPaid || 0
+            );
+
+
+          const existingMonthly =
+            Number(
+              emi.monthlyPayment ??
+              emi.emiAmount ??
+              0
+            );
+
+
+          const existingMonths =
+            Number(
+              emi.totalMonths || 0
+            );
+
+
+          const existingAccount =
+            emi.accountId || "";
+
+
+          if (
+            total !== existingTotal ||
+            alreadyPaid !== existingAlreadyPaid ||
+            monthlyPayment !== existingMonthly ||
+            totalMonths !== existingMonths ||
+            accountId !== existingAccount
+          ) {
+
+            alert(
+              "Payment history exists. Total Amount, Already Paid, Monthly EMI, Total Months and Payment Account cannot be changed now."
+            );
+
+            return;
+
+          }
+
+        }
+
+
+
+        /* =========================
+           UPDATE DETAILS
+        ========================== */
+
+        emi.name =
+          name;
+
+
+        emi.emiName =
+          name;
+
+
+        emi.product =
+          product;
+
+
+        emi.lender =
+          lender;
+
+
+        emi.lenderName =
+          lender;
+
+
+        emi.loanNumber =
+          loanNumber;
+
+
+        emi.dueDate =
+          dueDate;
+
+
+        emi.notes =
+          notes;
+
+
+
+        /*
+          Financial values can change
+          only when no actual payment
+          history exists.
+        */
+
+        if (!hasPayments) {
+
+          emi.totalAmount =
+            total;
+
+
+          emi.amount =
+            total;
+
+
+          emi.alreadyPaid =
+            alreadyPaid;
+
+
+          emi.monthlyPayment =
+            monthlyPayment;
+
+
+          emi.emiAmount =
+            monthlyPayment;
+
+
+          emi.totalMonths =
+            totalMonths;
+
+
+          emi.accountId =
+            accountId;
+
+        }
+
+
+        saveData();
+
+
+        walletData =
+          window.TamilandaWallet.getData();
+
+
+        closeEmiForm();
+
+
+        renderSummary();
+
+        renderEmis();
+
+
+        alert(
+          "EMI updated successfully. ✅"
+        );
+
+
+        return;
+
+      }
+
+
+
+      /* =========================
+         NEW EMI
+      ========================== */
+
+      const emi = {
+
+        id:
+          generateId(),
+
+        name:
+          name,
+
+        emiName:
+          name,
+
+        product:
+          product,
+
+        lender:
+          lender,
+
+        lenderName:
+          lender,
+
+        loanNumber:
+          loanNumber,
+
+        totalAmount:
+          total,
+
+        amount:
+          total,
+
+        /*
+          Historical payment only.
+          It does NOT reduce current
+          account balance.
+        */
+
+        alreadyPaid:
+          alreadyPaid,
+
+        monthlyPayment:
+          monthlyPayment,
+
+        emiAmount:
+          monthlyPayment,
+
+        totalMonths:
+          totalMonths,
+
+        dueDate:
+          dueDate,
+
+        accountId:
+          accountId,
+
+        notes:
+          notes,
+
+        createdAt:
+          new Date().toISOString()
+
+      };
+
+
+      walletData.myEmis.push(
+        emi
+      );
+
+
+      saveData();
+
+
+      walletData =
+        window.TamilandaWallet.getData();
+
+
+      closeEmiForm();
+
+
+      renderSummary();
+
+      renderEmis();
+
+
+      alert(
+        "EMI added successfully. 🎉"
+      );
+
+    }
+
+
+
+    /* =========================
+       EDIT EMI
+    ========================== */
+
+    function editEmi(id) {
+
+      const emi =
+        walletData.myEmis.find(
+          item =>
+            String(item.id) ===
+            String(id)
+        );
+
+
+      if (!emi) {
+        return;
+      }
+
+
+      editingEmiId =
+        id;
+
+
+      document.getElementById(
+        "formTitle"
+      ).textContent =
+        "Edit EMI";
+
+
+      document.getElementById(
+        "emiName"
+      ).value =
+        emi.name ||
+        emi.emiName ||
+        "";
+
+
+      document.getElementById(
+        "emiProduct"
+      ).value =
+        emi.product ||
+        "";
+
+
+      document.getElementById(
+        "lenderName"
+      ).value =
+        emi.lender ||
+        emi.lenderName ||
+        "";
+
+
+      document.getElementById(
+        "loanNumber"
+      ).value =
+        emi.loanNumber ||
+        "";
+
+
+      document.getElementById(
+        "emiTotalAmount"
+      ).value =
+        emi.totalAmount ??
+        emi.amount ??
+        "";
+
+
+      document.getElementById(
+        "emiAlreadyPaid"
+      ).value =
+        emi.alreadyPaid ??
+        "";
+
+
+      document.getElementById(
+        "monthlyPayment"
+      ).value =
+        emi.monthlyPayment ??
+        emi.emiAmount ??
+        "";
+
+
+      document.getElementById(
+        "totalMonths"
+      ).value =
+        emi.totalMonths ??
+        "";
+
+
+      document.getElementById(
+        "emiDueDate"
+      ).value =
+        emi.dueDate ||
+        today();
+
+
+      document.getElementById(
+        "emiAccount"
+      ).value =
+        emi.accountId ||
+        "";
+
+
+      document.getElementById(
+        "emiNotes"
+      ).value =
+        emi.notes ||
+        "";
+
+
+      updateEmiPreview();
+
+
+
+      /* =========================
+         LOCK FINANCIAL FIELDS
+      ========================== */
+
+      const hasPayments =
+        (walletData.emiPayments || [])
+          .some(
+            payment =>
+              String(payment.emiId) ===
+              String(emi.id)
+          );
+
+
+      document.getElementById(
+        "emiTotalAmount"
+      ).readOnly =
+        hasPayments;
+
+
+      document.getElementById(
+        "emiAlreadyPaid"
+      ).readOnly =
+        hasPayments;
+
+
+      document.getElementById(
+        "monthlyPayment"
+      ).readOnly =
+        hasPayments;
+
+
+      document.getElementById(
+        "totalMonths"
+      ).readOnly =
+        hasPayments;
+
+
+      document.getElementById(
+        "emiAccount"
+      ).disabled =
+        hasPayments;
+
+
+      document.getElementById(
+        "emiFormCard"
+      ).style.display =
+        "block";
+
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+
+    }
+
+
+
+    /* =========================
+       PAYMENT MODAL
+    ========================== */
+
+    function openEmiPaymentModal(id) {
+
+      const emi =
+        walletData.myEmis.find(
+          item =>
+            String(item.id) ===
+            String(id)
+        );
+
+
+      if (!emi) {
+        return;
+      }
+
+
+      const remaining =
+        getRemaining(emi);
+
+
+      if (remaining <= 0) {
+
+        alert(
+          "This EMI is already completed. ✅"
+        );
+
+        return;
+
+      }
+
+
+      const monthly =
+        Number(
+          emi.monthlyPayment ??
+          emi.emiAmount ??
+          0
+        );
+
+
+      document.getElementById(
+        "paymentEmiId"
+      ).value =
+        id;
+
+
+      document.getElementById(
+        "paymentEmiName"
+      ).textContent =
+        emi.name ||
+        emi.emiName ||
+        "EMI";
+
+
+      document.getElementById(
+        "paymentEmiRemaining"
+      ).textContent =
+        money(remaining);
+
+
+      document.getElementById(
+        "paymentMonthlyEmi"
+      ).textContent =
+        money(monthly);
+
+
+      document.getElementById(
+        "emiPaymentAmount"
+      ).value =
+        Math.min(
+          monthly ||
+          remaining,
+          remaining
+        );
+
+
+      document.getElementById(
+        "emiPaymentAccount"
+      ).value =
+        emi.accountId ||
+        "";
+
+
+      document.getElementById(
+        "emiPaymentDate"
+      ).value =
+        today();
+
+
+      document.getElementById(
+        "emiPaymentNote"
+      ).value =
+        "";
+
+
+      document.getElementById(
+        "emiPaymentModal"
+      ).style.display =
+        "flex";
+
+    }
+
+
+
+    function closeEmiPaymentModal() {
+
+      document.getElementById(
+        "emiPaymentModal"
+      ).style.display =
+        "none";
+
+    }
+
+
+
+    /* =========================
+       SAVE EMI PAYMENT
+    ========================== */
+
+    function saveEmiPayment() {
+
+      const emiId =
+        document.getElementById(
+          "paymentEmiId"
+        ).value;
+
+
+      const amount =
+        Number(
+          document.getElementById(
+            "emiPaymentAmount"
+          ).value
+        ) || 0;
+
+
+      const accountId =
+        document.getElementById(
+          "emiPaymentAccount"
+        ).value;
+
+
+      const date =
+        document.getElementById(
+          "emiPaymentDate"
+        ).value ||
+        today();
+
+
+      const note =
+        document.getElementById(
+          "emiPaymentNote"
+        ).value.trim();
+
+
+      const emi =
+        walletData.myEmis.find(
+          item =>
+            String(item.id) ===
+            String(emiId)
+        );
+
+
+      if (!emi) {
+
+        alert(
+          "EMI record not found."
+        );
+
+        return;
+
+      }
+
+
+      if (amount <= 0) {
+
+        alert(
+          "Please enter a valid payment amount."
+        );
+
+        return;
+
+      }
+
+
+      const remaining =
+        getRemaining(emi);
+
+
+      if (amount > remaining) {
+
+        alert(
+          "Maximum payment allowed is " +
+          money(remaining) +
+          "."
+        );
+
+        return;
+
+      }
+
+
+      if (!accountId) {
+
+        alert(
+          "Please select the account used for EMI payment."
+        );
+
+        return;
+
+      }
+
+
+      const account =
+        walletData.accounts.find(
+          item =>
+            String(item.id) ===
+            String(accountId)
+        );
+
+
+      if (!account) {
+
+        alert(
+          "Selected account not found."
+        );
+
+        return;
+
+      }
+
+
+      if (
+        Number(account.balance || 0) <
+        amount
+      ) {
+
+        alert(
+          "Insufficient balance in selected account."
+        );
+
+        return;
+
+      }
+
+
+
+      /* =========================
+         DUPLICATE PAYMENT CHECK
+      ========================== */
+
+      const duplicatePayment =
+        (walletData.emiPayments || [])
+          .some(
+            payment => {
+
+              return (
+                String(payment.emiId) ===
+                String(emiId) &&
+
+                Number(payment.amount || 0) ===
+                Number(amount) &&
+
+                String(payment.accountId) ===
+                String(accountId) &&
+
+                String(payment.date || "") ===
+                String(date) &&
+
+                String(payment.note || "") ===
+                String(note)
+              );
+
+            }
+          );
+
+
+      if (duplicatePayment) {
+
+        alert(
+          "This exact EMI payment already exists. Duplicate payment was blocked. ⚠️"
+        );
+
+        return;
+
+      }
+
+
+
+      /*
+        Accounting rule:
+        this page updates the account balance directly.
+        Do NOT call addTransaction() here, or the same
+        EMI amount would be deducted twice.
+      */
+
+      /* =========================
+         REDUCE ACCOUNT BALANCE
+      ========================== */
+
+      account.balance =
+        Number(
+          account.balance || 0
+        ) -
+        amount;
+
+
+
+      if (!walletData.emiPayments) {
+
+        walletData.emiPayments =
+          [];
+
+      }
+
+
+
+      /* =========================
+         CREATE PAYMENT ID
+      ========================== */
+
+      const paymentId =
+        generateId();
+
+      /*
+        One permanent ledger ID links the EMI payment
+        history and its transaction record.
+      */
+      const transactionId =
+        generateId();
+
+
+
+      /* =========================
+         PAYMENT HISTORY
+      ========================== */
+
+      walletData.emiPayments.push({
+
+        id:
+          paymentId,
+
+        emiId:
+          emiId,
+
+        amount:
+          amount,
+
+        accountId:
+          accountId,
+
+        date:
+          date,
+
+        note:
+          note,
+
+        source:
+          "emi_payment",
+
+        transactionId:
+          transactionId,
+
+        createdAt:
+          new Date().toISOString()
+
+      });
+
+
+
+      /* =========================
+         TRANSACTION
+      ========================== */
+
+      if (!walletData.transactions) {
+
+        walletData.transactions =
+          [];
+
+      }
+
+
+      walletData.transactions.push({
+
+        id:
+          transactionId,
+
+        type:
+          "expense",
+
+        category:
+          "EMI",
+
+        amount:
+          amount,
+
+        accountId:
+          accountId,
+
+        date:
+          date,
+
+        description:
+          `EMI Payment - ${
+            emi.name ||
+            emi.emiName ||
+            "EMI"
+          }`,
+
+        note:
+          note,
+
+        source:
+          "emi_payment",
+
+        emiId:
+          emiId,
+
+        paymentId:
+          paymentId,
+
+        transactionId:
+          transactionId,
+
+        createdAt:
+          new Date().toISOString()
+
+      });
+
+
+
+      /* =========================
+         NEXT DUE DATE
+      ========================== */
+
+      if (emi.dueDate) {
+
+        const due =
+          new Date(
+            emi.dueDate +
+            "T00:00:00"
+          );
+
+
+        due.setMonth(
+          due.getMonth() + 1
+        );
+
+
+        emi.dueDate =
+          due.getFullYear() +
+          "-" +
+          String(
+            due.getMonth() + 1
+          ).padStart(2, "0") +
+          "-" +
+          String(
+            due.getDate()
+          ).padStart(2, "0");
+
+      }
+
+
+
+      saveData();
+
+
+      walletData =
+        window.TamilandaWallet.getData();
+
+
+      const newRemaining =
+        getRemaining(emi);
+
+
+      closeEmiPaymentModal();
+
+
+      populateAccounts();
+
+      renderSummary();
+
+      renderEmis();
+
+
+
+      if (newRemaining <= 0) {
+
+        alert(
+          "EMI fully completed! 🎉"
+        );
+
+      } else {
+
+        alert(
+          "EMI payment recorded. Remaining: " +
+          money(newRemaining)
+        );
+
+      }
+
+    }
+
+
+
+    /* =========================
+       PAYMENT HISTORY
+    ========================== */
+
+    function getEmiPayments(id) {
+
+      return (
+        walletData.emiPayments || []
+      )
+        .filter(
+          payment =>
+            String(payment.emiId) ===
+            String(id)
+        )
+        .sort(
+          (a, b) =>
+            new Date(
+              b.date ||
+              b.createdAt
+            ) -
+            new Date(
+              a.date ||
+              a.createdAt
+            )
+        );
+
+    }
+
+
+
+    function toggleHistory(id) {
+
+      const element =
+        document.getElementById(
+          "emi-history-" + id
+        );
+
+
+      if (!element) {
+        return;
+      }
+
+
+      element.style.display =
+        element.style.display === "none"
+          ? "block"
+          : "none";
+
+    }
+
+
+
+    /* =========================
+       DELETE EMI
+    ========================== */
+
+    function deleteEmi(id) {
+
+      const emi =
+        walletData.myEmis.find(
+          item =>
+            String(item.id) ===
+            String(id)
+        );
+
+
+      if (!emi) {
+        return;
+      }
+
+
+      const payments =
+        getEmiPayments(id);
+
+
+      if (payments.length > 0) {
+
+        alert(
+          "This EMI has payment history. Please keep it for accounting history. You can edit the EMI instead."
+        );
+
+        return;
+
+      }
+
+
+      const remaining =
+        getRemaining(emi);
+
+
+      let message =
+        `Move ${
+          emi.name ||
+          "this EMI"
+        } to Trash?`;
+
+
+      if (remaining > 0) {
+
+        message +=
+          `\n\nRemaining: ${
+            money(remaining)
+          }`;
+
+      }
+
+
+      if (!confirm(message)) {
+        return;
+      }
+
+
+      if (
+        window.TamilandaWallet &&
+        typeof window.TamilandaWallet.moveToTrash ===
+          "function"
+      ) {
+
+        window.TamilandaWallet.moveToTrash(
+          "myEmis",
+          emi
+        );
+
+      } else {
+
+        walletData.trash =
+          walletData.trash ||
+          [];
+
+
+        walletData.trash.push({
+
+          id:
+            generateId(),
+
+          type:
+            "myEmis",
+
+          originalCollection:
+            "myEmis",
+
+          data:
+            emi,
+
+          deletedAt:
+            new Date().toISOString()
+
+        });
+
+      }
+
+
+      const index =
+        walletData.myEmis.findIndex(
+          item =>
+            String(item.id) ===
+            String(id)
+        );
+
+
+      if (index !== -1) {
+
+        walletData.myEmis.splice(
+          index,
+          1
+        );
+
+      }
+
+
+      saveData();
+
+
+      walletData =
+        window.TamilandaWallet.getData();
+
+
+      renderSummary();
+
+      renderEmis();
+
+
+      alert(
+        "EMI moved to Trash. 🗑️"
+      );
+
+    }
+
+
+
+    /* =========================
+       RENDER
+    ========================== */
+
+    function renderEmis() {
+
+      const container =
+        document.getElementById(
+          "emiList"
+        );
+
+
+      const search =
+        document.getElementById(
+          "searchInput"
+        )
+          .value
+          .trim()
+          .toLowerCase();
+
+
+      const filter =
+        document.getElementById(
+          "statusFilter"
+        ).value;
+
+
+      let list = [
+        ...(walletData.myEmis || [])
+      ];
+
+
+      list =
+        list.filter(
+          emi => {
+
+            const remaining =
+              getRemaining(emi);
+
+
+            const completed =
+              remaining <= 0;
+
+
+            const overdue =
+              isOverdue(emi);
+
+
+            if (
+              filter === "completed" &&
+              !completed
+            ) {
+
+              return false;
+
+            }
+
+
+            if (
+              filter === "active" &&
+              (
+                completed ||
+                overdue
+              )
+            ) {
+
+              return false;
+
+            }
+
+
+            if (
+              filter === "overdue" &&
+              !overdue
+            ) {
+
+              return false;
+
+            }
+
+
+            if (!search) {
+              return true;
+            }
+
+
+            const searchable =
+              [
+                emi.name,
+                emi.emiName,
+                emi.product,
+                emi.lender,
+                emi.lenderName,
+                emi.loanNumber,
+                emi.notes
+              ]
+                .join(" ")
+                .toLowerCase();
+
+
+            return searchable.includes(
+              search
+            );
+
+          }
+        );
+
+
+      list.sort(
+        (a, b) => {
+
+          const aRemaining =
+            getRemaining(a);
+
+
+          const bRemaining =
+            getRemaining(b);
+
+
+          if (
+            aRemaining <= 0 &&
+            bRemaining > 0
+          ) {
+
+            return 1;
+
+          }
+
+
+          if (
+            aRemaining > 0 &&
+            bRemaining <= 0
+          ) {
+
+            return -1;
+
+          }
+
+
+          if (
+            a.dueDate &&
+            b.dueDate
+          ) {
+
+            return (
+              new Date(a.dueDate) -
+              new Date(b.dueDate)
+            );
+
+          }
+
+
+          return (
+            new Date(
+              b.createdAt || 0
+            ) -
+            new Date(
+              a.createdAt || 0
+            )
+          );
+
+        }
+      );
+
+
+      if (list.length === 0) {
+
+        container.innerHTML = `
+
+          <div class="empty-state">
+
+            <div class="empty-icon">
+              💳
+            </div>
+
+            <h3>
+              No EMI Found
+            </h3>
+
+            <p>
+              Add your bank, phone, bike, loan or other EMI.
+            </p>
+
+            <button
+              class="primary-button"
+              onclick="openEmiForm()"
+            >
+              + Add EMI
+            </button>
+
+          </div>
+
+        `;
+
+        return;
+
+      }
+
+
+      container.innerHTML =
+        list
+          .map(
+            renderEmiCard
+          )
+          .join("");
+
+    }
+
+
+
+    /* =========================
+       EMI CARD
+    ========================== */
+
+    function renderEmiCard(emi) {
+
+      const total =
+        Number(
+          emi.totalAmount ??
+          emi.amount ??
+          0
+        );
+
+
+      const remaining =
+        getRemaining(emi);
+
+
+      const paid =
+        getPaid(emi);
+
+
+      const monthly =
+        Number(
+          emi.monthlyPayment ??
+          emi.emiAmount ??
+          0
+        );
+
+
+      const progress =
+        total > 0
+          ? Math.min(
+              100,
+              Math.round(
+                (
+                  paid /
+                  total
+                ) *
+                100
+              )
+            )
+          : 0;
+
+
+      const completed =
+        remaining <= 0;
+
+
+      const overdue =
+        isOverdue(emi);
+
+
+      const days =
+        daysUntil(
+          emi.dueDate
+        );
+
+
+      let statusClass =
+        "status-warning";
+
+
+      let statusText =
+        "ACTIVE";
+
+
+      if (completed) {
+
+        statusClass =
+          "status-success";
+
+        statusText =
+          "COMPLETED";
+
+      } else if (overdue) {
+
+        statusClass =
+          "status-danger";
+
+        statusText =
+          "OVERDUE";
+
+      }
+
+
+
+      let dueText =
+        "";
+
+
+      if (emi.dueDate) {
+
+        if (overdue) {
+
+          dueText =
+            "Overdue";
+
+        } else if (days === 0) {
+
+          dueText =
+            "Due Today";
+
+        } else if (days === 1) {
+
+          dueText =
+            "Due Tomorrow";
+
+        } else {
+
+          dueText =
+            `Due in ${days} days`;
+
+        }
+
+      }
+
+
+
+      const payments =
+        getEmiPayments(
+          emi.id
+        );
+
+
+      const initialPaid =
+        Number(
+          emi.alreadyPaid || 0
+        );
+
+
+
+      /* =========================
+         HISTORY HTML
+      ========================== */
+
+      let historyHtml =
+        "";
+
+
+      if (initialPaid > 0) {
+
+        historyHtml += `
+
+          <div class="payment-history-item">
+
+            <div>
+
+              <strong>
+                ${money(initialPaid)}
+              </strong>
+
+              <small>
+                Already Paid / Previous
+              </small>
+
+            </div>
+
+
+            <div>
+
+              <small>
+                Historical amount
+              </small>
+
+            </div>
+
+          </div>
+
+        `;
+
+      }
+
+
+      if (payments.length === 0) {
+
+        if (initialPaid <= 0) {
+
+          historyHtml += `
+
+            <div class="muted-text">
+              No payment history yet.
+            </div>
+
+          `;
+
+        }
+
+      } else {
+
+        historyHtml +=
+          payments
+            .map(
+              payment => `
+
+                <div class="payment-history-item">
+
+                  <div>
+
+                    <strong>
+                      ${money(
+                        payment.amount
+                      )}
+                    </strong>
+
+                    <small>
+                      ${formatDate(
+                        payment.date
+                      )}
+                    </small>
+
+                  </div>
+
+
+                  <div>
+
+                    <small>
+
+                      Paid from:
+                      ${escapeHtml(
+                        getAccountName(
+                          payment.accountId
+                        )
+                      )}
+
+                    </small>
+
+
+                    ${
+                      payment.note
+                        ? `
+
+                          <small>
+                            ${escapeHtml(
+                              payment.note
+                            )}
+                          </small>
+
+                        `
+                        : ""
+                    }
+
+                  </div>
+
+                </div>
+
+              `
+            )
+            .join("");
+
+      }
+
+
+
+      const historyCount =
+        payments.length +
+        (
+          initialPaid > 0
+            ? 1
+            : 0
+        );
+
+
+
+      return `
+
+        <article class="card emi-card">
+
+
+          <!-- HEADER -->
+
+          <div class="emi-header">
+
+            <div>
+
+              <div class="emi-title">
+
+                <h3>
+
+                  ${escapeHtml(
+                    emi.name ||
+                    emi.emiName ||
+                    "Unnamed EMI"
+                  )}
+
+                </h3>
+
+
+                <span
+                  class="${statusClass}"
+                >
+                  ${statusText}
+                </span>
+
+              </div>
+
+
+              ${
+                emi.product
+                  ? `
+                    <p class="emi-product-line">
+                      📦
+                      ${escapeHtml(emi.product)}
+                    </p>
+                  `
+                  : ""
+              }
+
+              ${
+                emi.lender ||
+                emi.lenderName
+                  ? `
+
+                    <p>
+
+                      🏦
+                      ${escapeHtml(
+                        emi.lender ||
+                        emi.lenderName
+                      )}
+
+                    </p>
+
+                  `
+                  : ""
+              }
+
+
+              ${
+                emi.loanNumber
+                  ? `
+
+                    <p>
+
+                      🔢
+                      ${escapeHtml(
+                        emi.loanNumber
+                      )}
+
+                    </p>
+
+                  `
+                  : ""
+              }
+
+            </div>
+
+
+            <div class="emi-menu">
+
+              <button
+                class="icon-button"
+                onclick="editEmi('${emi.id}')"
+                title="Edit"
+              >
+                ✏️
+              </button>
+
+
+              <button
+                class="icon-button"
+                onclick="deleteEmi('${emi.id}')"
+                title="Delete"
+              >
+                🗑️
+              </button>
+
+            </div>
+
+          </div>
+
+
+
+          <!-- PROGRESS -->
+
+          <div class="progress-section">
+
+            <div class="progress-label">
+
+              <span>
+                Payment Progress
+              </span>
+
+              <strong>
+                ${progress}%
+              </strong>
+
+            </div>
+
+
+            <div class="progress-bar">
+
+              <div
+                class="progress-fill"
+                style="width:${progress}%"
+              ></div>
+
+            </div>
+
+          </div>
+
+
+
+          <!-- MONEY -->
+
+          <div class="money-grid">
+
+            <div>
+
+              <span>
+                Total
+              </span>
+
+              <strong>
+                ${money(total)}
+              </strong>
+
+            </div>
+
+
+            <div>
+
+              <span>
+                Paid
+              </span>
+
+              <strong>
+                ${money(paid)}
+              </strong>
+
+            </div>
+
+
+            <div>
+
+              <span>
+                Remaining
+              </span>
+
+              <strong>
+                ${money(remaining)}
+              </strong>
+
+            </div>
+
+
+            <div>
+
+              <span>
+                Monthly EMI
+              </span>
+
+              <strong>
+                ${money(monthly)}
+              </strong>
+
+            </div>
+
+          </div>
+
+
+
+          <!-- DUE -->
+
+          ${
+            emi.dueDate
+              ? `
+
+                <div class="info-box">
+
+                  <div>
+
+                    <span>
+                      Next Due Date
+                    </span>
+
+                    <strong>
+                      ${formatDate(
+                        emi.dueDate
+                      )}
+                    </strong>
+
+                  </div>
+
+
+                  <div>
+
+                    <span>
+                      Status
+                    </span>
+
+                    <strong>
+                      ${dueText}
+                    </strong>
+
+                  </div>
+
+                </div>
+
+              `
+              : ""
+          }
+
+
+
+          ${
+            emi.totalMonths
+              ? `
+
+                <div class="small-info">
+
+                  📆 Total Tenure:
+                  ${emi.totalMonths}
+                  months
+
+                </div>
+
+              `
+              : ""
+          }
+
+
+
+          ${
+            emi.notes
+              ? `
+
+                <div class="note-box">
+
+                  📝
+                  ${escapeHtml(
+                    emi.notes
+                  )}
+
+                </div>
+
+              `
+              : ""
+          }
+
+
+
+          <!-- ACTIONS -->
+
+          <div class="emi-actions">
+
+            ${
+              !completed
+                ? `
+
+                  <button
+                    class="primary-button"
+                    onclick="openEmiPaymentModal('${emi.id}')"
+                  >
+                    💳 Pay EMI
+                  </button>
+
+                `
+                : `
+
+                  <button
+                    class="secondary-button"
+                    disabled
+                  >
+                    ✓ EMI Completed
+                  </button>
+
+                `
+            }
+
+
+            <button
+              class="secondary-button"
+              onclick="toggleHistory('${emi.id}')"
+            >
+
+              🧾 History
+              (${historyCount})
+
+            </button>
+
+          </div>
+
+
+
+          <!-- HISTORY -->
+
+          <div
+            id="emi-history-${emi.id}"
+            class="payment-history"
+            style="display:none;"
+          >
+
+            <h4>
+              EMI Payment History
+            </h4>
+
+            ${historyHtml}
+
+          </div>
+
+
+        </article>
+
+      `;
+
+    }
+
+
+
+    /* =========================
+       NAVIGATION
+    ========================== */
+
+    function goBack() {
+
+      if (
+        window.history.length > 1
+      ) {
+
+        window.history.back();
+
+      } else {
+
+        goToPage(
+          "home"
+        );
+
+      }
+
+    }
+
+
+
+    function goToPage(page) {
+
+      if (
+        window.TamilandaWallet &&
+        typeof window.TamilandaWallet.goToPage ===
+          "function"
+      ) {
+
+        window.TamilandaWallet.goToPage(
+          page
+        );
+
+        return;
+
+      }
+
+
+      const pages = {
+
+        home:
+          "../index.html",
+
+        transactions:
+          "transactions.html",
+
+        buyers:
+          "buyers.html",
+
+        accounts:
+          "accounts.html",
+
+        more:
+          "more.html"
+
+      };
+
+
+      if (pages[page]) {
+
+        window.location.href =
+          pages[page];
+
+      }
+
+    }
+
+
+
+    /* =========================
+       OUTSIDE MODAL CLICK
+    ========================== */
+
+    document.addEventListener(
+      "click",
+      function(event) {
+
+        const modal =
+          document.getElementById(
+            "emiPaymentModal"
+          );
+
+
+        if (
+          event.target ===
+          modal
+        ) {
+
+          closeEmiPaymentModal();
+
+        }
+
+      }
+    );
+
+  </script>
+
+<script>
+document.addEventListener("DOMContentLoaded",()=>{
+  const list=document.getElementById("emiList");
+  const syncCount=()=>{
+    const count=list?list.querySelectorAll(".emi-card").length:0;
+    const el=document.getElementById("emiListCount");
+    if(el) el.textContent=`${count} EMI${count===1?"":"s"}`;
+  };
+  if(list){
+    new MutationObserver(syncCount).observe(list,{childList:true,subtree:true});
+    syncCount();
+  }
+
+  // Keep the product value visible in edited records even though the
+  // original data model also supports older lender/loan fields.
+  const form=document.getElementById("emiFormCard");
+  if(form) form.addEventListener("click",()=>{});
+});
+</script>
+</body>
+</html>

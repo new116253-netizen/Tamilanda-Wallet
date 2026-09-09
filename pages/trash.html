@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#09070d">
+<link rel="manifest" href="../manifest.json">
+<link rel="icon" href="../icons/icon-192.png">
+<link rel="apple-touch-icon" href="../icons/icon-192.png">
+<link rel="stylesheet" href="../css/style.css">
+<title>Trash — Tamilanda Wallet 👑</title>
+
+<style>
+:root{
+  --bg:#09070d;--surface:#15111d;--edge:rgba(255,255,255,.08);
+  --text:#fff;--muted:#b7b2bf;--dim:#77717f;
+  --purple:#9b6dff;--blue:#55aaff;--green:#55d98b;--red:#ff667a;--gold:#ffc857
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:var(--bg);color:#fff}
+body{
+  overflow-x:hidden;-webkit-font-smoothing:antialiased;
+  background:
+    radial-gradient(circle at 95% 8%,rgba(92,82,255,.16),transparent 30%),
+    radial-gradient(circle at 5% 20%,rgba(0,117,255,.07),transparent 26%),
+    linear-gradient(180deg,#0a0d1e 0%,#061625 50%,#04090e 100%)
+}
+.trash-page{width:min(100%,720px);margin:0 auto;padding:18px 16px calc(105px + env(safe-area-inset-bottom))}
+.trash-header{
+  display:flex;align-items:center;gap:10px;padding:15px 14px;margin-bottom:12px;
+  border-radius:19px;background:rgba(21,17,29,.90);border:1px solid var(--edge)
+}
+.trash-back,.trash-empty{
+  width:42px;height:42px;flex:0 0 42px;display:grid;place-items:center;
+  border-radius:13px;border:1px solid rgba(255,255,255,.09);color:#fff
+}
+.trash-back{background:rgba(255,255,255,.04);font-size:22px}
+.trash-empty{margin-left:auto;background:rgba(255,102,122,.07);border-color:rgba(255,102,122,.16);font-size:18px}
+.trash-head-copy{min-width:0}.trash-head-copy h1{margin:0;font-size:23px;line-height:1.05;font-weight:900;letter-spacing:-.5px}
+.trash-head-copy p{margin:5px 0 0;color:var(--muted);font-size:10px}
+
+.trash-hero{
+  position:relative;overflow:hidden;padding:18px;border-radius:22px;
+  border:1px solid rgba(255,102,122,.20);
+  background:
+    radial-gradient(circle at 90% 15%,rgba(255,84,111,.18),transparent 32%),
+    radial-gradient(circle at 14% 117%,rgba(123,51,255,.28),transparent 39%),
+    linear-gradient(145deg,#1e1320,#0d0b16 76%);
+  box-shadow:0 15px 44px rgba(0,0,0,.27)
+}
+.trash-hero-label{color:rgba(255,255,255,.60);font-size:9px;font-weight:800;letter-spacing:1px;text-transform:uppercase}
+.trash-hero-row{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-top:7px}
+.trash-count-value{font-size:clamp(35px,9vw,47px);line-height:1;font-weight:950;letter-spacing:-1.6px;color:var(--red)}
+.trash-hero-note{margin-top:7px;color:rgba(255,255,255,.50);font-size:10px;max-width:280px}
+.trash-pills{display:grid;grid-template-columns:1fr 1fr;gap:7px;width:156px;max-width:43%}
+.trash-pill{padding:9px;border-radius:12px;background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.05)}
+.trash-pill span{display:block;color:#77717f;font-size:7px;font-weight:800;text-transform:uppercase}
+.trash-pill strong{display:block;margin-top:4px;font-size:14px;color:#fff}
+
+.trash-tools{
+  display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:11px;
+  padding:11px 12px;border-radius:17px;background:rgba(21,17,29,.86);border:1px solid var(--edge)
+}
+.trash-search{
+  min-width:0;flex:1;height:42px;padding:0 11px;border-radius:11px;background:#100d17;color:#fff;
+  border:1px solid rgba(255,255,255,.08);outline:none;font-size:10px
+}
+.trash-search::placeholder{color:#756f7f}
+.trash-filter{
+  width:125px;height:42px;padding:0 9px;border-radius:11px;background:#100d17;color:#fff;
+  border:1px solid rgba(255,255,255,.08);outline:none;font-size:9px
+}
+
+.trash-list-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:17px 2px 8px}
+.trash-list-head h2{margin:0;font-size:16px;font-weight:900}.trash-list-count{color:#77717f;font-size:9px}
+.trash-list{display:grid;gap:9px}
+
+.trash-card{
+  padding:13px;border-radius:17px;background:linear-gradient(145deg,rgba(24,20,32,.97),rgba(14,12,20,.97));
+  border:1px solid rgba(255,255,255,.07);box-shadow:0 7px 21px rgba(0,0,0,.11)
+}
+.trash-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.trash-main{display:flex;align-items:center;gap:10px;min-width:0}
+.trash-icon{
+  width:40px;height:40px;flex:0 0 40px;display:grid;place-items:center;border-radius:12px;
+  background:rgba(255,102,122,.07);border:1px solid rgba(255,102,122,.13);font-size:18px
+}
+.trash-title-wrap{min-width:0}.trash-title{font-size:13px;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.trash-type{margin-top:3px;color:#77717f;font-size:8px}
+.trash-date{color:#77717f;font-size:8px;white-space:nowrap}
+.trash-details{
+  display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:10px
+}
+.trash-detail{
+  padding:9px;border-radius:11px;background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.045)
+}
+.trash-detail span{display:block;color:#77717f;font-size:7px}.trash-detail strong{display:block;margin-top:4px;color:#d8d1de;font-size:9px}
+.trash-actions{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:9px}
+.trash-restore,.trash-delete{
+  min-height:37px;border-radius:10px;font-size:9px;font-weight:850
+}
+.trash-restore{color:var(--green);background:rgba(85,217,139,.06);border:1px solid rgba(85,217,139,.14)}
+.trash-delete{color:var(--red);background:rgba(255,102,122,.055);border:1px solid rgba(255,102,122,.14)}
+
+.trash-empty-state{
+  padding:38px 16px;text-align:center;border-radius:18px;background:rgba(21,17,29,.80);border:1px dashed rgba(255,255,255,.09)
+}
+.trash-empty-icon{font-size:32px}.trash-empty-state h3{margin:8px 0 0;font-size:15px}.trash-empty-state p{margin:5px 0 0;color:#77717f;font-size:9px;line-height:1.5}
+
+.trash-note{
+  margin-top:13px;padding:11px 12px;border-radius:13px;
+  background:rgba(85,170,255,.045);border:1px solid rgba(85,170,255,.10);color:#8f8997;font-size:8px;line-height:1.5
+}
+.trash-note strong{color:#c7c0ce}
+
+@media(max-width:520px){.trash-page{padding-left:13px;padding-right:13px}}
+@media(max-width:390px){
+  .trash-head-copy h1{font-size:21px}.trash-head-copy p{font-size:9px}
+  .trash-pills{width:135px}.trash-pill strong{font-size:13px}
+  .trash-details{grid-template-columns:1fr}
+  .trash-filter{width:110px}
+}
+</style>
+</head>
+
+<body>
+<main class="trash-page">
+
+<header class="trash-header">
+  <button class="trash-back" type="button" onclick="goMore()" aria-label="Back">‹</button>
+  <div class="trash-head-copy">
+    <h1>Trash 🗑️</h1>
+    <p>Restore deleted records or remove them permanently</p>
+  </div>
+  <button class="trash-empty" type="button" onclick="emptyTrash()" aria-label="Empty trash">🗑️</button>
+</header>
+
+<section class="trash-hero">
+  <div class="trash-hero-label">Deleted Records</div>
+  <div class="trash-hero-row">
+    <div>
+      <div id="trashCountValue" class="trash-count-value">0</div>
+      <div class="trash-hero-note">Items currently waiting in Trash</div>
+    </div>
+    <div class="trash-pills">
+      <div class="trash-pill"><span>Transactions</span><strong id="trashTransactions">0</strong></div>
+      <div class="trash-pill"><span>Other Records</span><strong id="trashOther">0</strong></div>
+    </div>
+  </div>
+</section>
+
+<section class="trash-tools">
+  <input id="trashSearch" class="trash-search" type="search" placeholder="🔎 Search deleted records..." oninput="renderTrash()">
+  <select id="trashFilter" class="trash-filter" onchange="renderTrash()">
+    <option value="all">All Types</option>
+    <option value="transactions">Transactions</option>
+    <option value="buyers">EMI Buyers</option>
+    <option value="accounts">Accounts</option>
+    <option value="moneyToGive">Loans To Give</option>
+    <option value="myEmis">My EMI</option>
+  </select>
+</section>
+
+<div class="trash-list-head">
+  <h2>Recently Deleted</h2>
+  <span class="trash-list-count" id="visibleCount">0 items</span>
+</div>
+
+<section id="trashList" class="trash-list"></section>
+
+<div class="trash-note">
+  <strong>Restore:</strong> transactions restore their linked account effect through the wallet's existing Trash engine. Some linked payment records are managed from their original section.
+</div>
+
+</main>
+
+<nav class="bottom-nav" aria-label="Primary navigation">
+  <a class="nav-item" data-page="home" href="../index.html"><span class="nav-icon">🏠</span><span class="nav-label">Home</span></a>
+  <a class="nav-item" data-page="myIds" href="./my-ids.html"><span class="nav-icon">🆔</span><span class="nav-label">My IDs</span></a>
+  <a class="nav-item" data-page="buyers" href="./buyers.html"><span class="nav-icon">💳</span><span class="nav-label">EMI Buyers</span></a>
+  <a class="nav-item" data-page="accounts" href="./accounts.html"><span class="nav-icon">🏦</span><span class="nav-label">Accounts</span></a>
+  <a class="nav-item active" data-page="more" href="./more.html"><span class="nav-icon">☰</span><span class="nav-label">More</span></a>
+</nav>
+
+<script src="../js/app.js"></script>
+<script>
+(() => {
+  "use strict";
+
+  const typeLabels = {
+    transactions:"Transaction",
+    buyers:"EMI Buyer",
+    accounts:"Account",
+    moneyToGive:"Loan To Give",
+    myEmis:"My EMI",
+    recurringBills:"Recurring Payment",
+    buyerPayments:"Buyer Payment",
+    givePayments:"Give Payment",
+    emiPayments:"EMI Payment",
+    recurringPayments:"Recurring Payment"
+  };
+
+  function getData(){
+    if(window.TamilandaWallet && typeof window.TamilandaWallet.getData === "function"){
+      return window.TamilandaWallet.getData() || {};
+    }
+    try{
+      return JSON.parse(localStorage.getItem("tamilanda_wallet_data") || "{}") || {};
+    }catch{
+      return {};
+    }
+  }
+
+  function saveData(data){
+    if(window.TamilandaWallet && typeof window.TamilandaWallet.save === "function"){
+      const current=window.TamilandaWallet.getData();
+      Object.keys(current).forEach(k=>delete current[k]);
+      Object.assign(current,data);
+      return !!window.TamilandaWallet.save();
+    }
+    localStorage.setItem("tamilanda_wallet_data",JSON.stringify(data));
+    return true;
+  }
+
+  function getTrash(){
+    const d=getData();
+    return Array.isArray(d.trash)?d.trash:[];
+  }
+
+  function collectionName(item){
+    const d=getData();
+    const direct=item?.originalCollection || item?.collection;
+    if(direct && Array.isArray(d[direct])) return direct;
+
+    const type=String(item?.type||"").trim();
+    const aliases={
+      transaction:"transactions",transactions:"transactions",
+      buyer:"buyers",buyers:"buyers",
+      account:"accounts",accounts:"accounts",
+      give:"moneyToGive",moneyToGive:"moneyToGive",money_to_give:"moneyToGive",
+      emi:"myEmis",myEmis:"myEmis",
+      recurring:"recurringBills",recurringBills:"recurringBills",
+      buyerPayment:"buyerPayments",buyerPayments:"buyerPayments",
+      givePayment:"givePayments",givePayments:"givePayments",
+      emiPayment:"emiPayments",emiPayments:"emiPayments",
+      recurringPayment:"recurringPayments",recurringPayments:"recurringPayments"
+    };
+    return aliases[type] || direct || type;
+  }
+
+  function label(item){
+    const collection=collectionName(item);
+    const data=item?.data || {};
+    return (
+      data.name ||
+      data.idName ||
+      data.description ||
+      data.title ||
+      data.personName ||
+      data.buyerName ||
+      data.emiName ||
+      data.accountName ||
+      collection
+    );
+  }
+
+  function amount(item){
+    const data=item?.data || {};
+    const value=Number(data.amount ?? data.totalAmount ?? data.totalPayment ?? data.buyPrice ?? 0);
+    return Number.isFinite(value) ? value : 0;
+  }
+
+  function money(value){
+    const n=Number(value)||0;
+    return "₹"+n.toLocaleString("en-IN",{minimumFractionDigits:2,maximumFractionDigits:2});
+  }
+
+  function escapeHtml(value){
+    return String(value??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  }
+
+  function icon(item){
+    const collection=collectionName(item);
+    return collection==="transactions"?"📒":
+      collection==="buyers"?"💳":
+      collection==="accounts"?"🏦":
+      collection==="myEmis"?"💰":
+      collection==="moneyToGive"?"💸":"🗑️";
+  }
+
+  function formatDeletedAt(value){
+    if(!value)return "Unknown";
+    const d=new Date(value);
+    if(Number.isNaN(d.getTime()))return "Unknown";
+    return d.toLocaleString("en-IN",{day:"2-digit",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"});
+  }
+
+  window.goMore=()=>window.location.assign("./more.html");
+
+  window.restoreTrashItem=async(id)=>{
+    const index=getTrash().findIndex(item=>String(item.id)===String(id));
+    if(index<0){alert("Trash item not found.");return}
+
+    if(!window.TamilandaWallet?.restoreFromTrash){
+      alert("Restore engine is not available.");
+      return;
+    }
+
+    const result=window.TamilandaWallet.restoreFromTrash(id);
+    // restoreFromTrash in the app engine returns true/false and performs the
+    // balance-safe restoration described by the project's Trash logic.
+    if(result){
+      renderTrash();
+    }else{
+      alert("Could not restore this item. Check the original section or account balance.");
+      renderTrash();
+    }
+  };
+
+  window.deleteForever=(id)=>{
+    const d=getData();
+    const index=Array.isArray(d.trash)?d.trash.findIndex(item=>String(item.id)===String(id)):-1;
+    if(index<0){alert("Trash item not found.");return}
+
+    const item=d.trash[index];
+    if(!confirm(`Delete "${label(item)}" permanently? This cannot be undone.`))return;
+
+    d.trash.splice(index,1);
+    if(saveData(d)) renderTrash();
+    else alert("Could not permanently delete this item.");
+  };
+
+  window.emptyTrash=()=>{
+    const items=getTrash();
+    if(!items.length){alert("Trash is already empty.");return}
+    if(!confirm(`Permanently delete all ${items.length} deleted items? This cannot be undone.`))return;
+
+    const d=getData();
+    d.trash=[];
+    if(saveData(d)) renderTrash();
+    else alert("Could not empty Trash.");
+  };
+
+  window.renderTrash=()=>{
+    const all=getTrash();
+    const txCount=all.filter(x=>collectionName(x)==="transactions").length;
+    document.getElementById("trashCountValue").textContent=all.length;
+    document.getElementById("trashTransactions").textContent=txCount;
+    document.getElementById("trashOther").textContent=Math.max(0,all.length-txCount);
+
+    const query=document.getElementById("trashSearch").value.trim().toLowerCase();
+    const filter=document.getElementById("trashFilter").value;
+
+    const rows=all.filter(item=>{
+      const collection=collectionName(item);
+      const text=`${label(item)} ${typeLabels[collection]||collection} ${item?.data?.notes||item?.data?.note||""}`.toLowerCase();
+      return (filter==="all" || collection===filter) && (!query || text.includes(query));
+    });
+
+    document.getElementById("visibleCount").textContent=`${rows.length} item${rows.length===1?"":"s"}`;
+    const list=document.getElementById("trashList");
+
+    if(!rows.length){
+      list.innerHTML=`
+        <div class="trash-empty-state">
+          <div class="trash-empty-icon">🗑️</div>
+          <h3>Trash is Empty</h3>
+          <p>Deleted wallet records will appear here. You can restore them or delete them forever.</p>
+        </div>`;
+      return;
+    }
+
+    list.innerHTML=rows.map(item=>{
+      const collection=collectionName(item);
+      const data=item.data||{};
+      const a=amount(item);
+      return `
+        <article class="trash-card">
+          <div class="trash-top">
+            <div class="trash-main">
+              <div class="trash-icon">${icon(item)}</div>
+              <div class="trash-title-wrap">
+                <div class="trash-title">${escapeHtml(label(item))}</div>
+                <div class="trash-type">${escapeHtml(typeLabels[collection]||collection)}</div>
+              </div>
+            </div>
+            <div class="trash-date">${escapeHtml(formatDeletedAt(item.deletedAt))}</div>
+          </div>
+
+          <div class="trash-details">
+            <div class="trash-detail"><span>Amount</span><strong>${money(a)}</strong></div>
+            <div class="trash-detail"><span>Original ID</span><strong>${escapeHtml(item.originalId||data.id||"—")}</strong></div>
+          </div>
+
+          <div class="trash-actions">
+            <button class="trash-restore" type="button" onclick="restoreTrashItem('${escapeHtml(item.id)}')">↩ Restore</button>
+            <button class="trash-delete" type="button" onclick="deleteForever('${escapeHtml(item.id)}')">Delete Forever</button>
+          </div>
+        </article>`;
+    }).join("");
+  };
+
+  document.addEventListener("DOMContentLoaded",()=>{
+    renderTrash();
+    setTimeout(renderTrash,100);
+  });
+  window.addEventListener("storage",renderTrash);
+  window.addEventListener("pageshow",renderTrash);
+})();
+</script>
+</body>
+</html>
